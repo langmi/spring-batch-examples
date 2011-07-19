@@ -19,6 +19,7 @@ List of examples, for some i provided detailed wiki pages
 
 All Spring Batch Examples:
 
+* are individual maven projects, the pom.xml in the root directory is only for a convenient _build all_ feature
 * are tested with:
   * Spring Batch 2.1.8.RELEASE
   * Spring Framework 3.0.5.RELEASE
