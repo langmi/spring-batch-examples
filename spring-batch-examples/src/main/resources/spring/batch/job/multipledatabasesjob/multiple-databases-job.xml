@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <description>
+        Job which uses multiple databases.
+        
+        - one database for spring batch infrastructure
+        - second database for business implementation (step)
+        
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="skipJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="skipJobStep">
+            <tasklet>
+                <chunk 
+                    reader="itemReader" 
+                    writer="itemWriter" 
+                    commit-interval="5"
+                    skip-limit="2">
+                    <streams>
+                        <stream ref="itemReader" />
+                    </streams>
+                    <skippable-exception-classes>
+                        <include class="de.langmi.spring.batch.examples.skipjob.SkipJobCustomException"/>
+                    </skippable-exception-classes>
+                </chunk>
+            </tasklet>
+            <listeners>
+                <listener ref="jobListener" />
+            </listeners>
+        </step>
+        <listeners>
+            <listener ref="jobListener" />
+        </listeners>
+    </job>
+
+    <bean id="itemReader" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemReader" />
+    
+    <bean id="itemWriter" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemWriter" />
+
+    <bean id="jobListener" class="de.langmi.spring.batch.examples.skipjob.SkipJobListener" />
+    
+    <!-- JTA Transactionmanager needed -->
+    <!-- wie konfiguriert man den mit 2+ datasources ? -->
+    <!-- http://www.atomikos.com/Documentation/HibernateThreeStandalone#jndi_properties
+         schaut vielversprechend aus 
+         in Verbindung mit http://blogs.oracle.com/randystuph/entry/injecting_jndi_datasources_for_junit 
+         und http://radio-weblogs.com/0112098/2005/07/26.html#a533 -->
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+        <property name="url" value="jdbc:hsqldb:mem:testdb" />
+        <property name="username" value="sa" />
+        <property name="password" value="" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+</beans>

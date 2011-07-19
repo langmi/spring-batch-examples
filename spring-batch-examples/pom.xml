@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <prerequisites>
+        <maven>3.+</maven>
+    </prerequisites>      
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.langmi</groupId>
+    <artifactId>spring-batch-examples</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>spring-batch-examples</name>
+    <url>https://github.com/langmi/spring-batch-examples</url>
+    <description>Spring Batch Examples</description>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>manual</distribution>
+            <comments>
+                Choosed 'manual' distribution, because there are no plans 
+                to upload the project to a maven repository.
+            </comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>michael</id>
+            <name>Michael Lange</name>
+            <email>michael.r.lange@langmi.de</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <properties>
+        <!-- compiler settings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.jdk>1.6</maven.jdk>
+        <maven.compiler.debug>true</maven.compiler.debug>
+        <maven.compiler.optimize>false</maven.compiler.optimize>
+        <!-- test settings -->
+        <maven.surefire.forkmode>always</maven.surefire.forkmode>
+        <log4j.configuration>log4j/log4j.properties</log4j.configuration>
+        <!-- often used dependency version data -->
+        <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
+        <spring.framework.version>3.0.5.RELEASE</spring.framework.version>
+    </properties>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${maven.jdk}</source>
+                    <target>${maven.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <debug>${maven.compiler.debug}</debug>
+                    <optimize>${maven.compiler.optimize}</optimize>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>    
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>log4j.configuration</name>
+                            <value>${log4j.configuration}</value>
+                        </property>
+                    </systemProperties>
+                    <forkMode>${maven.surefire.forkmode}</forkMode>
+                    <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
+                </configuration>
+            </plugin>
+<!--            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>            -->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- slf4j logging facade -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <!-- Spring (core) Framework dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <!-- Spring Batch dependencies -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-core</artifactId>
+            <version>${spring.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-infrastructure</artifactId>
+            <version>${spring.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <!-- test scoped dependencies -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-test</artifactId>
+            <version>${spring.batch.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

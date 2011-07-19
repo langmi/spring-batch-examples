@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <description>
+        Simple Skip Job Example - with "normal" skip configuration,
+        like skip-limit and skippable-exception-classes.
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="skipJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="skipJobStep">
+            <tasklet>
+                <chunk 
+                    reader="itemReader" 
+                    writer="itemWriter" 
+                    commit-interval="5"
+                    skip-limit="2">
+                    <streams>
+                        <stream ref="itemReader" />
+                    </streams>
+                    <skippable-exception-classes>
+                        <include class="de.langmi.spring.batch.examples.skipjob.SkipJobCustomException"/>
+                    </skippable-exception-classes>
+                </chunk>
+            </tasklet>
+            <listeners>
+                <listener ref="jobListener" />
+            </listeners>
+        </step>
+        <listeners>
+            <listener ref="jobListener" />
+        </listeners>
+    </job>
+
+    <bean id="itemReader" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemReader" />
+    
+    <bean id="itemWriter" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemWriter" />
+
+    <bean id="jobListener" class="de.langmi.spring.batch.examples.skipjob.SkipJobListener" />
+
+</beans>
