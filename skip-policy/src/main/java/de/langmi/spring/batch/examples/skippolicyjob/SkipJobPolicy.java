@@ -27,15 +27,20 @@ import org.springframework.batch.core.step.skip.SkipPolicy;
  */
 public class SkipJobPolicy implements SkipPolicy {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());    
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private int skipLimit;
 
     @Override
     public boolean shouldSkip(Throwable t, int skipCount) throws SkipLimitExceededException {
         LOG.debug("shouldSkip:" + t.toString());
-        if (t instanceof SkipJobCustomException && skipCount < 3) {
+        if (t instanceof SkipJobCustomException && skipCount <= skipLimit) {
             return true;
         } else {
             return false;
         }
     }
+
+    public void setSkipLimit(int skipLimit) {
+        this.skipLimit = skipLimit;
+    }    
 }

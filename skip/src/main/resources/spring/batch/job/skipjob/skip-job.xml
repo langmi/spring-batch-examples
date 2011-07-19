@@ -20,7 +20,7 @@
 
     <description>
         Simple Skip Job Example - with "normal" skip configuration,
-        like skip-limit and skippable-exception-classes.
+                                  like skip-limit and skippable-exception-classes
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
@@ -34,6 +34,8 @@
                     writer="itemWriter" 
                     commit-interval="5"
                     skip-limit="2">
+                    <!-- item reader registered as stream to open the in-memory 
+                         test-data-list and read with iterator.next() -->
                     <streams>
                         <stream ref="itemReader" />
                     </streams>
@@ -46,6 +48,7 @@
                 <listener ref="jobListener" />
             </listeners>
         </step>
+        <!-- registered at job level as well, to log job events -->
         <listeners>
             <listener ref="jobListener" />
         </listeners>

@@ -19,7 +19,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <description>
-        Simple Skip Job Example - with skip policy.
+        Simple Skip Job Example - with skip policy instead of skip-limit 
+                                  and skippable-exceptions
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
@@ -33,6 +34,8 @@
                     writer="itemWriter" 
                     commit-interval="5"
                     skip-policy="skipPolicy">
+                    <!-- item reader registered as stream to open the in-memory 
+                         test-data-list and read with iterator.next() -->                        
                     <streams>
                         <stream ref="itemReader" />
                     </streams>
@@ -42,7 +45,8 @@
                 <listener ref="jobListener" />
             </listeners>
         </step>
-        <listeners>
+        <!-- registered at job level as well, to log job events -->        
+        <listeners>            
             <listener ref="jobListener" />
         </listeners>
     </job>
@@ -53,6 +57,8 @@
 
     <bean id="jobListener" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobListener" />
     
-    <bean id="skipPolicy" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobPolicy" />
+    <bean id="skipPolicy" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobPolicy">
+        <property name="skipLimit" value="2" />
+    </bean>
 
 </beans>
