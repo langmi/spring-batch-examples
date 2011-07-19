@@ -32,8 +32,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/skippolicyjob/skip-policy-job.xml",
-    "classpath*:spring/batch/job/**/*.xml"})
+    "classpath*:spring/batch/job/skippolicyjob/*.xml",
+    "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SkipPolicyJobConfigurationTest {
 
