@@ -20,14 +20,14 @@
     </prerequisites>      
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.langmi</groupId>
-    <artifactId>spring-batch-examples</artifactId>
+    <groupId>de.langmi.spring.batch.examples</groupId>
+    <artifactId>skip</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-batch-examples</name>
+    <name>skip</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Examples</description>
+    <description>Spring Batch Example: simple skip job</description>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -101,24 +101,6 @@
                     <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
                 </configuration>
             </plugin>
-<!--            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-distribution</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>            -->
         </plugins>
     </build>
 
