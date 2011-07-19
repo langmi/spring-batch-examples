@@ -15,28 +15,15 @@
  */
 package de.langmi.spring.batch.examples.skippolicyjob;
 
-import de.langmi.spring.batch.examples.skipjob.SkipJobCustomException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.step.skip.SkipLimitExceededException;
-import org.springframework.batch.core.step.skip.SkipPolicy;
-
 /**
- * SkipJobPolicy.
- * 
+ * SkipJobCustomException.
+ *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class SkipJobPolicy implements SkipPolicy {
+public class SkipJobCustomException extends Exception {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());    
-
-    @Override
-    public boolean shouldSkip(Throwable t, int skipCount) throws SkipLimitExceededException {
-        LOG.debug("shouldSkip:" + t.toString());
-        if (t instanceof SkipJobCustomException && skipCount < 3) {
-            return true;
-        } else {
-            return false;
-        }
+    public SkipJobCustomException(String string) {
+        super(string);
     }
+    
 }

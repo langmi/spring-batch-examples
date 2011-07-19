@@ -15,7 +15,6 @@
  */
 package de.langmi.spring.batch.examples.skippolicyjob;
 
-import de.langmi.spring.batch.examples.skipjob.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
