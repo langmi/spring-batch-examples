@@ -29,7 +29,7 @@ All Spring Batch Examples:
 
 ## License
 
-
+Apache 2.0 see [license wiki page][1] for more details
 
 [1]: https://github.com/langmi/spring-batch-examples/wiki/License---Apache-2.0
 [2]: https://jira.springsource.org/browse/BATCH-1541
