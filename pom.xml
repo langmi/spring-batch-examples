@@ -28,6 +28,7 @@
     <modules>
         <module>skip</module>
         <module>skip-policy</module>
+        <module>rename-files-tasklet</module>
     </modules>
 
     <name>parent</name>
