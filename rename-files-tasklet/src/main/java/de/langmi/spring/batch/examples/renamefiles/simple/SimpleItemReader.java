@@ -47,7 +47,7 @@ public class SimpleItemReader implements ItemStream, ItemReader<String> {
         if (iterator.hasNext()) {
             String item = iterator.next();
             if (!desiredOutputFilePathCreated) {
-                stepExecution.getExecutionContext().put("desired.output.file", "file:target/test-outputs/output-" + item + ".txt");
+                stepExecution.getExecutionContext().put("desired.output.file", "file:target/test-outputs/simple/output-" + item + ".txt");
                 desiredOutputFilePathCreated = true;
             }
             return item;

@@ -32,10 +32,11 @@
         'batch:job, batch:step, etc.' 
     -->
     <job id="renameFilesGenericJob" xmlns="http://www.springframework.org/schema/batch">        
-        <step id="renameFilesGenericStep" parent="renameFilesGenericStep:master" />
+        <step id="businessStep" 
+              parent="businessStep:master" />
     </job>
 
-    <step id="concreteRenameFilesGenericStep" xmlns="http://www.springframework.org/schema/batch">
+    <step id="concreteBusinessStep" xmlns="http://www.springframework.org/schema/batch">
         <tasklet>
             <chunk reader="itemReader" 
                    writer="itemWriter" 
@@ -46,15 +47,18 @@
         </listeners>
     </step>
 
-    <bean name="renameFilesGenericStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
+    <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
         <property name="jobRepository" ref="jobRepository"/>
         <property name="stepExecutionSplitter">
             <bean class="org.springframework.batch.core.partition.support.SimpleStepExecutionSplitter">
                 <constructor-arg ref="jobRepository"/>
-                <constructor-arg ref="concreteRenameFilesGenericStep"/>
+                <constructor-arg ref="concreteBusinessStep"/>
                 <constructor-arg>
                     <bean class="de.langmi.spring.batch.examples.renamefiles.generic.CustomMultiResourcePartitioner" scope="step">
                         <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
+                        <property name="callbackHandler">
+                            <bean class="de.langmi.spring.batch.examples.renamefiles.generic.CustomMultiResourceCallbackHandler" />
+                        </property>
                     </bean>
                 </constructor-arg>
             </bean>
@@ -63,17 +67,17 @@
             <bean class="org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler">
                 <property name="taskExecutor">
                     <bean class="org.springframework.core.task.SimpleAsyncTaskExecutor">
-                        <property name="concurrencyLimit" value="2" />
+                        <property name="concurrencyLimit" value="1" />
                     </bean>
                 </property>
-                <property name="step" ref="concreteRenameFilesGenericStep"/>
+                <property name="step" ref="concreteBusinessStep"/>
             </bean>
         </property>
     </bean>
 
     <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
         <description>
-            #{stepExecution['fileName']} works because the bean is part of a
+            #{stepExecution['filePath']} works because the bean is part of a
             partition step with MultiResourcePartitioner, which promotes the name
             of the used file to the step execution context
 
@@ -82,7 +86,7 @@
             - simple linemapper
             - strict mode - we expect input files
         </description>
-        <property name="resource" value="#{stepExecutionContext['fileName']}" />
+        <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
         <property name="linesToSkip" value="1" />
         <property name="skippedLinesCallback" ref="headerLineCallbackHandler" />
         <property name="lineMapper">
@@ -91,22 +95,19 @@
         <property name="strict" value="true" />
     </bean>
 
-    <bean id="headerLineCallbackHandler" class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler">
-        <property name="fileNamesMap" ref="fileNamesMap" />
-    </bean>
+    <bean id="headerLineCallbackHandler" 
+          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" />
 
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <description>
-            #{stepExecution['outputFileName']} works because the bean is part of a
+            #{stepExecution['fileName']} works because the bean is part of a
             partition step with MultiResourcePartitioner, which promotes the used
             file to the step execution context
         </description>
-        <property name="resource" value="file:target/test-outputs/generic/out-#{stepExecutionContext['outputFileName']}" />
+        <property name="resource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
         <property name="lineAggregator">
             <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
         </property>
     </bean>
-
-    <bean id="fileNamesMap" class="java.util.concurrent.ConcurrentHashMap" />
 
 </beans>

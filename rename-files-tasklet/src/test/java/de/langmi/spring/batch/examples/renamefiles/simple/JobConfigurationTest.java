@@ -50,7 +50,7 @@ public class JobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple/output.txt"));
         
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

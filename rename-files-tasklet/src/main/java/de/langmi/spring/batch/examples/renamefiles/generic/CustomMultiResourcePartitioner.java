@@ -15,7 +15,6 @@
  */
 package de.langmi.spring.batch.examples.renamefiles.generic;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.batch.core.partition.support.Partitioner;
@@ -32,12 +31,9 @@ import org.springframework.util.Assert;
  */
 public class CustomMultiResourcePartitioner implements Partitioner {
 
-    private static final String DEFAULT_KEY_NAME = "fileName";
-    private static final String DEFAULT_KEY_FILE_NAME = "outputFileName";
     private static final String PARTITION_KEY = "partition";
     private Resource[] resources = new Resource[0];
-    private String keyName = DEFAULT_KEY_NAME;
-    private String keyOutputFileName = DEFAULT_KEY_FILE_NAME;
+    private MultiResourceCallbackHandler callbackHandler = new DefaultMultiResourceCallbackHandler();
 
     /**
      * The resources to assign to each partition. In Spring configuration you
@@ -48,22 +44,8 @@ public class CustomMultiResourcePartitioner implements Partitioner {
         this.resources = resources;
     }
 
-    /**
-     * The name of the key for the file name in each {@link ExecutionContext}.
-     * Defaults to "fileName".
-     * @param keyName the value of the key
-     */
-    public void setKeyName(String keyName) {
-        this.keyName = keyName;
-    }
-
-    /**
-     * The name of the key for the file name in each {@link ExecutionContext}.
-     * Defaults to "fileName".
-     * @param keyOutputFileName 
-     */
-    public void setKeyOutputFileName(String keyOutputFileName) {
-        this.keyOutputFileName = keyOutputFileName;
+    public void setCallbackHandler(MultiResourceCallbackHandler callbackHandler) {
+        this.callbackHandler = callbackHandler;
     }
 
     /**
@@ -79,12 +61,8 @@ public class CustomMultiResourcePartitioner implements Partitioner {
         for (Resource resource : resources) {
             ExecutionContext context = new ExecutionContext();
             Assert.state(resource.exists(), "Resource does not exist: " + resource);
-            try {
-                context.putString(keyName, resource.getURL().toExternalForm());
-                context.put(keyOutputFileName, resource.getFilename());
-            } catch (IOException e) {
-                throw new IllegalArgumentException("File could not be located for: " + resource, e);
-            }
+            // callback
+            callbackHandler.handleContextParametersSetup(i, context, resource);
             map.put(PARTITION_KEY + i, context);
             i++;
         }

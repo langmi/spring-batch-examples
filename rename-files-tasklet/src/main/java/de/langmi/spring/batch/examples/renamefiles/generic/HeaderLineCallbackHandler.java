@@ -15,7 +15,8 @@
  */
 package de.langmi.spring.batch.examples.renamefiles.generic;
 
-import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.file.LineCallbackHandler;
@@ -28,8 +29,8 @@ import org.springframework.batch.item.file.LineCallbackHandler;
  */
 public class HeaderLineCallbackHandler implements LineCallbackHandler {
 
-    private ConcurrentHashMap<String, String> fileNamesMap;
     private StepExecution stepExecution;
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Handles header line and saves business key to step execution context.
@@ -38,18 +39,12 @@ public class HeaderLineCallbackHandler implements LineCallbackHandler {
      */
     @Override
     public void handleLine(String line) {
-        // extract filename
-        String fileName = stepExecution.getExecutionContext().getString(BatchConstants.CONTEXT_NAME_INPUT_FILE);
-        // put desired fileName        
-        this.fileNamesMap.put(fileName, "output-" + line + ".txt");
+        // promote line as business key for output file
+        stepExecution.getExecutionContext().put("business.key", line);
     }
 
     @BeforeStep
     public void setStepExecution(StepExecution stepExecution) {
         this.stepExecution = stepExecution;
-    }
-
-    public void setFileNamesMap(ConcurrentHashMap<String, String> fileNamesMap) {
-        this.fileNamesMap = fileNamesMap;
     }
 }

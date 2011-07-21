@@ -52,6 +52,7 @@ public class JobConfigurationGenericTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/*.txt"));
+        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/generic/"));
         
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
