@@ -44,6 +44,7 @@
         </tasklet>
         <listeners>
             <listener ref="headerLineCallbackHandler" />
+            <listener ref="renameFileListener" />
         </listeners>
     </step>
 
@@ -67,7 +68,7 @@
             <bean class="org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler">
                 <property name="taskExecutor">
                     <bean class="org.springframework.core.task.SimpleAsyncTaskExecutor">
-                        <property name="concurrencyLimit" value="1" />
+                        <property name="concurrencyLimit" value="3" />
                     </bean>
                 </property>
                 <property name="step" ref="concreteBusinessStep"/>
@@ -96,7 +97,7 @@
     </bean>
 
     <bean id="headerLineCallbackHandler" 
-          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" />
+          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" scope="step" />
 
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <description>
@@ -110,4 +111,7 @@
         </property>
     </bean>
 
+    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.renamefiles.generic.RenameFileListener" scope="step">
+        <property name="outputFileResource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+    </bean>
 </beans>

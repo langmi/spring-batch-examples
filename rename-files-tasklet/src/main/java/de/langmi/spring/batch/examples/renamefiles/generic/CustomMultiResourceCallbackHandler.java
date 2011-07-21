@@ -15,6 +15,8 @@
  */
 package de.langmi.spring.batch.examples.renamefiles.generic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.core.io.Resource;
 
@@ -24,7 +26,9 @@ import org.springframework.core.io.Resource;
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class CustomMultiResourceCallbackHandler extends DefaultMultiResourceCallbackHandler {
-    
+
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public void handleContextParametersSetup(int partition, ExecutionContext context, Resource resource) {
         // i want the standard way for propagating the complete file path, but
@@ -32,7 +36,8 @@ public class CustomMultiResourceCallbackHandler extends DefaultMultiResourceCall
         super.setKeyName("inputFilePath");
         super.handleContextParametersSetup(partition, context, resource);
         // and the desired output file name
-        context.put("outputFileName", "output-" + String.valueOf(partition) + ".txt");
+        String outputFileName = "output-" + String.valueOf(partition) + ".txt";
+        context.put("outputFileName", outputFileName);
+        LOG.debug("for inputfile:'" + resource.getFilename() + "' outputfilename:'" + outputFileName + "' was created");
     }
-
 }
