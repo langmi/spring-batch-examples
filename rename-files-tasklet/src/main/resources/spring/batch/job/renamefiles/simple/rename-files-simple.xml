@@ -19,7 +19,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Rename Files Tasklet Examples
+        Rename Files Tasklet Simple Example for usecase:
+        Create output file names at runtime in relation to business data from e.g. the item reader.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
