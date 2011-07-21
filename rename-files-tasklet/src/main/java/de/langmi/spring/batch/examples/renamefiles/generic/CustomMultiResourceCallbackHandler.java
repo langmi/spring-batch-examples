@@ -38,6 +38,6 @@ public class CustomMultiResourceCallbackHandler extends DefaultMultiResourceCall
         // and the desired output file name
         String outputFileName = "output-" + String.valueOf(partition) + ".txt";
         context.put("outputFileName", outputFileName);
-        LOG.debug("for inputfile:'" + resource.getFilename() + "' outputfilename:'" + outputFileName + "' was created");
+        LOG.info("for inputfile:'" + resource.getFilename() + "' outputfilename:'" + outputFileName + "' was taken");
     }
 }

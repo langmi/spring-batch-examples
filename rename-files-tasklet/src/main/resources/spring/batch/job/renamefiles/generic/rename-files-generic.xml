@@ -21,11 +21,11 @@
     <description>
         Rename Files Tasklet Example: generic version.
         
-            - partition step to read multiple files
-            - for each file, a specific business key is extracted and provided
-              for later file rename tasklet
-            - no processor or specific writer config, just read line and write it             
-            - max. 2 threads used, see taskExecutor in partitionHandler from partitionStep
+            * partition step to read multiple files
+                * count of threads matches input files            
+            * for each file, a specific business key is extracted and provided
+              for later file renaming in listener
+            * no processor or specific writer config, just read line and write it
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
@@ -49,6 +49,9 @@
     </step>
 
     <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
+        <description>
+            * concurrencyLimit matches count of read files to force multi-threading
+        </description>
         <property name="jobRepository" ref="jobRepository"/>
         <property name="stepExecutionSplitter">
             <bean class="org.springframework.batch.core.partition.support.SimpleStepExecutionSplitter">
@@ -78,14 +81,9 @@
 
     <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
         <description>
-            #{stepExecution['filePath']} works because the bean is part of a
-            partition step with MultiResourcePartitioner, which promotes the name
-            of the used file to the step execution context
-
-            - linesToSkip - count for header lines, set to 1, there is only 1 header line
-            - skippedLinesCallback - bean references processes the skipped line(s)
-            - simple linemapper
-            - strict mode - we expect input files
+            * resource is set via step scoped late binding (see multiresourcereader)
+            * linesToSkip - count for header lines, set to 1, there is only 1 header line
+            * strict mode - we expect input files
         </description>
         <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
         <property name="linesToSkip" value="1" />
@@ -97,13 +95,18 @@
     </bean>
 
     <bean id="headerLineCallbackHandler" 
-          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" scope="step" />
+          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" 
+          scope="step">
+         <description>
+            * handles the header line
+            * extracts business key
+            * promotes the key to the step execution context for further use
+         </description>
+    </bean>
 
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <description>
-            #{stepExecution['fileName']} works because the bean is part of a
-            partition step with MultiResourcePartitioner, which promotes the used
-            file to the step execution context
+            resource is set via step scoped late binding
         </description>
         <property name="resource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
         <property name="lineAggregator">

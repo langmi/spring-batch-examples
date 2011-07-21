@@ -22,5 +22,5 @@ package de.langmi.spring.batch.examples.renamefiles.generic;
  */
 public class BatchConstants {
     
-    public static final String CONTEXT_NAME_INPUT_FILE = "fileName";
+    public static final String CONTEXT_NAME_INPUT_FILEF = "fileName";
 }

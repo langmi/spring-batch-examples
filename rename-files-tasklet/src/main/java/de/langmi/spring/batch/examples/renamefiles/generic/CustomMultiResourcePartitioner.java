@@ -23,9 +23,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 /**
- * A 99% Copy of the the Spring MultiResourcePartitioner, in addition to the
- * normal function which promotes the file path to the step execution, it promotes
- * the filename too. Use it if your need access to the filename and filepath.
+ * A 99% Copy of the the Spring MultiResourcePartitioner, file name propagation
+ * is outsourced to a callback handler.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */

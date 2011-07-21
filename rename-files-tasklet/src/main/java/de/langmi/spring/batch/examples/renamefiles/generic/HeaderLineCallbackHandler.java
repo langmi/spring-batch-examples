@@ -24,7 +24,7 @@ import org.springframework.batch.item.file.LineCallbackHandler;
 
 /**
  * HeaderLineCallbackHandler handles header line from file, do not use with 
- * more than one header line.
+ * more than one header line. Is not threadsafe, use with scope="step".
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
@@ -40,16 +40,13 @@ public class HeaderLineCallbackHandler implements LineCallbackHandler, StepExecu
      */
     @Override
     public void handleLine(String line) {
-        LOG.debug(stepExecution.getStepName());
-        LOG.debug("obj-id" + String.valueOf(System.identityHashCode(this)) + " line:" + line);
-        //LOG.debug("stepname:" + stepExecution.getStepName() + " business.key:" + line);
         // promote line as business key for output file
         stepExecution.getExecutionContext().put("business.key", line);
+        LOG.debug("business key created:'" + line + "'");        
     }
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        LOG.debug("beforeStep obj-id" + String.valueOf(System.identityHashCode(this)));
         this.stepExecution = stepExecution;
     }
 
