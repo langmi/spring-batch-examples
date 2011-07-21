@@ -19,7 +19,7 @@ import java.util.List;
 import org.springframework.batch.item.ItemWriter;
 
 /**
- * SkipJobItemWriter.
+ * SkipJobItemWriter is threadsafe.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
