@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.generic;
+package de.langmi.spring.batch.examples.renamefiles.partition;
 import de.langmi.spring.batch.examples.renamefiles.simple.*;
 
 import java.util.HashMap;
@@ -36,10 +36,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/renamefiles/generic/*.xml",
+    "classpath*:spring/batch/job/renamefiles/partition/*.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JobConfigurationGenericTest {
+public class JobConfigurationPartitionTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired
@@ -52,7 +52,7 @@ public class JobConfigurationGenericTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/*.txt"));
-        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/generic/"));
+        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/partition/"));
         
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

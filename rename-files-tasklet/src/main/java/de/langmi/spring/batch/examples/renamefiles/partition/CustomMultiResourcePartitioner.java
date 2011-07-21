@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.generic;
+package de.langmi.spring.batch.examples.renamefiles.partition;
 
 import java.util.HashMap;
 import java.util.Map;

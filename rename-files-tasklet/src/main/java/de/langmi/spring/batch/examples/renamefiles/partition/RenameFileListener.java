@@ -13,45 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.generic;
+package de.langmi.spring.batch.examples.renamefiles.partition;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.item.file.LineCallbackHandler;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 /**
- * HeaderLineCallbackHandler handles header line from file, do not use with 
- * more than one header line. Is not threadsafe, use with scope="step".
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class HeaderLineCallbackHandler implements LineCallbackHandler, StepExecutionListener {
+public class RenameFileListener implements StepExecutionListener {
 
-    private StepExecution stepExecution;
+    private Resource outputFileResource;
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-
-    /**
-     * Handles header line and saves business key to step execution context.
-     * 
-     * @param line 
-     */
-    @Override
-    public void handleLine(String line) {
-        // promote line as business key for output file
-        stepExecution.getExecutionContext().put("business.key", line);
-        LOG.debug("business key created:'" + line + "'");        
-    }
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        this.stepExecution = stepExecution;
+        // no-op
     }
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
+        // get business key
+        String businessKey = (String) stepExecution.getExecutionContext().get("business.key");
+        try {
+            String path = this.outputFileResource.getFile().getParent();
+            String newFileName = path + File.separator + businessKey + ".txt";
+            if (outputFileResource.getFile().renameTo(new File(newFileName))) {
+                LOG.debug("renamed:" + this.outputFileResource.getFilename() + " to:" + newFileName);
+            } else {
+                throw new RuntimeException("renaming failed");
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
         return stepExecution.getExitStatus();
+    }
+
+    public void setOutputFileResource(Resource outputFileResource) {
+        this.outputFileResource = outputFileResource;
     }
 }

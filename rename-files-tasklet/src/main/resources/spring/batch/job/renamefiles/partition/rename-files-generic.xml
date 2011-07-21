@@ -31,7 +31,7 @@
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="renameFilesGenericJob" xmlns="http://www.springframework.org/schema/batch">        
+    <job id="renameFilespartitionJob" xmlns="http://www.springframework.org/schema/batch">        
         <step id="businessStep" 
               parent="businessStep:master" />
     </job>
@@ -58,10 +58,10 @@
                 <constructor-arg ref="jobRepository"/>
                 <constructor-arg ref="concreteBusinessStep"/>
                 <constructor-arg>
-                    <bean class="de.langmi.spring.batch.examples.renamefiles.generic.CustomMultiResourcePartitioner" scope="step">
+                    <bean class="de.langmi.spring.batch.examples.renamefiles.partition.CustomMultiResourcePartitioner" scope="step">
                         <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
                         <property name="callbackHandler">
-                            <bean class="de.langmi.spring.batch.examples.renamefiles.generic.CustomMultiResourceCallbackHandler" />
+                            <bean class="de.langmi.spring.batch.examples.renamefiles.partition.CustomMultiResourceCallbackHandler" />
                         </property>
                     </bean>
                 </constructor-arg>
@@ -95,7 +95,7 @@
     </bean>
 
     <bean id="headerLineCallbackHandler" 
-          class="de.langmi.spring.batch.examples.renamefiles.generic.HeaderLineCallbackHandler" 
+          class="de.langmi.spring.batch.examples.renamefiles.partition.HeaderLineCallbackHandler" 
           scope="step">
          <description>
             * handles the header line
@@ -114,7 +114,7 @@
         </property>
     </bean>
 
-    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.renamefiles.generic.RenameFileListener" scope="step">
+    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.renamefiles.partition.RenameFileListener" scope="step">
         <property name="outputFileResource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
     </bean>
 </beans>
