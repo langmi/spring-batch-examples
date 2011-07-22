@@ -27,6 +27,7 @@
     
     <modules>
         <module>listeners</module>
+        <module>multi-resource-partitioner</module>
         <module>rename-files-tasklet</module>        
         <module>skip</module>
         <module>skip-policy</module>
