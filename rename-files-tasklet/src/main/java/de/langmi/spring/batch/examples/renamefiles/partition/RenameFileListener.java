@@ -16,17 +16,18 @@
 package de.langmi.spring.batch.examples.renamefiles.partition;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 /**
+ * RenameFileListener - renames outputFileResource to a new name with relation
+ * to a business key.
+ * Is not threadsafe ! Use with scope="step".
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
@@ -43,17 +44,17 @@ public class RenameFileListener implements StepExecutionListener {
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
         // get business key
-        String businessKey = (String) stepExecution.getExecutionContext().get("business.key");
+        String businessKey = (String) stepExecution.getExecutionContext().get(BatchConstants.CONTEXT_NAME_BUSINESS_KEY);
         try {
             String path = this.outputFileResource.getFile().getParent();
-            String newFileName = path + File.separator + businessKey + ".txt";
-            if (outputFileResource.getFile().renameTo(new File(newFileName))) {
-                LOG.debug("renamed:" + this.outputFileResource.getFilename() + " to:" + newFileName);
-            } else {
-                throw new RuntimeException("renaming failed");
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            String newFilePathAndName = path + File.separator + businessKey + ".txt";
+            FileUtils.copyFile(outputFileResource.getFile(), new File(newFilePathAndName));
+            LOG.info("copied:" + this.outputFileResource.getFile().getPath() + " to:" + newFilePathAndName);
+            // on Windows XP FileUtils.moveFile = copy and delete won't work
+            // due to locking problems, so get it deleted on jvm exit
+            this.outputFileResource.getFile().deleteOnExit();
+        } catch (Exception ex) {
+            return new ExitStatus(ExitStatus.FAILED.getExitCode(), ex.getMessage());
         }
 
         return stepExecution.getExitStatus();

@@ -41,8 +41,8 @@ public class HeaderLineCallbackHandler implements LineCallbackHandler, StepExecu
     @Override
     public void handleLine(String line) {
         // promote line as business key for output file
-        stepExecution.getExecutionContext().put("business.key", line);
-        LOG.debug("business key created:'" + line + "'");        
+        stepExecution.getExecutionContext().put(BatchConstants.CONTEXT_NAME_BUSINESS_KEY, line);
+        LOG.info("business key created:'" + line + "'");        
     }
 
     @Override
