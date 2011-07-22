@@ -56,9 +56,6 @@
                 <constructor-arg>
                     <bean class="de.langmi.spring.batch.examples.multiresourcepartitioner.CustomMultiResourcePartitioner" scope="step">
                         <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
-                        <property name="callbackHandler">
-                            <bean class="de.langmi.spring.batch.examples.multiresourcepartitioner.CustomMultiResourceCallbackHandler" />
-                        </property>
                     </bean>
                 </constructor-arg>
             </bean>

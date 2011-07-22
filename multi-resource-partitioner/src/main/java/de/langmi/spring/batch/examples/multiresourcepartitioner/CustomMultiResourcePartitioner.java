@@ -15,24 +15,27 @@
  */
 package de.langmi.spring.batch.examples.multiresourcepartitioner;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 /**
- * A 99% Copy of the the Spring MultiResourcePartitioner, file name propagation
- * is outsourced to a callback handler.
+ * Slightly changed MultiResourcePartitioner, does create output file name too.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class CustomMultiResourcePartitioner implements Partitioner {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     private static final String PARTITION_KEY = "partition";
     private Resource[] resources = new Resource[0];
-    private MultiResourceCallbackHandler callbackHandler = new DefaultMultiResourceCallbackHandler();
+    private String keyName = "inputFilePath";
 
     /**
      * The resources to assign to each partition. In Spring configuration you
@@ -41,10 +44,6 @@ public class CustomMultiResourcePartitioner implements Partitioner {
      */
     public void setResources(Resource[] resources) {
         this.resources = resources;
-    }
-
-    public void setCallbackHandler(MultiResourceCallbackHandler callbackHandler) {
-        this.callbackHandler = callbackHandler;
     }
 
     /**
@@ -60,11 +59,35 @@ public class CustomMultiResourcePartitioner implements Partitioner {
         for (Resource resource : resources) {
             ExecutionContext context = new ExecutionContext();
             Assert.state(resource.exists(), "Resource does not exist: " + resource);
-            // callback
-            callbackHandler.handleContextParametersSetup(i, context, resource);
+            try {
+                context.putString(keyName, resource.getURL().toExternalForm());
+                context.put("outputFileName", createOutputFilename(i, context, resource));
+            } catch (IOException e) {
+                throw new IllegalArgumentException("File could not be located for: " + resource, e);
+            }
             map.put(PARTITION_KEY + i, context);
             i++;
         }
         return map;
+    }
+
+    /**
+     * Creates distinct output  file name per partition.
+     *
+     * @param partitionId
+     * @param context
+     * @param resource
+     * @return 
+     */
+    private String createOutputFilename(int partitionId, ExecutionContext context, Resource resource) {
+        String outputFileName = "output-" + String.valueOf(partitionId) + ".txt";
+        LOG.info(
+                "for inputfile:'"
+                + resource.getFilename()
+                + "' outputfilename:'"
+                + outputFileName
+                + "' was created");
+
+        return outputFileName;
     }
 }
