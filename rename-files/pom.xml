@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.langmi.spring.batch.examples</groupId>
-    <artifactId>rename-file-tasklet</artifactId>
+    <artifactId>rename-files</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>rename-file-tasklet</name>
+    <name>rename-files</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: rename file tasklet</description>
+    <description>Spring Batch Example: rename files</description>
     <licenses>
         <license>
             <name>Apache 2</name>
