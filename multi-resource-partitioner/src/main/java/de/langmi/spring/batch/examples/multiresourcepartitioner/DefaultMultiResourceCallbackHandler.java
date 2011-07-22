@@ -13,19 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.partition;
+package de.langmi.spring.batch.examples.multiresourcepartitioner;
 
+import java.io.IOException;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.core.io.Resource;
 
 /**
- * Callback interface for handling ExecutionContext parameters setup in multi 
- * resource partitioning.
+ * Default callback implementation.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public interface MultiResourceCallbackHandler {
+public class DefaultMultiResourceCallbackHandler implements MultiResourceCallbackHandler {
+
+    private static final String DEFAULT_KEY_NAME = "fileName";
+    private String keyName = DEFAULT_KEY_NAME;
     
-    void handleContextParametersSetup(int partition, ExecutionContext executionContext, Resource resource);
-    
+    @Override
+    public void handleContextParametersSetup(int partition, ExecutionContext context, Resource resource) {
+        try {
+            context.putString(keyName, resource.getURL().toExternalForm());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("File could not be located for: " + resource, e);
+        }
+    }
+
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
 }

@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.partition;
-import de.langmi.spring.batch.examples.renamefiles.simple.*;
+package de.langmi.spring.batch.examples.multiresourcepartitioner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/renamefiles/partition/*.xml",
+    "classpath*:spring/batch/job/multiresourcepartitioner/*.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class JobConfigurationPartitionTest {
@@ -52,8 +51,8 @@ public class JobConfigurationPartitionTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/*.txt"));
-        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/partition/"));
-        
+        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/"));
+
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
 

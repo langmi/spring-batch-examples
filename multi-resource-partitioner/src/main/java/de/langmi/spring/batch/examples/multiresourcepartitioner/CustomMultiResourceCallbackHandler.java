@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.renamefiles.partition;
+package de.langmi.spring.batch.examples.multiresourcepartitioner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,6 @@ public class CustomMultiResourceCallbackHandler extends DefaultMultiResourceCall
         // and the desired output file name
         String outputFileName = "output-" + String.valueOf(partition) + ".txt";
         context.put("outputFileName", outputFileName);
-        LOG.info("for inputfile:'" + resource.getFilename() + "' outputfilename:'" + outputFileName + "' was taken");
+        LOG.info("for inputfile:'" + resource.getFilename() + "' outputfilename:'" + outputFileName + "' was created");
     }
 }

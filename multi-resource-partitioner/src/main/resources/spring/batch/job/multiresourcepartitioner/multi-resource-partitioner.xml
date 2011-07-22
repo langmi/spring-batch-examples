@@ -42,10 +42,6 @@
                    writer="itemWriter" 
                    commit-interval="5" />
         </tasklet>
-        <listeners>
-            <listener ref="headerLineCallbackHandler" />
-            <listener ref="renameFileListener" />
-        </listeners>
     </step>
 
     <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
@@ -58,10 +54,10 @@
                 <constructor-arg ref="jobRepository"/>
                 <constructor-arg ref="concreteBusinessStep"/>
                 <constructor-arg>
-                    <bean class="de.langmi.spring.batch.examples.renamefiles.partition.CustomMultiResourcePartitioner" scope="step">
+                    <bean class="de.langmi.spring.batch.examples.multiresourcepartitioner.CustomMultiResourcePartitioner" scope="step">
                         <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
                         <property name="callbackHandler">
-                            <bean class="de.langmi.spring.batch.examples.renamefiles.partition.CustomMultiResourceCallbackHandler" />
+                            <bean class="de.langmi.spring.batch.examples.multiresourcepartitioner.CustomMultiResourceCallbackHandler" />
                         </property>
                     </bean>
                 </constructor-arg>
@@ -82,26 +78,13 @@
     <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
         <description>
             * resource is set via step scoped late binding (see multiresourcereader)
-            * linesToSkip - count for header lines, set to 1, there is only 1 header line
             * strict mode - we expect input files
         </description>
         <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
-        <property name="linesToSkip" value="1" />
-        <property name="skippedLinesCallback" ref="headerLineCallbackHandler" />
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
         </property>
         <property name="strict" value="true" />
-    </bean>
-
-    <bean id="headerLineCallbackHandler" 
-          class="de.langmi.spring.batch.examples.renamefiles.partition.HeaderLineCallbackHandler" 
-          scope="step">
-         <description>
-            * handles the header line
-            * extracts business key
-            * promotes the key to the step execution context for further use
-         </description>
     </bean>
 
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
@@ -112,9 +95,5 @@
         <property name="lineAggregator">
             <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
         </property>
-    </bean>
-
-    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.renamefiles.partition.RenameFileListener" scope="step">
-        <property name="outputFileResource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
-    </bean>
+    </bean>    
 </beans>
