@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package de.langmi.spring.batch.examples.renamefiles.partition;
-import de.langmi.spring.batch.examples.renamefiles.simple.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class JobConfigurationPartitionTest {
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/*.txt"));
         jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/partition/"));
-        
+
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
 
