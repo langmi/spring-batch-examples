@@ -21,20 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.langmi.spring.batch.examples</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>listeners</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>listeners</module>
-        <module>rename-files-tasklet</module>        
-        <module>skip</module>
-        <module>skip-policy</module>
-    </modules>
+    <packaging>jar</packaging>
 
-    <name>parent</name>
+    <name>listeners</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: parent project for convenient build all feature</description>
+    <description>Spring Batch Example: simple skip job</description>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -58,6 +51,7 @@
             <timezone>+1</timezone>
         </developer>
     </developers>
+
     <properties>
         <!-- compiler settings -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,6 +60,10 @@
         <maven.compiler.optimize>false</maven.compiler.optimize>
         <!-- test settings -->
         <maven.surefire.forkmode>always</maven.surefire.forkmode>
+        <log4j.configuration>log4j/log4j.properties</log4j.configuration>
+        <!-- often used dependency version data -->
+        <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
+        <spring.framework.version>3.0.5.RELEASE</spring.framework.version>
     </properties>
     
     <build>
@@ -105,5 +103,73 @@
             </plugin>
         </plugins>
     </build>
-    
+
+    <dependencies>
+        <!-- slf4j logging facade -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <!-- Spring (core) Framework dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <!-- Spring Batch dependencies -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-core</artifactId>
+            <version>${spring.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-infrastructure</artifactId>
+            <version>${spring.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <!-- test scoped dependencies -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-test</artifactId>
+            <version>${spring.batch.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
