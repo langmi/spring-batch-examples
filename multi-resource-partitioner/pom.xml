@@ -27,7 +27,7 @@
 
     <name>multi-resource-partitioner</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: rename file tasklet</description>
+    <description>Spring Batch Example: MultiResourcePartitioner</description>
     <licenses>
         <license>
             <name>Apache 2</name>
