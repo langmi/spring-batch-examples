@@ -27,7 +27,7 @@ import org.springframework.core.io.Resource;
 /**
  * RenameFileListener - renames outputFileResource to a new name with relation
  * to a business key.
- * Is not threadsafe ! Use with scope="step".
+ * Is not threadsafe! Use with scope="step".
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
@@ -50,8 +50,9 @@ public class RenameFileListener implements StepExecutionListener {
             String newFilePathAndName = path + File.separator + businessKey + ".txt";
             FileUtils.copyFile(outputFileResource.getFile(), new File(newFilePathAndName));
             LOG.info("copied:" + this.outputFileResource.getFile().getPath() + " to:" + newFilePathAndName);
-            // on Windows XP FileUtils.moveFile = copy and delete won't work
-            // due to locking problems, so get it deleted on jvm exit
+            // deletion here is not good, the itemstream will be closed after 
+            // this afterStep method is called
+            // so get it deleted on jvm exit
             this.outputFileResource.getFile().deleteOnExit();
         } catch (Exception ex) {
             return new ExitStatus(ExitStatus.FAILED.getExitCode(), ex.getMessage());
