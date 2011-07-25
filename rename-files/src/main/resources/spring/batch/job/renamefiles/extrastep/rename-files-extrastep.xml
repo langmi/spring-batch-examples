@@ -33,7 +33,11 @@
     -->
     <job id="renameFilespartitionJob" xmlns="http://www.springframework.org/schema/batch">        
         <step id="businessStep" 
-              parent="businessStep:master" />
+              parent="businessStep:master"
+              next="renameFilesStep" />
+        <step id="renameFilesStep">
+            <tasklet ref="renameFilesTasklet" />
+        </step>
     </job>
 
     <step id="concreteBusinessStep" xmlns="http://www.springframework.org/schema/batch">
@@ -44,7 +48,7 @@
         </tasklet>
         <listeners>
             <listener ref="headerLineCallbackHandler" />
-            <listener ref="renameFileListener" />
+            <listener ref="propagateFileNamesListener" />
         </listeners>
     </step>
 
@@ -95,11 +99,11 @@
     <bean id="headerLineCallbackHandler" 
           class="de.langmi.spring.batch.examples.renamefiles.partition.HeaderLineCallbackHandler" 
           scope="step">
-         <description>
+        <description>
             * handles the header line
             * extracts business key
             * promotes the key to the step execution context for further use
-         </description>
+        </description>
     </bean>
 
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
@@ -112,7 +116,14 @@
         </property>
     </bean>
 
-    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.renamefiles.partition.RenameFileListener" scope="step">
-        <property name="outputFileResource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+    <bean id="propagateFileNamesListener" class="de.langmi.spring.batch.examples.renamefiles.extrastep.PropagateFileNamesListener" scope="step">
+        <property name="outputFile" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+        <property name="fileNames" ref="fileNamesMap" />
     </bean>
+
+    <bean id="renameFilesTasklet" class="de.langmi.spring.batch.examples.renamefiles.extrastep.RenameFilesTasklet">
+        <property name="fileNames" ref="fileNamesMap" />
+    </bean>
+
+    <bean id="fileNamesMap" class="java.util.concurrent.ConcurrentHashMap" />
 </beans>
