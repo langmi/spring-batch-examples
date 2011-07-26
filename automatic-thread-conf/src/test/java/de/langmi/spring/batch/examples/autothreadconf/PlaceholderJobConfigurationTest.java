@@ -49,7 +49,7 @@ public class PlaceholderJobConfigurationTest {
     @BeforeClass
     public static void setup() {
         // set the system property before
-        System.setProperty("concurrency.limit", String.valueOf(2));        
+        System.setProperty("concurrency.limit", String.valueOf(2));
     }
 
 
