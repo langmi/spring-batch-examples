@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.langmi.spring.batch.examples</groupId>
-    <artifactId>listeners</artifactId>
+    <artifactId>automatic-thread-conf</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>listeners</name>
+    <name>automatic-thread-conf</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: listener examples</description>
+    <description>Spring Batch Example: simple skip job</description>
     <licenses>
         <license>
             <name>Apache 2</name>
