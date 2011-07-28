@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Michael R. Lange.
+ * Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,26 @@
  */
 package de.langmi.spring.batch.examples.skipjob;
 
-import java.util.List;
-import org.springframework.batch.item.ItemWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ItemProcessor;
 
 /**
- * SkipJobItemWriter is threadsafe.
- *
+ * Simple pass through processor.
+ * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class SkipJobItemWriter implements ItemWriter<String> {
+public class SkipJobItemProcessor implements ItemProcessor<String, String> {
 
-    /** {@inheritDoc} */
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     @Override
-    public void write(List<? extends String> items) throws Exception {
-        for (String item : items) {
-            // throw exception for specific items
-            if (Integer.valueOf(item) == 6 || Integer.valueOf(item) == 17) {
-                throw new SkipJobCustomException("provoked error with:" + item);
-            }
+    public String process(String item) throws Exception {
+        LOG.debug("processor called:" + item);
+        if (Integer.valueOf(item) == 5 || Integer.valueOf(item) == 16) {
+            throw new SkipJobCustomException("provoked error with:" + item);
         }
+        // do nothing
+        return item;
     }
 }

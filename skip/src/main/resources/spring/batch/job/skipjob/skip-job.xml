@@ -26,14 +26,15 @@
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="skipJob" xmlns="http://www.springframework.org/schema/batch">
+    <job id="skipJob" xmlns="http://www.springframework.org/schema/batch" restartable="true">
         <step id="skipJobStep">
             <tasklet>
                 <chunk 
                     reader="itemReader" 
+                    processor="itemProcessor"
                     writer="itemWriter" 
                     commit-interval="5"
-                    skip-limit="2">
+                    skip-limit="4">
                     <!-- item reader registered as stream to open the in-memory 
                          test-data-list and read with iterator.next() -->
                     <streams>
@@ -43,6 +44,7 @@
                         <include class="de.langmi.spring.batch.examples.skipjob.SkipJobCustomException"/>
                     </skippable-exception-classes>
                 </chunk>
+                <transaction-attributes isolation="READ_COMMITTED" />
             </tasklet>
             <listeners>
                 <listener ref="jobListener" />
@@ -56,6 +58,8 @@
 
     <bean id="itemReader" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemReader" />
     
+    <bean id="itemProcessor" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemProcessor" />
+
     <bean id="itemWriter" class="de.langmi.spring.batch.examples.skipjob.SkipJobItemWriter" />
 
     <bean id="jobListener" class="de.langmi.spring.batch.examples.skipjob.SkipJobListener" />
