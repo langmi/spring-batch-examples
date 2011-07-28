@@ -15,7 +15,7 @@ List of examples, for some i provided detailed wiki pages
 * [automatic threads configuration][7]
 * [listeners][5]
 * [multi resource partitioner][6]
-* [rename files][4], contains a simple and a more generic solution
+* [rename files][4], contains different strategies
 * [simple skip job][3]
 * **skip-policy** same as [simple skip job][3] but i used a skip policy instead of the usual skip-limit and skippable-exceptions
 
