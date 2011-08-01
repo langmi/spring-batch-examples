@@ -33,7 +33,7 @@
         <module>skip-policy</module>
     </modules>
 
-    <name>parent</name>
+    <name>spring batch examples parent</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
     <description>Spring Batch Example: parent project for convenient build all feature</description>
     <licenses>
