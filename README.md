@@ -27,7 +27,7 @@ All Spring Batch Examples:
 * are individual maven projects, the pom.xml in the root directory is only for a convenient _build all_ feature
 * are tested with:
   * Spring Batch 2.1.8.RELEASE
-  * Spring Framework 3.0.5.RELEASE
+  * Spring Framework 3.0.6.RELEASE
 * are provided "as is", no guarantees :-)
 * work with in-memory database, but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][2] i could use it, but why break a standard configuration ?
 
