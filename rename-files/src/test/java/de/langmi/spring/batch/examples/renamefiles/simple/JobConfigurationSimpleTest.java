@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/renamefiles/simple/*.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JobConfigurationTest {
+public class JobConfigurationSimpleTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired

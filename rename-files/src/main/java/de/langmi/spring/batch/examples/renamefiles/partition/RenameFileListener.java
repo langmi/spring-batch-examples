@@ -54,6 +54,7 @@ public class RenameFileListener implements StepExecutionListener {
             // this afterStep method is called
             // so get it deleted on jvm exit
             this.outputFileResource.getFile().deleteOnExit();
+            LOG.info("deleteOnExit for:" + this.outputFileResource.getFile().getPath());
         } catch (Exception ex) {
             return new ExitStatus(ExitStatus.FAILED.getExitCode(), ex.getMessage());
         }

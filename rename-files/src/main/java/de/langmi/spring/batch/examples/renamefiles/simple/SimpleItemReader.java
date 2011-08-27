@@ -29,7 +29,7 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
 /**
- * SkipJobItemReader - is not threadsafe, uses testdata.
+ * SimpleItemReader - is not threadsafe, uses testdata.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */

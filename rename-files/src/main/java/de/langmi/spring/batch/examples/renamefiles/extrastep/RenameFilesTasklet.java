@@ -40,18 +40,23 @@ public class RenameFilesTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         for (Entry<String, String> entry : fileNames.entrySet()) {
             String oldFileName = entry.getKey();
-            // remove file:
+            // remove "file:" part
             if (oldFileName.contains(FILE_PREFIX)) {
                 oldFileName = oldFileName.replace(FILE_PREFIX, "");
-            } 
+            }
             // old file name
             File oldFile = new File(oldFileName);
             String path = oldFile.getParent();
-            // create new file name
-            String newFilePathAndName = path + File.separator + entry.getValue() + ".txt";
-            File newFile = new File(newFilePathAndName);
 
-            // rename
+            // create new file name
+            StringBuilder sb = new StringBuilder(path);
+            sb.append(File.separator);
+            sb.append(entry.getValue());
+            sb.append(".txt");
+            String newFilePathAndName = sb.toString();
+
+            // rename file
+            File newFile = new File(newFilePathAndName);
             oldFile.renameTo(newFile);
 
             LOG.info("renamed:" + oldFile.getPath() + " to:" + newFilePathAndName);
