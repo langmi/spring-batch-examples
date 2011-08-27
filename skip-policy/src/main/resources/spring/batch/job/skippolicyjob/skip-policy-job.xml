@@ -34,11 +34,6 @@
                     writer="itemWriter" 
                     commit-interval="5"
                     skip-policy="skipPolicy">
-                    <!-- item reader registered as stream to open the in-memory 
-                         test-data-list and read with iterator.next() -->                        
-                    <streams>
-                        <stream ref="itemReader" />
-                    </streams>
                 </chunk>
             </tasklet>
             <listeners>
@@ -51,8 +46,14 @@
         </listeners>
     </job>
 
-    <bean id="itemReader" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobItemReader" />
-    
+    <bean id="itemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+        <constructor-arg>
+            <ref bean="testData" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="testData" class="de.langmi.spring.batch.examples.skippolicyjob.TestDataFactoryBean" />
+
     <bean id="itemWriter" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobItemWriter" />
 
     <bean id="jobListener" class="de.langmi.spring.batch.examples.skippolicyjob.SkipJobListener" />

@@ -45,6 +45,7 @@ public class SimpleFlatFileJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
+    /** Lines count from input file. */
     private static final int COUNT = 20;
     /** JobLauncherTestUtils Bean. */
     @Autowired
@@ -56,7 +57,6 @@ public class SimpleFlatFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("count", new JobParameter(String.valueOf(COUNT)));
         jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/input.txt"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple/output.txt"));
 

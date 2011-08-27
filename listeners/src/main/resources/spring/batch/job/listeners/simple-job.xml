@@ -20,6 +20,7 @@
 
     <description>
         Simple Job with Listener Example
+        - Item reader uses a simple List&gt;String&lt; created from a TestDataFactory.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
@@ -43,7 +44,11 @@
         </step>
     </job>
 
-    <bean id="itemReader" class="de.langmi.spring.batch.examples.listeners.SimpleItemReader" />
+    <bean id="itemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+        <constructor-arg>
+            <ref bean="testData" />
+        </constructor-arg>
+    </bean>
     
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <property name="resource" value="#{jobParameters['output.file']}" />
@@ -52,6 +57,8 @@
         </property>
     </bean>
 
+    <bean id="testData" class="de.langmi.spring.batch.examples.listeners.TestDataFactoryBean" />
+    
     <bean id="interfaceStepListener" class="de.langmi.spring.batch.examples.listeners.InterfaceStepListener" />
     <bean id="interfaceStepScopeListener" class="de.langmi.spring.batch.examples.listeners.InterfaceStepScopeListener" scope="step" />
     <bean id="annotationStepListener" class="de.langmi.spring.batch.examples.listeners.AnnotationStepListener" />
