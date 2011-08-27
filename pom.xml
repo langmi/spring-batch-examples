@@ -13,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <prerequisites>
         <maven>3.+</maven>
     </prerequisites>      
@@ -26,8 +25,10 @@
     <packaging>pom</packaging>
     
     <modules>
+        <module>automatic-thread-conf</module>
         <module>listeners</module>
         <module>multi-resource-partitioner</module>
+        <module>readers</module>        
         <module>rename-files</module>        
         <module>skip</module>
         <module>skip-policy</module>
@@ -59,5 +60,4 @@
             <timezone>+1</timezone>
         </developer>
     </developers>
-    
 </project>
