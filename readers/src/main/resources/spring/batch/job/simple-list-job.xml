@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        Examples for item readers which use simple Lists, Maps and similiar resources.
+        
+        * the Job has one step for each simple reader example
+        
+        springListItemReaderStep
+            * uses the ListItemReader, see:
+                * http://static.springsource.org/spring-batch/reference/html-single/index.html#itemReadersAppendix
+                * http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/support/ListItemReader.html
+                * IMPORTANT: the Spring ListItemReader removes each read item from the list while reading, use with care
+                    * thats why the factory bean is configured as prototype
+            * gets List from a (prototype) Factory Bean, see:
+                * http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/beans.html#beans-factory-extension-factorybean
+                * to make the factory bean configurable by Job Parameters, you would need to apply a workaround, see:
+                    * https://jira.springsource.org/browse/SPR-7864
+                    * http://forum.springsource.org/showthread.php?100735-Multiple-calls-to-getObject-in-step-scoped-FactoryBean
+        springIteratorItemReaderStep
+            * uses IteratorItemReader, see:
+                * http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/support/IteratorItemReader.html
+            * shares config with springListItemReaderStep
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="simpleListReaderJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="springListItemReaderStep" next="springIteratorItemReaderStep">
+            <tasklet>
+                <chunk 
+                    reader="springListItemReader"
+                    writer="itemWriter" 
+                    commit-interval="5">
+                </chunk>
+            </tasklet>
+        </step>
+        <step id="springIteratorItemReaderStep">
+            <tasklet>
+                <chunk 
+                    reader="springIteratorItemReader"
+                    writer="itemWriter" 
+                    commit-interval="5">
+                </chunk>
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="springListItemReader" class="org.springframework.batch.item.support.ListItemReader">
+        <constructor-arg>
+            <ref bean="testData" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="springIteratorItemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+        <constructor-arg>
+            <ref bean="testData" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="testData" class="de.langmi.spring.batch.examples.readers.simplelist.TestDataFactoryBean">
+        <description>
+            Is configured as prototype, only needed for present version of ListItemReader, which exhausts
+            the used list while reading.
+        </description>
+    </bean>
+
+    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <property name="resource" value="#{jobParameters['output.file']}" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+        </property>
+    </bean>
+
+</beans>
