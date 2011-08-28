@@ -41,7 +41,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/simple-flatfile-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class FlatFileJobConfigurationTest {
+public class SimpleFlatFileJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());

@@ -35,7 +35,7 @@ public class FlatFileItemReaderTest {
     private static final int EXPECTED_COUNT = 20;
 
     /**
-     * Tests should successfully read the file.
+     * Test should read succesfully.
      *
      * @throws Exception 
      */

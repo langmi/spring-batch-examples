@@ -15,36 +15,36 @@
  */
 package de.langmi.spring.batch.examples.readers.simplelist;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.FactoryBean;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.springframework.batch.item.support.IteratorItemReader;
 
 /**
- * TestDataFactoryBean provides simple List Testdata, configured as prototype, <br />
- * because one of the readers exhausts the list while reading.
- *
+ * Tests the ListItemReader from Spring Batch without Application Context.
+ * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class TestDataFactoryBean implements FactoryBean<List<String>> {
+public class IteratorItemReaderTest {
 
-    public static final int COUNT = 20;
+    /** Reader under test. */
+    private IteratorItemReader<String> reader;
 
-    @Override
-    public List<String> getObject() throws Exception {
-        List<String> data = new ArrayList<String>();
-        for (int i = 0; i < COUNT; i++) {
-            data.add(String.valueOf(i));
+    /**
+     * Test should read succesfully.
+     *
+     * @throws Exception 
+     */
+    @Test
+    public void testSuccessfulReading() throws Exception {
+        // setup reader with test data
+        List<String> testData = new TestDataFactoryBean().getObject();
+        reader = new IteratorItemReader<String>(testData);
+        // read
+        int count = 0;
+        while (reader.read() != null) {
+            count++;
         }
-        return data;
-    }
-
-    @Override
-    public Class<?> getObjectType() {
-        return List.class;
-    }
-
-    @Override
-    public boolean isSingleton() {
-        return false;
+        assertEquals(count, testData.size());
     }
 }
