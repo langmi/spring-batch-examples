@@ -22,7 +22,7 @@
 
     <description>Spring Batch Test Setup</description>
 
-    <context:annotation-config/>
+    <context:annotation-config />
 
     <bean class="org.springframework.batch.test.JobLauncherTestUtils"/>
 

@@ -15,62 +15,73 @@
  */
 package de.langmi.spring.batch.examples.readers.simpleflatfile;
 
+import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.Assert.*;
+import java.util.concurrent.Callable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.ItemStreamReader;
+import org.springframework.batch.test.MetaDataInstanceFactory;
+import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * JobConfigurationTest.
- *
- * @author Michael R. Lange <michael.r.lange@langmi.de> 
+ * 
+ * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-@ContextConfiguration(locations = {
+@ContextConfiguration({
     "classpath*:spring/batch/job/simple-flatfile-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SimpleFlatFileJobConfigurationTest {
+public class FlatFileItemReaderContextTest {
 
-    /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    /** Lines count from input file. */
-    private static final int COUNT = 20;
-    /** JobLauncherTestUtils Bean. */
     @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
+    private ItemStreamReader<String> itemReaderStream;
+    private static final int EXPECTED_COUNT = 20;
 
-    /** Launch Test. */
+    /**
+     * Tests should successfully read the file.
+     *
+     * @throws Exception 
+     */
     @Test
-    public void launchJob() throws Exception {
-        // Job parameters
+    public void testSuccessfulReading() throws Exception {
+        // setup
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/input.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple/output.txt"));
+        StepExecution execution = MetaDataInstanceFactory.createStepExecution(new JobParameters(jobParametersMap));
 
-        // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        int count = StepScopeTestUtils.doInStepScope(execution, new Callable<Integer>() {
 
-        // assert job run status
-        assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
+            @Override
+            public Integer call() throws Exception {
 
-        // output step summaries
-        for (StepExecution step : jobExecution.getStepExecutions()) {
-            LOG.debug(step.getSummary());
-            assertTrue("Read Count mismatch, changed input file?",
-                    step.getReadCount() == COUNT);
-        }
+                int count = 0;
+
+                itemReaderStream.open(new ExecutionContext());
+
+                try {
+                    while (itemReaderStream.read() != null) {
+                        count++;
+                    }
+                } finally {
+                    itemReaderStream.close();
+                }
+                return count;
+
+            }
+        });
+        assertEquals(count, EXPECTED_COUNT);
     }
 }

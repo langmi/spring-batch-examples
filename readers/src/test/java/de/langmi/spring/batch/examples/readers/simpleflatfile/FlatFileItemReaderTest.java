@@ -16,10 +16,7 @@
 package de.langmi.spring.batch.examples.readers.simpleflatfile;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
 import org.springframework.batch.test.MetaDataInstanceFactory;
@@ -30,12 +27,12 @@ import org.springframework.core.io.FileSystemResource;
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class FlatFileItemReaderWithoutSpringContextTest {
+public class FlatFileItemReaderTest {
 
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private FlatFileItemReader<String> reader;
+    /** Reader under test. */
+    private FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
     private static final String INPUT_FILE = "src/test/resources/input/input.txt";
-    private static final int COUNT = 20;
+    private static final int EXPECTED_COUNT = 20;
 
     /**
      * Tests should successfully read the file.
@@ -44,38 +41,22 @@ public class FlatFileItemReaderWithoutSpringContextTest {
      */
     @Test
     public void testSuccessfulReading() throws Exception {
-        // set resource
+        // init reader
+        reader.setLineMapper(new PassThroughLineMapper());
         reader.setResource(new FileSystemResource(INPUT_FILE));
         // open, provide "mock" ExecutionContext
         reader.open(MetaDataInstanceFactory.createStepExecution().getExecutionContext());
         // read
         try {
-            String item = null;
-            int i = 0;
-            do {
-                item = reader.read();
-                if (item != null) {
-                    assertTrue(i == Integer.valueOf(item));
-                    i++;
-                }
-            } while (item != null);
-            assertTrue(i == COUNT);
+            int count = 0;
+            while (reader.read() != null) {
+                count++;
+            }
+            assertEquals(count, EXPECTED_COUNT);
         } catch (Exception e) {
             throw e;
         } finally {
             reader.close();
         }
-    }
-
-    /**
-     * Initialize reader for tests.
-     *
-     * @throws Exception 
-     */
-    @Before
-    public void setup() throws Exception {
-        // init reader
-        reader = new FlatFileItemReader<String>();
-        reader.setLineMapper(new PassThroughLineMapper());
     }
 }
