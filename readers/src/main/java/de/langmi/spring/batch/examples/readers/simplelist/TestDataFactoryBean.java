@@ -20,6 +20,7 @@ import java.util.List;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
+ * TestDataFactoryBean provides simple List Testdata.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
