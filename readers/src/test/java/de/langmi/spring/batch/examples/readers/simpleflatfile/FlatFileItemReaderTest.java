@@ -52,7 +52,7 @@ public class FlatFileItemReaderTest {
             while (reader.read() != null) {
                 count++;
             }
-            assertEquals(count, EXPECTED_COUNT);
+            assertEquals(EXPECTED_COUNT, count);
         } catch (Exception e) {
             throw e;
         } finally {

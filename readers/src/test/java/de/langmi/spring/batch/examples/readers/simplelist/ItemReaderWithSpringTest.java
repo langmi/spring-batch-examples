@@ -57,7 +57,7 @@ public class ItemReaderWithSpringTest {
         while (listItemReader.read() != null) {
             count++;
         }
-        assertEquals(count, EXPECTED_COUNT);
+        assertEquals(EXPECTED_COUNT, count);
     }
 
     /**
@@ -72,6 +72,6 @@ public class ItemReaderWithSpringTest {
         while (iteratorItemReader.read() != null) {
             count++;
         }
-        assertEquals(count, EXPECTED_COUNT);
+        assertEquals(EXPECTED_COUNT, count);
     }
 }

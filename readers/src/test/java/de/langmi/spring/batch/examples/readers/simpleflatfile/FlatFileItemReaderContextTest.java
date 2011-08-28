@@ -82,6 +82,6 @@ public class FlatFileItemReaderContextTest {
 
             }
         });
-        assertEquals(count, EXPECTED_COUNT);
+        assertEquals(EXPECTED_COUNT, count);
     }
 }

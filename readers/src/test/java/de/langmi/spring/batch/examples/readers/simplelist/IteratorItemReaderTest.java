@@ -45,6 +45,6 @@ public class IteratorItemReaderTest {
         while (reader.read() != null) {
             count++;
         }
-        assertEquals(count, testData.size());
+        assertEquals(testData.size(), count);
     }
 }

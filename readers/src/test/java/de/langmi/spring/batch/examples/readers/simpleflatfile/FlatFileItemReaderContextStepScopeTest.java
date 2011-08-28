@@ -76,7 +76,7 @@ public class FlatFileItemReaderContextStepScopeTest {
             while (itemReaderStream.read() != null) {
                 count++;
             }
-            assertEquals(count, EXPECTED_COUNT);
+            assertEquals(EXPECTED_COUNT, count);
         } catch (Exception e) {
             throw e;
         } finally {
