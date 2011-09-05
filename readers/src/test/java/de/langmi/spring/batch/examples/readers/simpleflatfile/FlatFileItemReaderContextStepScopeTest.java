@@ -39,10 +39,10 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * StepScopeTestExecutionListener.
  * <br />
  * By using StepScopeTestExecutionListener we need to provide the other "default"
- * listerners too.
+ * listeners too.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
- * @see http://static.springsource.org/spring-batch/reference/html/testing.html#d0e7538
+ * @see <a href="http://static.springsource.org/spring-batch/reference/html/testing.html#d0e7538">Spring Batch Testing</a>
  */
 @ContextConfiguration({
     "classpath*:spring/batch/job/simple-flatfile-job.xml",

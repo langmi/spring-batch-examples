@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
@@ -35,16 +33,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * 
+ * Tests the FlatFileItemReader from Spring Batch with Application Context with
+ * StepScopeTestUtils.doInStepScope(...).
+ *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
+ * @see <a href="http://static.springsource.org/spring-batch/reference/html/testing.html#d0e7538">Spring Batch Testing</a>
  */
 @ContextConfiguration({
     "classpath*:spring/batch/job/simple-flatfile-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class FlatFileItemReaderContextTest {
+public class FlatFileItemReaderDoInStepscopeTest {
 
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     @Autowired
     private ItemStreamReader<String> itemReaderStream;
     private static final int EXPECTED_COUNT = 20;

@@ -27,7 +27,7 @@ import org.springframework.core.io.Resource;
  * GZipBufferedReaderFactory provides Resourcehandling of gzip Files.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
- * @see http://php.sabscape.com/blog/?p=281
+ * @see <a href="http://php.sabscape.com/blog/?p=281">sabscape.com: Customizing Spring Batch to process zipped files</a>
  */
 public class GZipBufferedReaderFactory implements BufferedReaderFactory {
 
