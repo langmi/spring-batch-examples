@@ -49,6 +49,7 @@
         <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
         <spring.framework.version>3.0.6.RELEASE</spring.framework.version>
         <slf4j.version>1.6.2</slf4j.version>
+        <truezip.version>7.3</truezip.version>
     </properties>
 
     <build>
@@ -86,6 +87,32 @@
         </plugins>
     </build>
     <dependencies>
+        <!-- Truezip -->
+        <dependency>
+            <groupId>de.schlichtherle.truezip</groupId>
+            <artifactId>truezip-kernel</artifactId>
+            <version>${truezip.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.schlichtherle.truezip</groupId>
+            <artifactId>truezip-driver-file</artifactId>
+            <version>${truezip.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.schlichtherle.truezip</groupId>
+            <artifactId>truezip-driver-tar</artifactId>
+            <version>${truezip.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.schlichtherle.truezip</groupId>
+            <artifactId>truezip-driver-zip</artifactId>
+            <version>${truezip.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.schlichtherle.truezip</groupId>
+            <artifactId>truezip-file</artifactId>
+            <version>${truezip.version}</version>
+        </dependency>
         <!-- HSQLDB -->
         <dependency>
             <groupId>org.hsqldb</groupId>
@@ -97,6 +124,11 @@
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
