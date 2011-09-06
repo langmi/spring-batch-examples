@@ -31,6 +31,7 @@ All Spring Batch Examples:
   * Spring Framework 3.0.6.RELEASE
 * are provided "as is", no guarantees :-)
 * work with in-memory database, but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][8] i could use it, but why break a standard configuration ?
+* for the general Maven, Spring and Database setup see the [project setup][project-setup] wiki page.
 
 ## License
 
@@ -44,3 +45,4 @@ Apache 2.0 see [license wiki page][1] for more details
 [6]: https://github.com/langmi/spring-batch-examples/wiki/Rename-Files
 [7]: https://github.com/langmi/spring-batch-examples/wiki/Simple-Skip-Job
 [8]: https://jira.springsource.org/browse/BATCH-1541
+[project-setup]: https://github.com/langmi/spring-batch-examples/wiki/project-setup
