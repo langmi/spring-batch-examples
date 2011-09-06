@@ -21,19 +21,19 @@
     <description>
         Example for a job which reads TAR, ZIP, JAR, EAR, WAR files.
         
-        - uses a customized MultiResourceItemReader
+        - uses a customized MultiResourceItemReader for compressed archives
             - extracts the files from the archive
             - if archive contains nested directories it will extract all
               files recursively
             - extracted files are handled as ItemStreams
-                - 
+
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="simpleFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
-        <step id="simpleFlatFileStep">
+    <job id="archiveFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="archiveFlatFileStep">
             <tasklet>
                 <chunk 
                     reader="itemReader"
@@ -44,12 +44,18 @@
         </step>
     </job>
 
-    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
-        <property name="resource" value="#{jobParameters['input.file']}" />
+    <bean id="itemReader" 
+          class="de.langmi.spring.batch.examples.readers.archive.ArchiveMultiResourceItemReader" 
+          scope="step">
+        <property name="archives" value="#{jobParameters['input.archives']}" />
+        <property name="delegate" ref="delegateReader" />
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="delegateReader" class="org.springframework.batch.item.file.FlatFileItemReader">
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
         </property>
-        <property name="strict" value="true" />
     </bean>
     
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">

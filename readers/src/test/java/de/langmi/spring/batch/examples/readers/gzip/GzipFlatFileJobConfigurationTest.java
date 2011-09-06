@@ -69,8 +69,8 @@ public class GzipFlatFileJobConfigurationTest {
         // output step summaries
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
-            assertTrue("Read Count mismatch, changed input file?",
-                       step.getReadCount() == COUNT);
+            assertEquals("Read Count mismatch, changed input?",
+                    COUNT, step.getReadCount());
         }
     }
 }

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.tar;
+package de.langmi.spring.batch.examples.readers.archive;
 
+import de.langmi.spring.batch.examples.readers.archive.ArchiveMultiResourceItemReader;
+import de.langmi.spring.batch.examples.readers.archive.DefaultArchiveFileNameFilter;
 import java.io.FilenameFilter;
 import org.junit.Test;
 import static org.junit.Assert.*;

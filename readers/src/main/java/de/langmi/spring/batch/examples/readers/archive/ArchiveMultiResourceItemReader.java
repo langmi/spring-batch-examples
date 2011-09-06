@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.tar;
+package de.langmi.spring.batch.examples.readers.archive;
 
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TFileInputStream;
@@ -127,13 +127,15 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
      */
     private void runNestedDirs(TFile rootFile, List<TFile> fileList) {
         TFile files[] = rootFile.listFiles(this.filenameFilter);
-        for (int i = 0; i < files.length; i++) {
-            TFile tFile = files[i];
-            LOG.info("extracting:" + tFile.getAbsolutePath());
-            if (tFile.isDirectory()) {
-                runNestedDirs(tFile, fileList);
-            } else {
-                fileList.add(tFile);
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                TFile tFile = files[i];
+                LOG.info("extracting:" + tFile.getAbsolutePath());
+                if (tFile.isDirectory()) {
+                    runNestedDirs(tFile, fileList);
+                } else {
+                    fileList.add(tFile);
+                }
             }
         }
     }
