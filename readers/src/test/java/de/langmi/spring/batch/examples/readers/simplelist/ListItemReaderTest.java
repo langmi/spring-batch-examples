@@ -42,7 +42,9 @@ public class ListItemReaderTest {
         reader = new ListItemReader<String>(testData);
         // read
         int count = 0;
-        while (reader.read() != null) {
+        String line;
+        while ((line = reader.read()) != null) {
+            assertEquals(String.valueOf(count), line);
             count++;
         }
         assertEquals(testData.size(), count);

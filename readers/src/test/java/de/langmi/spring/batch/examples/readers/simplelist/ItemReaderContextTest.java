@@ -50,7 +50,9 @@ public class ItemReaderContextTest {
     public void testListItemReader() throws Exception {
         // read
         int count = 0;
-        while (listItemReader.read() != null) {
+        String line;
+        while ((line = listItemReader.read()) != null) {
+            assertEquals(String.valueOf(count), line);
             count++;
         }
         assertEquals(EXPECTED_COUNT, count);
@@ -65,7 +67,9 @@ public class ItemReaderContextTest {
     public void testIteratorItemReader() throws Exception {
         // read
         int count = 0;
-        while (iteratorItemReader.read() != null) {
+        String line;
+        while ((line = iteratorItemReader.read()) != null) {
+            assertEquals(String.valueOf(count), line);
             count++;
         }
         assertEquals(EXPECTED_COUNT, count);

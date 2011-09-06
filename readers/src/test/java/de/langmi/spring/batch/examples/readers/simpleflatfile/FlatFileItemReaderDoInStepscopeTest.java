@@ -71,8 +71,10 @@ public class FlatFileItemReaderDoInStepscopeTest {
 
                 itemReaderStream.open(new ExecutionContext());
 
+                String line;
                 try {
-                    while (itemReaderStream.read() != null) {
+                    while ((line = itemReaderStream.read()) != null) {
+                        assertEquals(String.valueOf(count), line);
                         count++;
                     }
                 } finally {

@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +37,6 @@ public class TruezipTest {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Test
-    public void testGzipFileSimple() throws Exception {
-        LOG.debug("testGzipFileSimple");
-        TFile file = new TFile("src/test/resources/input/input.txt.gz");
-        LOG.debug("truezip can't handle pure gzipped files, 'just' tar.gz.");
-    }
-
-    @Test
     public void testZipFileSimple() throws Exception {
         LOG.debug("testZipFileSimple");
         TFile file = new TFile("src/test/resources/input/input.txt.zip");
@@ -51,6 +45,8 @@ public class TruezipTest {
             TFile tFile = files[i];
             LOG.debug(tFile.getName());
         }
+        // i'm not sure if it's really needed to call umount, just being defensive
+        TFile.umount(file);
     }
 
     @Test
@@ -62,6 +58,8 @@ public class TruezipTest {
             TFile tFile = files[i];
             LOG.debug(tFile.getName());
         }
+        // i'm not sure if it's really needed to call umount, just being defensive
+        TFile.umount(file);
     }
 
     @Test
@@ -76,18 +74,26 @@ public class TruezipTest {
             try {
                 DataInputStream in = new DataInputStream(tfis);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                String strLine;
-                while ((strLine = br.readLine()) != null) {
-                    LOG.debug(strLine);
+                int count = 0;
+                String line;
+                while ((line = br.readLine()) != null) {
+                    assertEquals(String.valueOf(count), line);
+                    count++;
                 }
             } finally {
                 tfis.close();
             }
         }
-        // do we need umount?
-        //TFile.umount(file);
+        // i'm not sure if it's really needed to call umount, just being defensive
+        TFile.umount(file);
     }
 
+    /**
+     * Run recursively through the archive and keep only the files.
+     *
+     * @param rootFile
+     * @param fileList 
+     */
     private static void runNestedDirs(TFile rootFile, List<TFile> fileList) {
         TFile files[] = rootFile.listFiles();
         for (int i = 0; i < files.length; i++) {

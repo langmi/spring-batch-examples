@@ -15,8 +15,9 @@
  */
 package de.langmi.spring.batch.examples.readers.tar;
 
-import java.util.Comparator;
+import java.io.FilenameFilter;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -34,6 +35,54 @@ public class ArchiveMultiResourceItemReaderTest {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Test with one ZIP file containing two text files with 20 lines each.
+     * One file is a .csv, the other a .txt, only the .csv should be used.
+     *
+     * @throws Exception 
+     */
+    @Test
+    public void testOneZipFileWithFilter() throws Exception {
+        LOG.debug("testOneZipFileWithFilter");
+        ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
+        // setup multResourceReader
+        // zip file contains 2 files, one with suffix .csv, which contains 20 lines
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/input-mixed-files.zip")});
+        // setup filter
+        DefaultArchiveFileNameFilter fileNameFilter = new DefaultArchiveFileNameFilter();
+        fileNameFilter.setSuffixes(new String[]{".csv"});
+        mReader.setFilenameFilter(fileNameFilter);
+        // call general setup last, includes call to afterPropertiesSet
+        generalMultiResourceReaderWithFilterSetup(mReader, fileNameFilter);
+
+
+        // open with mock context
+        mReader.open(MetaDataInstanceFactory.createStepExecution().getExecutionContext());
+
+        // read
+        try {
+            String item = null;
+            int count = 0;
+            do {
+                item = mReader.read();
+                if (item != null) {
+                    assertEquals(String.valueOf(count), item);
+                    count++;
+                }
+            } while (item != null);
+            assertEquals(20, count);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            mReader.close();
+        }
+    }
+
+    /**
+     * Test with one ZIP file containing one text file with 20 lines.
+     *
+     * @throws Exception 
+     */
     @Test
     public void testOneZipFile() throws Exception {
         LOG.debug("testOneZipFile");
@@ -54,8 +103,8 @@ public class ArchiveMultiResourceItemReaderTest {
             do {
                 item = mReader.read();
                 if (item != null) {
+                    assertEquals(String.valueOf(count), item);
                     count++;
-                    LOG.debug(item);
                 }
             } while (item != null);
             LOG.debug(String.valueOf(count));
@@ -66,6 +115,12 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
+    /**
+     * Test with tar file with nested directories, contains 4 text files with
+     * 20 lines each.
+     * 
+     * @throws Exception 
+     */
     @Test
     public void testOneTarFileNestedDirs() throws Exception {
         LOG.debug("testOneTarFileNestedDirs");
@@ -87,10 +142,9 @@ public class ArchiveMultiResourceItemReaderTest {
                 item = mReader.read();
                 if (item != null) {
                     count++;
-                    LOG.debug(item);
                 }
             } while (item != null);
-            LOG.debug(String.valueOf(count));
+            assertEquals(80, count);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -98,6 +152,11 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
+    /**
+     * Test with tar file which contains 2 text files, with 20 lines each.
+     * 
+     * @throws Exception 
+     */
     @Test
     public void testOneTarFile() throws Exception {
         LOG.debug("testOneTarFile");
@@ -119,10 +178,9 @@ public class ArchiveMultiResourceItemReaderTest {
                 item = mReader.read();
                 if (item != null) {
                     count++;
-                    LOG.debug(item);
                 }
             } while (item != null);
-            LOG.debug(String.valueOf(count));
+            assertEquals(40, count);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -130,6 +188,12 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
+    /**
+     * Test with multiple tar files, together they contain 6 text files with 20 
+     * lines each.
+     *
+     * @throws Exception 
+     */
     @Test
     public void testMultipleTarFiles() throws Exception {
         LOG.debug("testMultipleTarFiles");
@@ -154,10 +218,9 @@ public class ArchiveMultiResourceItemReaderTest {
                 item = mReader.read();
                 if (item != null) {
                     count++;
-                    LOG.debug(item);
                 }
             } while (item != null);
-            LOG.debug(String.valueOf(count));
+            assertEquals(120, count);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -165,26 +228,41 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
+    /**
+     * Helper method to setup the used MultiResourceItemReader.
+     *
+     * @param mReader
+     * @throws Exception 
+     */
     private void generalMultiResourceReaderSetup(ArchiveMultiResourceItemReader<String> mReader) throws Exception {
-        // overwrite comparator, do not use fileName, but resource description instead
-        mReader.setComparator(new Comparator<Resource>() {
-
-            /**
-             * Compares resource filenames.
-             */
-            @Override
-            public int compare(Resource r1, Resource r2) {
-                return r1.getDescription().compareTo(r2.getDescription());
-            }
-        });
         // setup delegate
         FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
         reader.setLineMapper(new PassThroughLineMapper());
         mReader.setDelegate(reader);
+        // initialize the multiResourceReader, is mandatory! see javadoc
+        try {
+            mReader.afterPropertiesSet();
+        } catch (Exception e) {
+            mReader.close();
+            throw e;
+        }
+    }
 
-
-        // initialize multiResourceReader - is important, extracts the file from
-        // the provided archive
-        mReader.afterPropertiesSet();
+    /**
+     * Overloaded helper method to setup the used MultiResourceItemReader with 
+     * specific FileNameFilter.
+     *
+     * @param mReader
+     * @param filenameFilter
+     * @throws Exception 
+     */
+    private void generalMultiResourceReaderWithFilterSetup(
+            ArchiveMultiResourceItemReader<String> mReader,
+            FilenameFilter filenameFilter) throws Exception {
+        // set filter if needed
+        if (filenameFilter != null) {
+            mReader.setFilenameFilter(filenameFilter);
+        }
+        generalMultiResourceReaderSetup(mReader);
     }
 }

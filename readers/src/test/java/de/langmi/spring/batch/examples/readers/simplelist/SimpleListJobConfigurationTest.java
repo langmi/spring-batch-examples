@@ -64,6 +64,7 @@ public class SimpleListJobConfigurationTest {
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
         // output step summaries
+        // expects only jobs with the expected count
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
             assertTrue("Read Count mismatch, reader still working?",

@@ -18,7 +18,9 @@ package de.langmi.spring.batch.examples.readers.tar;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TFileInputStream;
 import de.schlichtherle.truezip.fs.FsSyncException;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +41,27 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
     private static final Logger LOG = LoggerFactory.getLogger(ArchiveMultiResourceItemReader.class);
     private Resource[] archives;
     private TFile[] wrappedArchives;
+    private FilenameFilter filenameFilter = new DefaultArchiveFileNameFilter();
 
+    /**
+     * Set archive files with normal Spring resources pattern, if not set, the
+     * class will fallback to normal MultiResourceItemReader behaviour.
+     *
+     * @param archives 
+     */
     public void setArchives(Resource[] archives) {
         this.archives = archives;
     }
 
+    public void setFilenameFilter(FilenameFilter filenameFilter) {
+        this.filenameFilter = filenameFilter;
+    }
+
+    /**
+     * Calls super.close() and tries to unmount all used archive files.
+     *
+     * @throws ItemStreamException 
+     */
     @Override
     public void close() throws ItemStreamException {
         super.close();
@@ -59,8 +77,26 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
         }
     }
 
+    /**
+     * Tries to extract all files in the archives and adds them as resources to
+     * the normal MultiResourceItemReader. Overwrites the Comparator from
+     * the super class to get it working with itemstreams.
+     *
+     * @throws Exception 
+     */
     @Override
     public void afterPropertiesSet() throws Exception {
+        // overwrite the comparator to use description
+        // instead of filename, the itemStream can only
+        // have that description
+        this.setComparator(new Comparator<Resource>() {
+
+            /** Compares resource descriptions. */
+            @Override
+            public int compare(Resource r1, Resource r2) {
+                return r1.getDescription().compareTo(r2.getDescription());
+            }
+        });
         // create the TFiles from the normal Resource Files
         if (archives != null) {
             wrappedArchives = new TFile[archives.length];
@@ -81,8 +117,16 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
         }
     }
 
-    private static void runNestedDirs(TFile rootFile, List<TFile> fileList) {
-        TFile files[] = rootFile.listFiles();
+    /**
+     * Runs recursively through the TFile.listFiles() and adds each file to the 
+     * fileList. Logs each step - even for directories - to show the archive
+     * file contents.
+     * 
+     * @param rootFile
+     * @param fileList 
+     */
+    private void runNestedDirs(TFile rootFile, List<TFile> fileList) {
+        TFile files[] = rootFile.listFiles(this.filenameFilter);
         for (int i = 0; i < files.length; i++) {
             TFile tFile = files[i];
             LOG.info("extracting:" + tFile.getAbsolutePath());
