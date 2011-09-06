@@ -12,12 +12,13 @@ To further simplify it, all work is under Apache 2.0 license (see [license wiki 
 
 List of examples, for some i provided detailed wiki pages
 
-* [automatic threads configuration][7]
-* [listeners][5]
-* [multi resource partitioner][6]
-* [rename files][4], contains different strategies
-* [simple skip job][3]
-* **skip-policy** same as [simple skip job][3] but i used a skip policy instead of the usual skip-limit and skippable-exceptions
+* [automatic threads configuration][2]
+* [listeners][3]
+* [multi resource partitioner][4]
+* [readers][5]
+* [rename files][6], contains different strategies
+* [simple skip job][7]
+* **skip-policy** same as [simple skip job][7] but i used a skip policy instead of the usual skip-limit and skippable-exceptions
 
 
 ## General Informations
@@ -29,16 +30,17 @@ All Spring Batch Examples:
   * Spring Batch 2.1.8.RELEASE
   * Spring Framework 3.0.6.RELEASE
 * are provided "as is", no guarantees :-)
-* work with in-memory database, but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][2] i could use it, but why break a standard configuration ?
+* work with in-memory database, but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][8] i could use it, but why break a standard configuration ?
 
 ## License
 
 Apache 2.0 see [license wiki page][1] for more details
 
 [1]: https://github.com/langmi/spring-batch-examples/wiki/License---Apache-2.0
-[2]: https://jira.springsource.org/browse/BATCH-1541
-[3]: https://github.com/langmi/spring-batch-examples/wiki/Simple-Skip-Job
-[4]: https://github.com/langmi/spring-batch-examples/wiki/Rename-Files
-[5]: https://github.com/langmi/spring-batch-examples/wiki/Listeners
-[6]: https://github.com/langmi/spring-batch-examples/wiki/Multi-Resource-Partitioner
-[7]: https://github.com/langmi/spring-batch-examples/wiki/Automatic-Threads-Configuration
+[2]: https://github.com/langmi/spring-batch-examples/wiki/Automatic-Threads-Configuration
+[3]: https://github.com/langmi/spring-batch-examples/wiki/Listeners
+[4]: https://github.com/langmi/spring-batch-examples/wiki/Multi-Resource-Partitioner
+[5]: https://github.com/langmi/spring-batch-examples/wiki/Readers
+[6]: https://github.com/langmi/spring-batch-examples/wiki/Rename-Files
+[7]: https://github.com/langmi/spring-batch-examples/wiki/Simple-Skip-Job
+[8]: https://jira.springsource.org/browse/BATCH-1541

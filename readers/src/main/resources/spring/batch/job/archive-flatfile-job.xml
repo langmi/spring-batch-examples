@@ -26,6 +26,7 @@
             - if archive contains nested directories it will extract all
               files recursively
             - extracted files are handled as ItemStreams
+        - writes all lines from all files into one file
 
     </description>
     <!-- 
