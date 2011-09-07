@@ -15,11 +15,13 @@
  */
 package de.langmi.spring.batch.examples.readers.composite;
 
+import java.util.List;
+
 /**
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public interface ObjectListMapper<T> {
 
-    T mapItems(Object... items) throws Exception;
+    T mapItems(List<?> items) throws Exception;
 }

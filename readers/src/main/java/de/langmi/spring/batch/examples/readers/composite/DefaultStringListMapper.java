@@ -15,20 +15,30 @@
  */
 package de.langmi.spring.batch.examples.readers.composite;
 
+import java.util.List;
+
 /**
- *
+ * Default implementation which just appends each object.toString() together.
+ * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class DefaultStringListMapper implements ObjectListMapper<String> {
 
+    /** {@inheritDoc} */
     @Override
-    public String mapItems(Object... items) throws Exception {
-        if (items != null) {
+    public String mapItems(List<?> items) throws Exception {
+        if (items != null && items.size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (Object item : items) {
-                sb.append(item);
+                if (item != null) {
+                    sb.append(item);
+                }
             }
-            return sb.toString();
+            if (sb.length() > 0) {
+                return sb.toString();
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
