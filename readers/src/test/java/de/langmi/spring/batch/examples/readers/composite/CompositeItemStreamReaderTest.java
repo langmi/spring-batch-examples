@@ -32,9 +32,9 @@ import org.springframework.core.io.FileSystemResource;
 public class CompositeItemStreamReaderTest {
 
     private final CompositeItemStreamReader<String> reader = new CompositeItemStreamReader<String>();
-    private static final String INPUT_FILE_CSV = "src/test/resources/input/composite/input.csv";
-    private static final String INPUT_FILE_TXT = "src/test/resources/input/composite/input.txt";
-    private static final int EXPECTED_COUNT = 6;
+    private static final String INPUT_FILE_CSV = "src/test/resources/input/composite/input1.txt";
+    private static final String INPUT_FILE_TXT = "src/test/resources/input/composite/input2.txt";
+    private static final int EXPECTED_COUNT = 20;
 
     @Test
     public void test() throws Exception {
