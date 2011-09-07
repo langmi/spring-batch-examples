@@ -17,6 +17,7 @@ package de.langmi.spring.batch.examples.readers.composite;
 
 import java.util.ArrayList;
 import org.junit.Test;
+import org.springframework.batch.item.ExecutionContext;
 import static org.junit.Assert.*;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -32,19 +33,56 @@ import org.springframework.core.io.FileSystemResource;
 public class CompositeItemStreamReaderTest {
 
     private final CompositeItemStreamReader<String> reader = new CompositeItemStreamReader<String>();
-    private static final String INPUT_FILE_CSV = "src/test/resources/input/composite/input1.txt";
-    private static final String INPUT_FILE_TXT = "src/test/resources/input/composite/input2.txt";
+    private static final String INPUT_FILE_1 = "src/test/resources/input/composite/input1.txt";
+    private static final String INPUT_FILE_2 = "src/test/resources/input/composite/input2.txt";
     private static final int EXPECTED_COUNT = 20;
 
     @Test
-    public void test() throws Exception {
+    public void testRestart() throws Exception {
         // setup composite reader
         reader.setMapper(new DefaultStringListMapper());
         reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
 
             {
-                add(createFlatFileItemReader(INPUT_FILE_CSV));
-                add(createFlatFileItemReader(INPUT_FILE_TXT));
+                add(createFlatFileItemReader(INPUT_FILE_1));
+                add(createFlatFileItemReader(INPUT_FILE_2));
+            }
+        });
+
+        // open, provide "mock" ExecutionContext
+        // fake restar scenario, works because the name of the FlatFileItemReader
+        // is set to its input_file
+        int alreadyRead = 2;
+        ExecutionContext ec = new ExecutionContext();
+        ec.put(INPUT_FILE_1 + "." + "read.count", alreadyRead);
+        ec.put(INPUT_FILE_2 + "." + "read.count", alreadyRead);
+        reader.open(ec);
+        // read
+        try {
+            int count = alreadyRead;
+            String line;
+            while ((line = reader.read()) != null) {
+                assertEquals(String.valueOf(count) + String.valueOf(count), line);
+                count++;
+            }
+            // read count includes the alreadyRead items too
+            assertEquals(EXPECTED_COUNT, count);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            reader.close();
+        }
+    }
+
+    @Test
+    public void testRead() throws Exception {
+        // setup composite reader
+        reader.setMapper(new DefaultStringListMapper());
+        reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
+
+            {
+                add(createFlatFileItemReader(INPUT_FILE_1));
+                add(createFlatFileItemReader(INPUT_FILE_2));
             }
         });
 
@@ -77,6 +115,7 @@ public class CompositeItemStreamReaderTest {
         // init reader
         ffir.setLineMapper(new PassThroughLineMapper());
         ffir.setResource(new FileSystemResource(inputFile));
+        ffir.setName(inputFile);
 
         return (ItemStreamReader) ffir;
     }

@@ -53,6 +53,7 @@
     </bean>
 
     <bean id="itemReader1" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="name" value="itemReader1" />
         <property name="resource" value="#{jobParameters['input.file.1']}" />
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
@@ -61,6 +62,7 @@
     </bean>
 
     <bean id="itemReader2" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="name" value="itemReader2" />        
         <property name="resource" value="#{jobParameters['input.file.2']}" />
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
