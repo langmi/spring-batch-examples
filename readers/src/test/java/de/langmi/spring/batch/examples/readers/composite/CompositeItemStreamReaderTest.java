@@ -59,6 +59,9 @@ public class CompositeItemStreamReaderTest {
         reader.open(ec);
         // read
         try {
+            // this makes sure we test a restart scenario, first read item
+            // should be alreadyRead, for my example files this is a "2" and
+            // not the first line a "0"
             int count = alreadyRead;
             String line;
             while ((line = reader.read()) != null) {
