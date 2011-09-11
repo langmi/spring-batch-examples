@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.simpleflatfile;
+package de.langmi.spring.batch.examples.readers.simple.list;
 
+import de.langmi.spring.batch.examples.readers.simple.TestDataFactoryBean;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.*;
@@ -37,16 +38,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
-@ContextConfiguration({
-    "classpath*:spring/batch/job/simple-flatfile-job.xml",
+@ContextConfiguration(locations = {
+    "classpath*:spring/batch/job/simple-list-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SimpleFlatFileJobConfigurationTest {
+public class SimpleListJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    /** Lines count from input file. */
-    private static final int COUNT = 20;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -57,8 +56,7 @@ public class SimpleFlatFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/input.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple-flatfile/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple-list/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
@@ -67,10 +65,11 @@ public class SimpleFlatFileJobConfigurationTest {
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
         // output step summaries
+        // expects only jobs with the expected count
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
-            assertEquals("Read Count mismatch, changed input?",
-                    COUNT, step.getReadCount());
+            assertEquals("Read Count mismatch, changed factory?",
+                    TestDataFactoryBean.COUNT, step.getReadCount());
         }
     }
 }

@@ -76,7 +76,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="testData" class="de.langmi.spring.batch.examples.readers.simplelist.TestDataFactoryBean">
+    <bean id="testData" class="de.langmi.spring.batch.examples.readers.simple.TestDataFactoryBean">
         <description>
             Is configured as prototype, only needed for present version of ListItemReader, which exhausts
             the used list while reading.

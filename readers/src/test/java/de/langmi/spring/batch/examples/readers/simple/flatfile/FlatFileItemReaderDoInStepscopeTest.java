@@ -13,52 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.simpleflatfile;
+package de.langmi.spring.batch.examples.readers.simple.flatfile;
 
+import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.Assert.*;
+import java.util.concurrent.Callable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.test.MetaDataInstanceFactory;
-import org.springframework.batch.test.StepScopeTestExecutionListener;
+import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
  * Tests the FlatFileItemReader from Spring Batch with Application Context with
- * StepScopeTestExecutionListener.
- * <br />
- * By using StepScopeTestExecutionListener we need to provide the other "default"
- * listeners too.
- * 
+ * StepScopeTestUtils.doInStepScope(...).
+ *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  * @see <a href="http://static.springsource.org/spring-batch/reference/html/testing.html#d0e7538">Spring Batch Testing</a>
  */
 @ContextConfiguration({
     "classpath*:spring/batch/job/simple-flatfile-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
-@TestExecutionListeners({
-    DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class,
-    StepScopeTestExecutionListener.class,
-    TransactionalTestExecutionListener.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class FlatFileItemReaderContextStepScopeTest {
+public class FlatFileItemReaderDoInStepscopeTest {
 
-    /** Reader under test. */
     @Autowired
     private ItemStreamReader<String> itemReaderStream;
-    private StepExecution execution;
     private static final int EXPECTED_COUNT = 20;
 
     /**
@@ -68,33 +56,34 @@ public class FlatFileItemReaderContextStepScopeTest {
      */
     @Test
     public void testSuccessfulReading() throws Exception {
-        // open manually
-        itemReaderStream.open(execution.getExecutionContext());
-        // read
-        try {
-            int count = 0;
-            while (itemReaderStream.read() != null) {
-                count++;
-            }
-            assertEquals(EXPECTED_COUNT, count);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            itemReaderStream.close();
-        }
-    }
-
-    /**
-     * Mandatory method for stepScope Test.
-     *
-     * @return
-     * @see StepScopeTestExecutionListener
-     */
-    public StepExecution getStepExection() {
+        // setup
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/input.txt"));
-        execution = MetaDataInstanceFactory.createStepExecution(new JobParameters(jobParametersMap));
-        return execution;
+        StepExecution execution = MetaDataInstanceFactory.createStepExecution(new JobParameters(jobParametersMap));
+
+        int count = StepScopeTestUtils.doInStepScope(execution, new Callable<Integer>() {
+
+            @Override
+            public Integer call() throws Exception {
+
+                int count = 0;
+
+                itemReaderStream.open(new ExecutionContext());
+
+                String line;
+                try {
+                    while ((line = itemReaderStream.read()) != null) {
+                        assertEquals(String.valueOf(count), line);
+                        count++;
+                    }
+                } finally {
+                    itemReaderStream.close();
+                }
+                return count;
+
+            }
+        });
+        assertEquals(EXPECTED_COUNT, count);
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.simplelist;
+package de.langmi.spring.batch.examples.readers.simple.list;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

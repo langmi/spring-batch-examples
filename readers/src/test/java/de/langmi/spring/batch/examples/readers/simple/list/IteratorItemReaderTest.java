@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.simplelist;
+package de.langmi.spring.batch.examples.readers.simple.list;
 
+import de.langmi.spring.batch.examples.readers.simple.TestDataFactoryBean;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.springframework.batch.item.support.ListItemReader;
+import org.springframework.batch.item.support.IteratorItemReader;
 
 /**
  * Tests the ListItemReader from Spring Batch without Application Context.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class ListItemReaderTest {
+public class IteratorItemReaderTest {
 
     /** Reader under test. */
-    private ListItemReader<String> reader;
+    private IteratorItemReader<String> reader;
 
     /**
      * Test should read succesfully.
@@ -39,7 +40,7 @@ public class ListItemReaderTest {
     public void testSuccessfulReading() throws Exception {
         // setup reader with test data
         List<String> testData = new TestDataFactoryBean().getObject();
-        reader = new ListItemReader<String>(testData);
+        reader = new IteratorItemReader<String>(testData);
         // read
         int count = 0;
         String line;
