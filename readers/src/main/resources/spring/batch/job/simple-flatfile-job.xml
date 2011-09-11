@@ -35,7 +35,7 @@
         'batch:job, batch:step, etc.' 
     -->
     <job id="simpleFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
-        <step id="simpleFlatFileStep">
+        <step id="simpleFlatFileReaderStep">
             <tasklet>
                 <chunk 
                     reader="itemReader"

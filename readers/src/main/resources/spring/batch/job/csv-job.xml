@@ -19,20 +19,17 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Example for a Composite Itemreader which reads multiple files at once
-        (not after another like the MultiResourceItemReader!) and delegates
-        all read items to one unifying mapper.
-        
+        CSV reader examples.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="compositeFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
-        <step id="compositeFlatFileReaderStep">
+    <job id="csvReaderJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="csvReaderStep">
             <tasklet>
                 <chunk 
-                    reader="compositeItemReader"
+                    reader="itemReader"
                     writer="itemWriter" 
                     commit-interval="5">
                 </chunk>
@@ -40,36 +37,14 @@
         </step>
     </job>
 
-    <bean id="compositeItemReader" class="de.langmi.spring.batch.examples.readers.composite.CompositeItemStreamReader">
-        <property name="mapper">
-            <bean class="de.langmi.spring.batch.examples.readers.composite.DefaultStringListMapper" />
-        </property>
-        <property name="itemReaderStreams">
-            <list>
-                <ref bean="itemReader1" />
-                <ref bean="itemReader2" />                 
-            </list>
-        </property>
-    </bean>
-
-    <bean id="itemReader1" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
-        <property name="name" value="itemReader1" />
-        <property name="resource" value="#{jobParameters['input.file.1']}" />
+    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file']}" />
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
         </property>
         <property name="strict" value="true" />
     </bean>
-
-    <bean id="itemReader2" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
-        <property name="name" value="itemReader2" />        
-        <property name="resource" value="#{jobParameters['input.file.2']}" />
-        <property name="lineMapper">
-            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
-        </property>
-        <property name="strict" value="true" />
-    </bean>
-
+    
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <property name="resource" value="#{jobParameters['output.file']}" />
         <property name="lineAggregator">
