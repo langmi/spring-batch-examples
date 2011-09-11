@@ -26,7 +26,7 @@ import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.core.io.FileSystemResource;
 
 /**
- * Tests the FlatFileItemReader from Spring Batch without Application Context.
+ * Tests the CSV FlatFileItemReader without Application Context.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
