@@ -188,6 +188,42 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
+        /**
+     * Test with tar file which contains 2 text files, with 20 lines each.
+     * 
+     * @throws Exception 
+     */
+    @Test
+    public void testOneGzippedTarFile() throws Exception {
+        LOG.debug("testOneTarFile");
+        ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
+        // setup multResourceReader
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input_nested_dir.tar.gz")});
+
+        // call general setup last
+        generalMultiResourceReaderSetup(mReader);
+
+        // open with mock context
+        mReader.open(MetaDataInstanceFactory.createStepExecution().getExecutionContext());
+
+        // read
+        try {
+            String item = null;
+            int count = 0;
+            do {
+                item = mReader.read();
+                if (item != null) {
+                    count++;
+                }
+            } while (item != null);
+            assertEquals(80, count);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            mReader.close();
+        }
+    }
+
     /**
      * Test with multiple tar files, together they contain 6 text files with 20 
      * lines each.
@@ -229,6 +265,24 @@ public class ArchiveMultiResourceItemReaderTest {
     }
 
     /**
+     * Overloaded helper method to setup the used MultiResourceItemReader with 
+     * specific FileNameFilter.
+     *
+     * @param mReader
+     * @param filenameFilter
+     * @throws Exception 
+     */
+    private void generalMultiResourceReaderWithFilterSetup(
+            ArchiveMultiResourceItemReader<String> mReader,
+            FilenameFilter filenameFilter) throws Exception {
+        // set filter if needed
+        if (filenameFilter != null) {
+            mReader.setFilenameFilter(filenameFilter);
+        }
+        generalMultiResourceReaderSetup(mReader);
+    }
+
+    /**
      * Helper method to setup the used MultiResourceItemReader.
      *
      * @param mReader
@@ -246,23 +300,5 @@ public class ArchiveMultiResourceItemReaderTest {
             mReader.close();
             throw e;
         }
-    }
-
-    /**
-     * Overloaded helper method to setup the used MultiResourceItemReader with 
-     * specific FileNameFilter.
-     *
-     * @param mReader
-     * @param filenameFilter
-     * @throws Exception 
-     */
-    private void generalMultiResourceReaderWithFilterSetup(
-            ArchiveMultiResourceItemReader<String> mReader,
-            FilenameFilter filenameFilter) throws Exception {
-        // set filter if needed
-        if (filenameFilter != null) {
-            mReader.setFilenameFilter(filenameFilter);
-        }
-        generalMultiResourceReaderSetup(mReader);
     }
 }
