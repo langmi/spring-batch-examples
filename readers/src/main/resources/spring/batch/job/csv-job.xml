@@ -40,7 +40,16 @@
     <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
         <property name="resource" value="#{jobParameters['input.file']}" />
         <property name="lineMapper">
-            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+            <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+                <property name="lineTokenizer">
+                    <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                        <property name="names" value="id,value" />
+                    </bean>
+                </property>
+                <property name="fieldSetMapper">
+                    <bean class="org.springframework.batch.item.file.mapping.PassThroughFieldSetMapper" />
+                </property>
+            </bean>
         </property>
         <property name="strict" value="true" />
     </bean>
