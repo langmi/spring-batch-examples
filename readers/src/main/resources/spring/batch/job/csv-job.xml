@@ -19,7 +19,9 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        CSV reader examples.
+        CSV reader example
+        
+        Reads a csv file and writes the lines unchanged to an csv output file.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
