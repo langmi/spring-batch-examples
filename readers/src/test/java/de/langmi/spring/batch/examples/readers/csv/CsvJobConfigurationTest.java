@@ -46,7 +46,7 @@ public class CsvJobConfigurationTest {
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     /** Lines count from input file. */
-    private static final int COUNT = 3;
+    private static final int COUNT = 20;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;

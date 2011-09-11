@@ -35,7 +35,7 @@ public class CsvFlatFileItemReaderTest {
     /** Reader under test. */
     private FlatFileItemReader<FieldSet> reader = new FlatFileItemReader<FieldSet>();
     private static final String INPUT_FILE = "src/test/resources/input/csv/input.csv";
-    private static final int EXPECTED_COUNT = 3;
+    private static final int EXPECTED_COUNT = 20;
 
     /**
      * Test should read succesfully.
