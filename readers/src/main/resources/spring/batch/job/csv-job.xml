@@ -57,7 +57,11 @@
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <property name="resource" value="#{jobParameters['output.file']}" />
         <property name="lineAggregator">
-            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.PassThroughFieldExtractor" />
+                </property>
+            </bean>
         </property>
     </bean>
 
