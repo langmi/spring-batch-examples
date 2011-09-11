@@ -17,8 +17,8 @@ public class GzippedFlatFileItemReaderTest {
 
     /** Reader under test. */
     private FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
-    private static final String PATH_TO_COMPRESSED_TEST_FILE = "src/test/resources/input/input.txt.gz";
-    private static final String PATH_TO_UNCOMPRESSED_TEST_FILE = "src/test/resources/input/input.txt";
+    private static final String PATH_TO_COMPRESSED_TEST_FILE = "src/test/resources/input/gzip/input.txt.gz";
+    private static final String PATH_TO_UNCOMPRESSED_TEST_FILE = "src/test/resources/input/gzip/input.txt";
     private static final int EXPECTED_COUNT = 20;
 
     /**

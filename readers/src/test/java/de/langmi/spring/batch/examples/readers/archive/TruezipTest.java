@@ -39,7 +39,7 @@ public class TruezipTest {
     @Test
     public void testZipFileSimple() throws Exception {
         LOG.debug("testZipFileSimple");
-        TFile file = new TFile("src/test/resources/input/input.txt.zip");
+        TFile file = new TFile("src/test/resources/input/archive/input.txt.zip");
         TFile files[] = file.listFiles();
         for (int i = 0; i < files.length; i++) {
             TFile tFile = files[i];
@@ -52,7 +52,7 @@ public class TruezipTest {
     @Test
     public void testTarFileSimple() throws Exception {
         LOG.debug("testTarFileSimple");
-        TFile file = new TFile("src/test/resources/input/input.tar");
+        TFile file = new TFile("src/test/resources/input/archive/input.tar");
         TFile files[] = file.listFiles();
         for (int i = 0; i < files.length; i++) {
             TFile tFile = files[i];
@@ -65,7 +65,7 @@ public class TruezipTest {
     @Test
     public void testTarFileNestedDirectories() throws Exception {
         LOG.debug("testTarFileNestedDirectories");
-        TFile file = new TFile("src/test/resources/input/input_nested_dir.tar");
+        TFile file = new TFile("src/test/resources/input/archive/input_nested_dir.tar");
         List<TFile> result = new ArrayList<TFile>();
         runNestedDirs(file, result);
         for (TFile extractedFile : result) {

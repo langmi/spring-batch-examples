@@ -50,7 +50,7 @@ public class CompositeItemStreamReaderTest {
         });
 
         // open, provide "mock" ExecutionContext
-        // fake restar scenario, works because the name of the FlatFileItemReader
+        // fake restart scenario, it works because the name of the FlatFileItemReader
         // is set to its input_file
         int alreadyRead = 2;
         ExecutionContext ec = new ExecutionContext();
@@ -108,10 +108,12 @@ public class CompositeItemStreamReaderTest {
     }
 
     /**
-     * Helpermethod to create FlatFileItemReader.
+     * Helpermethod to create FlatFileItemReader, sets the name too, to make restart
+     * scenario possible - otherwise one flatFileItemReader would overwrite the 
+     * other (in context).
      *
      * @param inputFile
-     * @return 
+     * @return configured FlatFileItemReader cast as ItemStreamReader
      */
     private ItemStreamReader<String> createFlatFileItemReader(final String inputFile) {
         FlatFileItemReader<String> ffir = new FlatFileItemReader<String>();

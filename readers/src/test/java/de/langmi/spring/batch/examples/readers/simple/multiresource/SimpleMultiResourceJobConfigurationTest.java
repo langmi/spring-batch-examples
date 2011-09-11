@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.gzip;
+package de.langmi.spring.batch.examples.readers.simple.multiresource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,15 +38,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/gzip-flatfile-job.xml",
+    "classpath*:spring/batch/job/simple-multiresource-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class GzipFlatFileJobConfigurationTest {
+public class SimpleMultiResourceJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     /** Lines count from input file. */
-    private static final int COUNT = 20;
+    private static final int COUNT = 40;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -57,8 +57,8 @@ public class GzipFlatFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/gzip/input.txt.gz"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/gzip/output.txt"));
+        jobParametersMap.put("input.files", new JobParameter("file:src/test/resources/input/simple/multiresource/*.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple/multiresource/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

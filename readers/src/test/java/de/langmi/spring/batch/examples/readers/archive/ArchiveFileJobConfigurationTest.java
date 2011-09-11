@@ -59,8 +59,8 @@ public class ArchiveFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/input.tar"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/archive-flatfile/output.txt"));
+        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/archive/input.tar"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/archive/launchJobOneArchive-output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
@@ -86,8 +86,8 @@ public class ArchiveFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/*.tar"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/archive-flatfile/output.txt"));
+        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/archive/*.tar"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/archive/launchJobMultipleArchives-output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

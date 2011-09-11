@@ -59,7 +59,7 @@ public class CompositeFlatFileJobConfigurationTest {
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.1", new JobParameter("file:src/test/resources/input/composite/input1.txt"));
         jobParametersMap.put("input.file.2", new JobParameter("file:src/test/resources/input/composite/input2.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/simple-flatfile/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/composite/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
