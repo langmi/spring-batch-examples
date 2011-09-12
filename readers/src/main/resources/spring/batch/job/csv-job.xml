@@ -21,7 +21,7 @@
     <description>
         CSV reader example
         
-        Reads a csv file and writes the lines unchanged to an csv output file.
+        Reads a csv file and writes the lines unchanged to another csv output file.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 

@@ -34,7 +34,17 @@ public class CsvFlatFileItemReaderTest {
 
     /** Reader under test. */
     private FlatFileItemReader<FieldSet> reader = new FlatFileItemReader<FieldSet>();
-    private static final String INPUT_FILE = "src/test/resources/input/csv/input.csv";
+    /** 
+     * File should have entries like <br />
+     * <ul>
+     * <li>0,foo0</li>
+     * <li>1,foo1</li>
+     * <li>2,foo2</li>
+     * <li>and so on</li>
+     * </ul>
+     * 
+     */
+    private static final String INPUT_FILE = "src/test/resources/input/csv/input.csv";    
     private static final int EXPECTED_COUNT = 20;
 
     /**
@@ -61,6 +71,12 @@ public class CsvFlatFileItemReaderTest {
             int count = 0;
             FieldSet line;
             while ((line = reader.read()) != null) {
+                // really test for the fieldSet names and values
+                assertEquals("id", line.getNames()[0]);
+                assertEquals(String.valueOf(count), line.getValues()[0]);
+                assertEquals("value", line.getNames()[1]);
+                // csv contains entry like '0,foo0'
+                assertEquals("foo" + String.valueOf(count), line.getValues()[1]);
                 count++;
             }
             assertEquals(EXPECTED_COUNT, count);

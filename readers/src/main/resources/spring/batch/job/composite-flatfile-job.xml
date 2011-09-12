@@ -20,9 +20,8 @@
 
     <description>
         Example for a Composite Itemreader which reads multiple files at once
-        (not after another like the MultiResourceItemReader!) and delegates
-        all read items to one unifying mapper.
-        
+        (not one after another (sequentially) like the MultiResourceItemReader) and delegates
+        all read items to one unifying mapper.        
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 

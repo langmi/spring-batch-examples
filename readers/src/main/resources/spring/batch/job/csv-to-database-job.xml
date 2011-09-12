@@ -19,7 +19,13 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        CSV import to database example.
+        An csv job example, which reads csv file and writes content to database.
+        
+        It's an almost generic csv-to-database solution. To get it working with
+        your usecase, you would need to change:
+        - the names for the DelimitedLineTokenizer, maybe even set the includedFields 
+          to ignore some csv values
+        - the sql for the JdbcBatchItemWriter        
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
