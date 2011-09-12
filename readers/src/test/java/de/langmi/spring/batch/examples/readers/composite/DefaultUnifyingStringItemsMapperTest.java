@@ -25,9 +25,9 @@ import static org.junit.Assert.*;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class DefaultStringListMapperTest {
+public class DefaultUnifyingStringItemsMapperTest {
 
-    private ObjectListMapper<String> mapper = new DefaultStringListMapper();
+    private UnifyingItemsMapper<String> mapper = new DefaultUnifyingStringItemsMapper();
 
     @Test
     public void testMapItems() throws Exception {

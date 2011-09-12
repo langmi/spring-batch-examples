@@ -40,8 +40,8 @@
     </job>
 
     <bean id="compositeItemReader" class="de.langmi.spring.batch.examples.readers.composite.CompositeItemStreamReader">
-        <property name="mapper">
-            <bean class="de.langmi.spring.batch.examples.readers.composite.DefaultStringListMapper" />
+        <property name="unifyingMapper">
+            <bean class="de.langmi.spring.batch.examples.readers.composite.DefaultUnifyingStringItemsMapper" />
         </property>
         <property name="itemReaderStreams">
             <list>

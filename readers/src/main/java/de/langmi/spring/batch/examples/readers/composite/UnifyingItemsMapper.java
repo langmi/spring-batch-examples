@@ -18,10 +18,18 @@ package de.langmi.spring.batch.examples.readers.composite;
 import java.util.List;
 
 /**
- *
+ * Interface for unifying items mapper implementations.
+ * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public interface ObjectListMapper<T> {
+public interface UnifyingItemsMapper<T> {
 
+    /**
+     * Should return null, if there are no items, or all items are null.
+     *
+     * @param items
+     * @return
+     * @throws Exception 
+     */
     T mapItems(List<?> items) throws Exception;
 }

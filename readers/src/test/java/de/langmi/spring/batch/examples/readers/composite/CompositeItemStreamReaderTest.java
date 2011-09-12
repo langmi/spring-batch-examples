@@ -40,7 +40,7 @@ public class CompositeItemStreamReaderTest {
     @Test
     public void testRestart() throws Exception {
         // setup composite reader
-        reader.setMapper(new DefaultStringListMapper());
+        reader.setUnifyingMapper(new DefaultUnifyingStringItemsMapper());
         reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
 
             {
@@ -80,7 +80,7 @@ public class CompositeItemStreamReaderTest {
     @Test
     public void testRead() throws Exception {
         // setup composite reader
-        reader.setMapper(new DefaultStringListMapper());
+        reader.setUnifyingMapper(new DefaultUnifyingStringItemsMapper());
         reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
 
             {

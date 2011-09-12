@@ -18,11 +18,12 @@ package de.langmi.spring.batch.examples.readers.composite;
 import java.util.List;
 
 /**
- * Default implementation which just appends each object.toString() together.
+ * Default implementation which just appends each object.toString() together,
+ * thus unifying all strings.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class DefaultStringListMapper implements ObjectListMapper<String> {
+public class DefaultUnifyingStringItemsMapper implements UnifyingItemsMapper<String> {
 
     /** {@inheritDoc} */
     @Override

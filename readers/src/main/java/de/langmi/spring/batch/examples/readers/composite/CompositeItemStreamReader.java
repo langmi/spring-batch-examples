@@ -26,34 +26,32 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
 /**
- * Copies the CompositeItemStream implementation, wraps its readers under one
- * hood, so all read operations are synchronized.
+ * Copies the CompositeItemStream implementation, wraps its registered readers 
+ * under one hood, so all read operations are simultaneously. 
+ * Is not threadsafe, at least not on purpose.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
 
+    /** Registered ItemStreamReaders. */
     private List<ItemStreamReader<T>> itemReaderStreams;
-    private ObjectListMapper<T> mapper;
+    /** Mandatory Unifying Mapper Implementation. */
+    private UnifyingItemsMapper<T> unifyingMapper;
 
     @Override
     public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        // read from all wrapped readers
+        // read from all registered readers
         List<T> items = new ArrayList<T>();
         for (ItemStreamReader<T> itemReaderStream : itemReaderStreams) {
             items.add(itemReaderStream.read());
         }
         // delegate to mapper
-        if (items.size() > 0) {
-            return mapper.mapItems(items);
-        } else {
-            return null;
-        }
+        return unifyingMapper.mapItems(items);
     }
 
     /**
-     * Simple aggregate {@link ExecutionContext} provider for the contributions
-     * registered under the given key.
+     * Broadcast the call to update to all registered readers.
      * 
      * @see org.springframework.batch.item.ItemStream#update(ExecutionContext)
      */
@@ -65,7 +63,8 @@ public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
     }
 
     /**
-     * Broadcast the call to close.
+     * Broadcast the call to close to all registered readers.
+     * 
      * @throws ItemStreamException
      */
     @Override
@@ -76,7 +75,8 @@ public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
     }
 
     /**
-     * Broadcast the call to open.
+     * Broadcast the call to open to all registered readers.
+     * 
      * @throws ItemStreamException
      */
     @Override
@@ -86,10 +86,15 @@ public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
         }
     }
 
-    public void setMapper(ObjectListMapper<T> mapper) {
-        this.mapper = mapper;
+    public void setUnifyingMapper(UnifyingItemsMapper<T> mapper) {
+        this.unifyingMapper = mapper;
     }
 
+    /**
+     * Register ItemStreamReaders.
+     *
+     * @param itemReaderStreams 
+     */
     public void setItemReaderStreams(List<ItemStreamReader<T>> itemReaderStreams) {
         this.itemReaderStreams = itemReaderStreams;
     }
