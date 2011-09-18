@@ -19,16 +19,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Real simple Spring Batch example for a basic FlatFileItemReader
-        
-        - basically reads file and writes each line out unchanged
-        - input/output files are configured with stepscope and jobparameters
-        - expects an input file, see http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/file/FlatFileItemReader.html#setStrict(boolean)
-        - uses http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/file/mapping/PassThroughLineMapper.html
-        
-        see:
-            - http://static.springsource.org/spring-batch/reference/html-single/index.html#flatFileItemReader
-            - http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/file/FlatFileItemReader.html
+        Simple example using the PatternMatchingCompositeLineMapper.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
