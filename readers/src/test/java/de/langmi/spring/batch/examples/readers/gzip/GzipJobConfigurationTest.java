@@ -38,10 +38,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/gzip-flatfile-job.xml",
+    "classpath*:spring/batch/job/gzip-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class GzipFlatFileJobConfigurationTest {
+public class GzipJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
