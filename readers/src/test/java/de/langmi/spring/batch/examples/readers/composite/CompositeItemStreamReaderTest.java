@@ -41,7 +41,7 @@ public class CompositeItemStreamReaderTest {
     public void testRestart() throws Exception {
         // setup composite reader
         reader.setUnifyingMapper(new DefaultUnifyingStringItemsMapper());
-        reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
+        reader.setItemReaderStreams(new ArrayList<ItemStreamReader<?>>() {
 
             {
                 add(createFlatFileItemReader(INPUT_FILE_1));
@@ -81,7 +81,7 @@ public class CompositeItemStreamReaderTest {
     public void testRead() throws Exception {
         // setup composite reader
         reader.setUnifyingMapper(new DefaultUnifyingStringItemsMapper());
-        reader.setItemReaderStreams(new ArrayList<ItemStreamReader<String>>() {
+        reader.setItemReaderStreams(new ArrayList<ItemStreamReader<?>>() {
 
             {
                 add(createFlatFileItemReader(INPUT_FILE_1));

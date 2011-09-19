@@ -35,15 +35,15 @@ import org.springframework.batch.item.UnexpectedInputException;
 public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
 
     /** Registered ItemStreamReaders. */
-    private List<ItemStreamReader<T>> itemReaderStreams;
+    private List<ItemStreamReader<?>> itemReaderStreams;
     /** Mandatory Unifying Mapper Implementation. */
     private UnifyingItemsMapper<T> unifyingMapper;
 
     @Override
     public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         // read from all registered readers
-        List<T> items = new ArrayList<T>();
-        for (ItemStreamReader<T> itemReaderStream : itemReaderStreams) {
+        List items = new ArrayList();
+        for (ItemStreamReader<?> itemReaderStream : itemReaderStreams) {
             items.add(itemReaderStream.read());
         }
         // delegate to mapper
@@ -95,7 +95,7 @@ public class CompositeItemStreamReader<T> implements ItemStreamReader<T> {
      *
      * @param itemReaderStreams 
      */
-    public void setItemReaderStreams(List<ItemStreamReader<T>> itemReaderStreams) {
+    public void setItemReaderStreams(List<ItemStreamReader<?>> itemReaderStreams) {
         this.itemReaderStreams = itemReaderStreams;
     }
 }
