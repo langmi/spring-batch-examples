@@ -27,7 +27,9 @@
 
     <name>automatic-thread-conf</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: simple skip job</description>
+    <description>
+        Spring Batch Example:
+        Examples for automatic thread configuration for task executor used partition step.</description>
     <licenses>
         <license>
             <name>Apache 2</name>
