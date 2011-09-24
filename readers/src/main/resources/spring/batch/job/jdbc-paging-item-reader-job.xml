@@ -46,8 +46,18 @@
                 <property name="dataSource" ref="dataSource" />
                 <property name="databaseType" value="HSQL" />
                 <property name="selectClause" value="select ID, NAME" />
-                <property name="fromClause" value="from TEST" />
+                <property name="fromClause" value="from TEST" /> 
                 <property name="whereClause">
+                    <!-- Why CDATA? 
+                    
+                         because < etc. is not allowed for xml values
+                         when you use &lt; xml parser will work, but
+                         now the sql won't because of the & spring assumes
+                         a placeholder, see
+                         - AbstractSqlPagingQueryProvider.init(...)
+                         - JdbcParameterUtils.countParameterPlaceholders(...)
+                         
+                         -->
                     <value>
                         <![CDATA[
                             where NAME <> 'foo'
