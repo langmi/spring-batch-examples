@@ -19,8 +19,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * ArchiveFileNameFilter without setting the suffixes, this
- * filter will accept .zip and .tar files.
+ * ArchiveFileNameFilter decides which files inside the archives should be read.
+ * Without setting suffixes, all files will be accepted.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */

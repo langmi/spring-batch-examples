@@ -31,8 +31,8 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
 /**
- * ArchiveMultiResourceItemReader works with TAR and ZIP Files. Falls back to normal
- * MultiResourceItemReader function if no archive is set.
+ * ArchiveMultiResourceItemReader works with TAR, TAR.GZ, ZIP, B2ZIP, WAR, EAR and JAR 
+ * Files. Falls back to normal MultiResourceItemReader function if no archive is set.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
