@@ -21,6 +21,9 @@
     <description>
         Reads from a file where each "line" consists of items which contain line endings,
         thus one "line" is spanned over two real lines.
+        
+        Can be made generic quite easily, just use a (Job)Parameter for the count in 
+        FieldCountItemReader.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
