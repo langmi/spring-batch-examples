@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.patternmatching;
+package de.langmi.spring.batch.examples.readers.fieldcount;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,20 +33,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * JobConfigurationTest.
+ * FieldCountJobConfigurationTest.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/pattern-matching-job.xml",
+    "classpath*:spring/batch/job/field-count-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class PatternMatchingJobConfigurationTest {
+public class FieldCountJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     /** Lines count from input file. */
-    private static final int COUNT = 2;
+    private static final int COUNT = 20;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -57,8 +57,8 @@ public class PatternMatchingJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/patternmatching/input.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/patternmatching/output.txt"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/fieldcount/input.csv"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/fieldcount/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
