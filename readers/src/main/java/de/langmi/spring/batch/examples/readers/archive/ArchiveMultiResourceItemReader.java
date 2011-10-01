@@ -106,7 +106,7 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
                 // iterate over each TFile and get the file list                
                 // extract only the files, ignore directories
                 List<TFile> fileList = new ArrayList<TFile>();
-                runNestedDirs(wrappedArchives[i], fileList);
+                runNestedDirs(wrappedArchives[i], fileList, filenameFilter);
                 for (TFile tFile : fileList) {
                     extractedResources.add(new InputStreamResource(new TFileInputStream(tFile), tFile.getName()));
                     LOG.info("using extracted file:" + tFile.getName());
@@ -124,15 +124,16 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
      * 
      * @param rootFile
      * @param fileList 
+     * @param filenameFilter
      */
-    private void runNestedDirs(TFile rootFile, List<TFile> fileList) {
-        TFile files[] = rootFile.listFiles(this.filenameFilter);
+    private static void runNestedDirs(TFile rootFile, List<TFile> fileList, FilenameFilter filenameFilter) {
+        TFile files[] = rootFile.listFiles(filenameFilter);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 TFile tFile = files[i];
                 LOG.info("extracting:" + tFile.getAbsolutePath());
                 if (tFile.isDirectory()) {
-                    runNestedDirs(tFile, fileList);
+                    runNestedDirs(tFile, fileList, filenameFilter);
                 } else {
                     fileList.add(tFile);
                 }

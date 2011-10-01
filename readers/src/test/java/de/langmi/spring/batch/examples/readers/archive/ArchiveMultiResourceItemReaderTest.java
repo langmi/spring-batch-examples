@@ -107,7 +107,7 @@ public class ArchiveMultiResourceItemReaderTest {
                     count++;
                 }
             } while (item != null);
-            LOG.debug(String.valueOf(count));
+            assertEquals(20, count);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -188,14 +188,14 @@ public class ArchiveMultiResourceItemReaderTest {
         }
     }
 
-        /**
+    /**
      * Test with tar file which contains 2 text files, with 20 lines each.
      * 
      * @throws Exception 
      */
     @Test
     public void testOneGzippedTarFile() throws Exception {
-        LOG.debug("testOneTarFile");
+        LOG.debug("testOneGzippedTarFile");
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
         mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input_nested_dir.tar.gz")});
