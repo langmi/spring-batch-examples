@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        An csv job example, which reads csv file and writes content to database.
+        
+        It's an almost generic csv-to-database solution. To get it working with
+        your usecase, you would need to change:
+        - the names for the DelimitedLineTokenizer, maybe even set the includedFields 
+          to ignore some csv values
+        - the sql for the JdbcBatchItemWriter        
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="csvToDatabaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="csvToDatabaseStep">
+            <tasklet>
+                <chunk 
+                    reader="itemReader"
+                    writer="itemWriter" 
+                    commit-interval="5">
+                </chunk>
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+                <property name="lineTokenizer">
+                    <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                        <property name="names" value="id,value" />
+                    </bean>
+                </property>
+                <property name="fieldSetMapper">
+                    <bean class="org.springframework.batch.item.file.mapping.PassThroughFieldSetMapper" />
+                </property>
+            </bean>
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+    
+    <bean id="itemWriter" class="org.springframework.batch.item.database.JdbcBatchItemWriter">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql">
+            <value>
+                <![CDATA[
+                    INSERT INTO BUSINESS_OBJECTS 
+                        (
+                            id,
+                            attribute
+                        ) 
+                    VALUES 
+                        ( 
+                            :id,
+                            :value
+                        )
+                ]]>
+            </value>
+        </property>
+        <property name="itemSqlParameterSourceProvider">
+            <bean class="de.langmi.spring.batch.examples.readers.file.csv.FieldSetSqlParameterSourceProvider" />
+        </property>
+    </bean>
+
+</beans>

@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/field-count-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-field-count-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FieldCountJobConfigurationTest {
@@ -58,7 +58,7 @@ public class FieldCountJobConfigurationTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/fieldcount/input.csv"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/fieldcount/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/field-count/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
