@@ -19,8 +19,12 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
+        Example for http://forum.springsource.org/showthread.php?115064-How-to-escape-\n-in-flat-file
+        
+            "process csv flat files, the line separator is \n, but certain data fields in the file can contain \n too"
+        
         Reads from a file where each "line" consists of items which contain line endings,
-        thus one "line" is spanned over two real lines.
+        thus one "line" is spanned over multiple real lines.
         
         Can be made generic quite easily, just use a (Job)Parameter for the count in 
         FieldCountItemReader.
@@ -44,7 +48,7 @@
         </step>
     </job>
 
-    <bean id="itemReader" class="de.langmi.spring.batch.examples.readers.fieldcount.FieldCountItemReader">
+    <bean id="itemReader" class="de.langmi.spring.batch.examples.readers.file.fieldcount.FieldCountItemReader">
         <property name="delegate" ref="fileItemReader" />
         <property name="count" value="3" />
     </bean>

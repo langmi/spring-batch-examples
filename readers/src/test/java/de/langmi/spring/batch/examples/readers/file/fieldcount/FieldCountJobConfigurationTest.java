@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.fieldcount;
+package de.langmi.spring.batch.examples.readers.file.fieldcount;
 
 import java.util.HashMap;
 import java.util.Map;

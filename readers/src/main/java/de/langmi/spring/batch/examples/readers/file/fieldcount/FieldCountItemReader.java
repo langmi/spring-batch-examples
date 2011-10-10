@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.fieldcount;
+package de.langmi.spring.batch.examples.readers.file.fieldcount;
 
 import java.util.ArrayList;
 import java.util.List;
