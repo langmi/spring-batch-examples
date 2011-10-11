@@ -32,7 +32,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * ArchiveMultiResourceItemReader works with TAR, TAR.GZ, ZIP, B2ZIP, WAR, EAR and JAR 
- * Files. Falls back to normal MultiResourceItemReader function if no archive is set.
+ * Files. Falls back to normal MultiResourceItemReader behaviour if no archive is set.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
@@ -44,21 +44,7 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
     private FilenameFilter filenameFilter = new DefaultArchiveFileNameFilter();
 
     /**
-     * Set archive files with normal Spring resources pattern, if not set, the
-     * class will fallback to normal MultiResourceItemReader behaviour.
-     *
-     * @param archives 
-     */
-    public void setArchives(Resource[] archives) {
-        this.archives = archives;
-    }
-
-    public void setFilenameFilter(FilenameFilter filenameFilter) {
-        this.filenameFilter = filenameFilter;
-    }
-
-    /**
-     * Calls super.close() and tries to unmount all used archive files.
+     * Calls super.close() and tries to unmount all used archive files afterwards.
      *
      * @throws ItemStreamException 
      */
@@ -88,9 +74,7 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
     public void afterPropertiesSet() throws Exception {
         // really used with archives?
         if (archives != null) {
-            // overwrite the comparator to use description
-            // instead of filename, the itemStream can only
-            // have that description
+            // overwrite the comparator to use description instead of filename
             this.setComparator(new Comparator<Resource>() {
 
                 /** Compares resource descriptions. */
@@ -119,7 +103,7 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
     }
 
     /**
-     * Runs recursively through the TFile.listFiles() and adds each file to the 
+     * Runs recursively through the rootFile.listFiles() and adds each file to the 
      * fileList. Logs each step - even for directories - to show the archive
      * file contents.
      * 
@@ -140,5 +124,24 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
                 }
             }
         }
+    }
+
+    /**
+     * Set archive files with normal Spring resources pattern, if not set, the
+     * class will fallback to normal MultiResourceItemReader behaviour.
+     *
+     * @param archives 
+     */
+    public void setArchives(Resource[] archives) {
+        this.archives = archives;
+    }
+
+    /**
+     * Set a {@link FilenameFilter} to control used files from the archives.
+     *
+     * @param filenameFilter 
+     */
+    public void setFilenameFilter(FilenameFilter filenameFilter) {
+        this.filenameFilter = filenameFilter;
     }
 }
