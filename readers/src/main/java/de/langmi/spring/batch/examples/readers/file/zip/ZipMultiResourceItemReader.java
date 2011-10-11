@@ -24,9 +24,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.file.MultiResourceItemReader;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
@@ -39,20 +39,51 @@ import org.springframework.core.io.Resource;
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  * @param <T> 
  */
-public class ZipMultiResourceItemReader<T> extends MultiResourceItemReader<T> implements InitializingBean {
+public class ZipMultiResourceItemReader<T> extends MultiResourceItemReader<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZipMultiResourceItemReader.class);
     private Resource[] archives;
     private ZipFile[] zipFiles;
 
     /**
-     * Set archive files with normal Spring resources pattern, if not set, the
-     * class will fallback to normal MultiResourceItemReader behaviour.
+     * Tries to extract all files in the archives and adds them as resources to
+     * the normal MultiResourceItemReader. Overwrites the Comparator from
+     * the super class to get it working with itemstreams.
      *
-     * @param archives 
+     * @param executionContext
+     * @throws ItemStreamException 
      */
-    public void setArchives(Resource[] archives) {
-        this.archives = archives;
+    @Override
+    public void open(ExecutionContext executionContext) throws ItemStreamException {
+        // really used with archives?
+        if (archives != null) {
+            // overwrite the comparator to use description
+            // instead of filename, the itemStream can only
+            // have that description
+            this.setComparator(new Comparator<Resource>() {
+
+                /** Compares resource descriptions. */
+                @Override
+                public int compare(Resource r1, Resource r2) {
+                    return r1.getDescription().compareTo(r2.getDescription());
+                }
+            });
+            // get the inputStreams from all files inside the archives
+            zipFiles = new ZipFile[archives.length];
+            List<Resource> extractedResources = new ArrayList<Resource>();
+            try {
+                for (int i = 0; i < archives.length; i++) {
+                    // find files inside the current zip resource
+                    zipFiles[i] = new ZipFile(archives[i].getFile());
+                    extractFiles(zipFiles[i], extractedResources);
+                }
+            } catch (Exception ex) {
+                throw new ItemStreamException(ex);
+            }
+            // propagate extracted resources
+            this.setResources(extractedResources.toArray(new Resource[extractedResources.size()]));
+        }
+        super.open(executionContext);
     }
 
     /**
@@ -72,41 +103,6 @@ public class ZipMultiResourceItemReader<T> extends MultiResourceItemReader<T> im
                     throw new ItemStreamException(ex);
                 }
             }
-        }
-    }
-
-    /**
-     * Tries to extract all files in the archives and adds them as resources to
-     * the normal MultiResourceItemReader. Overwrites the Comparator from
-     * the super class to get it working with itemstreams.
-     *
-     * @throws Exception 
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // really used with archives?
-        if (archives != null) {
-            // overwrite the comparator to use description
-            // instead of filename, the itemStream can only
-            // have that description
-            this.setComparator(new Comparator<Resource>() {
-
-                /** Compares resource descriptions. */
-                @Override
-                public int compare(Resource r1, Resource r2) {
-                    return r1.getDescription().compareTo(r2.getDescription());
-                }
-            });
-            // get the inputStreams from all files inside the archives
-            zipFiles = new ZipFile[archives.length];
-            List<Resource> extractedResources = new ArrayList<Resource>();
-            for (int i = 0; i < archives.length; i++) {
-                // find files inside the current zip resource
-                zipFiles[i] = new ZipFile(archives[i].getFile());
-                extractFiles(zipFiles[i], extractedResources);
-            }
-            // propagate extracted resources
-            this.setResources(extractedResources.toArray(new Resource[extractedResources.size()]));
         }
     }
 
@@ -132,5 +128,15 @@ public class ZipMultiResourceItemReader<T> extends MultiResourceItemReader<T> im
                 LOG.info("using extracted file:" + zipEntry.getName());
             }
         }
+    }
+
+    /**
+     * Set archive files with normal Spring resources pattern, if not set, the
+     * class will fallback to normal MultiResourceItemReader behaviour.
+     *
+     * @param archives 
+     */
+    public void setArchives(Resource[] archives) {
+        this.archives = archives;
     }
 }

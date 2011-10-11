@@ -163,12 +163,5 @@ public class ZipMultiResourceItemReaderTest {
         FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
         reader.setLineMapper(new PassThroughLineMapper());
         mReader.setDelegate(reader);
-        // initialize the multiResourceReader, is mandatory! see javadoc
-        try {
-            mReader.afterPropertiesSet();
-        } catch (Exception e) {
-            mReader.close();
-            throw e;
-        }
     }
 }

@@ -24,9 +24,9 @@ import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.file.MultiResourceItemReader;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
@@ -36,12 +36,57 @@ import org.springframework.core.io.Resource;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T> implements InitializingBean {
+public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArchiveMultiResourceItemReader.class);
     private Resource[] archives;
     private TFile[] wrappedArchives;
     private FilenameFilter filenameFilter = new DefaultArchiveFileNameFilter();
+
+    /**
+     * Tries to extract all files in the archives and adds them as resources to
+     * the normal MultiResourceItemReader. Overwrites the Comparator from
+     * the super class to get it working with itemstreams.
+     *
+     * @param executionContext
+     * @throws ItemStreamException 
+     */
+    @Override
+    public void open(ExecutionContext executionContext) throws ItemStreamException {
+        // really used with archives?
+        if (archives != null) {
+            // overwrite the comparator to use description instead of filename
+            this.setComparator(new Comparator<Resource>() {
+
+                /** Compares resource descriptions. */
+                @Override
+                public int compare(Resource r1, Resource r2) {
+                    return r1.getDescription().compareTo(r2.getDescription());
+                }
+            });
+            // get the inputStreams from all files inside the archives
+            wrappedArchives = new TFile[archives.length];
+            List<Resource> extractedResources = new ArrayList<Resource>();
+            try {
+                for (int i = 0; i < archives.length; i++) {
+                    wrappedArchives[i] = new TFile(archives[i].getFile());
+                    // iterate over each TFile and get the file list                
+                    // extract only the files, ignore directories
+                    List<TFile> fileList = new ArrayList<TFile>();
+                    runNestedDirs(wrappedArchives[i], fileList, filenameFilter);
+                    for (TFile tFile : fileList) {
+                        extractedResources.add(new InputStreamResource(new TFileInputStream(tFile), tFile.getName()));
+                        LOG.info("using extracted file:" + tFile.getName());
+                    }
+                }
+            } catch (Exception ex) {
+                throw new ItemStreamException(ex);
+            }
+            // propagate extracted resources
+            this.setResources(extractedResources.toArray(new Resource[extractedResources.size()]));
+        }
+        super.open(executionContext);
+    }
 
     /**
      * Calls super.close() and tries to unmount all used archive files afterwards.
@@ -60,45 +105,6 @@ public class ArchiveMultiResourceItemReader<T> extends MultiResourceItemReader<T
                     throw new ItemStreamException(ex);
                 }
             }
-        }
-    }
-
-    /**
-     * Tries to extract all files in the archives and adds them as resources to
-     * the normal MultiResourceItemReader. Overwrites the Comparator from
-     * the super class to get it working with itemstreams.
-     *
-     * @throws Exception 
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // really used with archives?
-        if (archives != null) {
-            // overwrite the comparator to use description instead of filename
-            this.setComparator(new Comparator<Resource>() {
-
-                /** Compares resource descriptions. */
-                @Override
-                public int compare(Resource r1, Resource r2) {
-                    return r1.getDescription().compareTo(r2.getDescription());
-                }
-            });
-            // get the inputStreams from all files inside the archives
-            wrappedArchives = new TFile[archives.length];
-            List<Resource> extractedResources = new ArrayList<Resource>();
-            for (int i = 0; i < archives.length; i++) {
-                wrappedArchives[i] = new TFile(archives[i].getFile());
-                // iterate over each TFile and get the file list                
-                // extract only the files, ignore directories
-                List<TFile> fileList = new ArrayList<TFile>();
-                runNestedDirs(wrappedArchives[i], fileList, filenameFilter);
-                for (TFile tFile : fileList) {
-                    extractedResources.add(new InputStreamResource(new TFileInputStream(tFile), tFile.getName()));
-                    LOG.info("using extracted file:" + tFile.getName());
-                }
-            }
-            // propagate extracted resources
-            this.setResources(extractedResources.toArray(new Resource[extractedResources.size()]));
         }
     }
 
