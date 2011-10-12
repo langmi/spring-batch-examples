@@ -39,9 +39,9 @@
         </step>
     </job>
 
-    <bean id="compositeItemReader" class="de.langmi.spring.batch.examples.readers.file.composite.CompositeItemStreamReader">
+    <bean id="compositeItemReader" class="de.langmi.spring.batch.examples.readers.support.CompositeItemStreamReader">
         <property name="unifyingMapper">
-            <bean class="de.langmi.spring.batch.examples.readers.file.composite.DefaultUnifyingStringItemsMapper" />
+            <bean class="de.langmi.spring.batch.examples.readers.support.DefaultUnifyingStringItemsMapper" />
         </property>
         <property name="itemReaderStreams">
             <list>
