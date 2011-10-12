@@ -26,7 +26,7 @@ import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.core.io.FileSystemResource;
 
 /**
- * CompositeItemStreamReaderTest.
+ * CompositeItemStreamReaderTest with FlatFileItemReaders.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
