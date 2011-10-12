@@ -64,9 +64,8 @@ public class CompositeCursorItemReaderTest {
             }
         });
 
-        // open, provide "mock" ExecutionContext
-        // fake restart scenario, it works because the name of the FlatFileItemReader
-        // is set to its input_file
+        // open, provide "mock" ExecutionContext and fake restart scenario, 
+        // it works because the name of reader is made distinct
         int alreadyRead = 2;
         ExecutionContext ec = new ExecutionContext();
         ec.put(readerName1 + "." + "read.count", alreadyRead);
