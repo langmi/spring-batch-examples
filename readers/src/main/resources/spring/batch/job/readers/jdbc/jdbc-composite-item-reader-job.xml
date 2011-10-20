@@ -19,9 +19,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Example for a Composite Itemreader which reads multiple files at once
-        (not one after another (sequentially) like the MultiResourceItemReader) and delegates
-        all read items to one unifying mapper.        
+        Example for a Composite Itemreader which reads from multiple JDBC Readers
+        with different DataSources at once (not one after another (sequentially) 
+        like the MultiResourceItemReader) and delegates all read items to one 
+        unifying mapper.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 

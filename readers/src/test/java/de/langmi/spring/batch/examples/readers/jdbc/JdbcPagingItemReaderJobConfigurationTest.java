@@ -38,8 +38,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * JobConfigurationTest for simple csv job. Reads csv file and writes content
- * to other csv file unchanged.
+ * JobConfigurationTest for simple JdbcPagingItemReader.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
