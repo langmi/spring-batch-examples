@@ -66,7 +66,7 @@
         <!-- often used dependency version data -->
         <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
         <spring.framework.version>3.0.6.RELEASE</spring.framework.version>
-        <sl4fj.version>1.6.2</sl4fj.version>
+        <sl4fj.version>1.6.3</sl4fj.version>
     </properties>
     
     <build>
