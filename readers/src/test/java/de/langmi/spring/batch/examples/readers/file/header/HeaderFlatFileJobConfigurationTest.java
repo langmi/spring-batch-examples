@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.file.composite;
+package de.langmi.spring.batch.examples.readers.file.header;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +38,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/readers/file/file-composite-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-header-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CompositeFlatFileJobConfigurationTest {
+public class HeaderFlatFileJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -57,9 +57,8 @@ public class CompositeFlatFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file.1", new JobParameter("file:src/test/resources/input/file/composite/input1.txt"));
-        jobParametersMap.put("input.file.2", new JobParameter("file:src/test/resources/input/file/composite/input2.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/composite/output.txt"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/header/input.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/header/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
@@ -71,7 +70,7 @@ public class CompositeFlatFileJobConfigurationTest {
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
             assertEquals("Read Count mismatch, changed input?",
-                         COUNT, step.getReadCount());
+                    COUNT, step.getReadCount());
         }
     }
 }

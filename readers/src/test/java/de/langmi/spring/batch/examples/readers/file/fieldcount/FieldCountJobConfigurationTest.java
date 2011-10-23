@@ -57,8 +57,8 @@ public class FieldCountJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/fieldcount/input.csv"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/field-count/output.txt"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/fieldcount/input.csv"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/fieldcount/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

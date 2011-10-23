@@ -32,7 +32,7 @@ public class SimplePeekableItemReaderTest {
 
     /** The delegate reader. */
     private FlatFileItemReader<String> delegateReader = new FlatFileItemReader<String>();
-    private static final String INPUT_FILE = "src/test/resources/input/simple/flatfile/input.txt";
+    private static final String INPUT_FILE = "src/test/resources/input/file/simple/input.txt";
     private static final int EXPECTED_COUNT = 20;
 
     /**

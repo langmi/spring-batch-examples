@@ -36,12 +36,12 @@ public class ZipTest {
 
     /** Logger for tests. */
     private static final Logger LOG = LoggerFactory.getLogger(ZipTest.class);
-    private static final String ZIP_INPUT_SINGLE_FILE = "src/test/resources/input/archive/input.txt.zip";
-    private static final String ZIP_INPUT_MULTIPLE_FILES = "src/test/resources/input/archive/input-mixed-files.zip";
-    private static final String ZIP_INPUT_NESTED_DIRS = "src/test/resources/input/archive/input-nested-dir.zip";
+    private static final String ZIP_INPUT_SINGLE_FILE = "src/test/resources/input/file/archive/input.txt.zip";
+    private static final String ZIP_INPUT_MULTIPLE_FILES = "src/test/resources/input/file/archive/input-mixed-files.zip";
+    private static final String ZIP_INPUT_NESTED_DIRS = "src/test/resources/input/file/archive/input-nested-dir.zip";
     /** 0xFFFF = 65535 = 64kB */
     private static final byte[] buffer = new byte[0xFFFF];
-    private static final String OUTPUT_DIR = "target/test-outputs/readers/file/zip/";
+    private static final String OUTPUT_DIR = "target/test-outputs/readers/file/ziptest/";
 
     /**
      * Read filename from file in zip archive.

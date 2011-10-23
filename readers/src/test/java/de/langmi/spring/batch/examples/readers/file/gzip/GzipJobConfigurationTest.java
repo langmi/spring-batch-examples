@@ -57,7 +57,7 @@ public class GzipJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/gzip/input.txt.gz"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/gzip/input.txt.gz"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/gzip/output.txt"));
 
         // launch the job

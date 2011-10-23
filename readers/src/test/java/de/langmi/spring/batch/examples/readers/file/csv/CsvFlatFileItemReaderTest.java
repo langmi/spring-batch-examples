@@ -44,7 +44,7 @@ public class CsvFlatFileItemReaderTest {
      * </ul>
      * 
      */
-    private static final String INPUT_FILE = "src/test/resources/input/csv/input.csv";    
+    private static final String INPUT_FILE = "src/test/resources/input/file/csv/input.csv";    
     private static final int EXPECTED_COUNT = 20;
 
     /**

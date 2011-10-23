@@ -59,7 +59,7 @@ public class ZipFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/archive/input.txt.zip"));
+        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/file/archive/input.txt.zip"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/zip/launchJobOneArchive-output.txt"));
 
         // launch the job
@@ -86,7 +86,7 @@ public class ZipFileJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/archive/*.zip"));
+        jobParametersMap.put("input.archives", new JobParameter("file:src/test/resources/input/file/archive/*.zip"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/zip/launchJobMultipleArchives-output.txt"));
 
         // launch the job

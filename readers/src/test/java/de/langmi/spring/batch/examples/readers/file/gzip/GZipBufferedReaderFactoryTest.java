@@ -33,9 +33,9 @@ import org.springframework.core.io.FileSystemResource;
 public class GZipBufferedReaderFactoryTest {
 
     private GZipBufferedReaderFactory gzbrf;
-    private static final String PATH_TO_COMPRESSED_TEST_FILE = "src/test/resources/input/gzip/input.txt.gz";
-    private static final String PATH_TO_COMPRESSED_TEST_FILE_OTHERSUFFIX = "src/test/resources/input/gzip/input.txt.gzfoo";
-    private static final String PATH_TO_UNCOMPRESSED_TEST_FILE = "src/test/resources/input/gzip/input.txt";
+    private static final String PATH_TO_COMPRESSED_TEST_FILE = "src/test/resources/input/file/gzip/input.txt.gz";
+    private static final String PATH_TO_COMPRESSED_TEST_FILE_OTHERSUFFIX = "src/test/resources/input/file/gzip/input.txt.gzfoo";
+    private static final String PATH_TO_UNCOMPRESSED_TEST_FILE = "src/test/resources/input/file/gzip/input.txt";
 
     @Test
     public void testChangingSuffix() throws Exception {

@@ -57,7 +57,7 @@ public class PatternMatchingJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/patternmatching/input.txt"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/patternmatching/input.txt"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/patternmatching/output.txt"));
 
         // launch the job

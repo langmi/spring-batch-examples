@@ -47,7 +47,7 @@ public class ArchiveMultiResourceItemReaderTest {
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
         // zip file contains 2 files, one with suffix .csv, which contains 20 lines
-        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input-mixed-files.zip")});
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/file/archive/input-mixed-files.zip")});
         // setup filter
         DefaultArchiveFileNameFilter fileNameFilter = new DefaultArchiveFileNameFilter();
         fileNameFilter.setSuffixes(new String[]{".csv"});
@@ -88,7 +88,7 @@ public class ArchiveMultiResourceItemReaderTest {
         LOG.debug("testOneZipFile");
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
-        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input.txt.zip")});
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/file/archive/input.txt.zip")});
 
         // call general setup last
         generalMultiResourceReaderSetup(mReader);
@@ -126,7 +126,7 @@ public class ArchiveMultiResourceItemReaderTest {
         LOG.debug("testOneTarFileNestedDirs");
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
-        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input_nested_dir.tar")});
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/file/archive/input_nested_dir.tar")});
 
         // call general setup last
         generalMultiResourceReaderSetup(mReader);
@@ -162,7 +162,7 @@ public class ArchiveMultiResourceItemReaderTest {
         LOG.debug("testOneTarFile");
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
-        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input.tar")});
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/file/archive/input.tar")});
 
         // call general setup last
         generalMultiResourceReaderSetup(mReader);
@@ -198,7 +198,7 @@ public class ArchiveMultiResourceItemReaderTest {
         LOG.debug("testOneGzippedTarFile");
         ArchiveMultiResourceItemReader<String> mReader = new ArchiveMultiResourceItemReader<String>();
         // setup multResourceReader
-        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/archive/input_nested_dir.tar.gz")});
+        mReader.setArchives(new Resource[]{new FileSystemResource("src/test/resources/input/file/archive/input_nested_dir.tar.gz")});
 
         // call general setup last
         generalMultiResourceReaderSetup(mReader);
@@ -237,8 +237,8 @@ public class ArchiveMultiResourceItemReaderTest {
         // setup multResourceReader
         mReader.setArchives(
                 new Resource[]{
-                    new FileSystemResource("src/test/resources/input/archive/input_nested_dir.tar"),
-                    new FileSystemResource("src/test/resources/input/archive/input.tar")});
+                    new FileSystemResource("src/test/resources/input/file/archive/input_nested_dir.tar"),
+                    new FileSystemResource("src/test/resources/input/file/archive/input.tar")});
 
         // call general setup last
         generalMultiResourceReaderSetup(mReader);

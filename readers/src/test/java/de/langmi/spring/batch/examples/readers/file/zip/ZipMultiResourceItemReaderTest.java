@@ -33,9 +33,9 @@ import org.springframework.core.io.Resource;
 public class ZipMultiResourceItemReaderTest {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private static final String ZIP_INPUT_SINGLE_FILE = "src/test/resources/input/archive/input.txt.zip";
-    private static final String ZIP_INPUT_MULTIPLE_FILES = "src/test/resources/input/archive/input-mixed-files.zip";
-    private static final String ZIP_INPUT_NESTED_DIRS = "src/test/resources/input/archive/input-nested-dir.zip";
+    private static final String ZIP_INPUT_SINGLE_FILE = "src/test/resources/input/file/archive/input.txt.zip";
+    private static final String ZIP_INPUT_MULTIPLE_FILES = "src/test/resources/input/file/archive/input-mixed-files.zip";
+    private static final String ZIP_INPUT_NESTED_DIRS = "src/test/resources/input/file/archive/input-nested-dir.zip";
 
     /**
      * Test with one ZIP file containing one text file with 20 lines.

@@ -59,7 +59,7 @@ public class FlatFileItemReaderDoInStepscopeTest {
         // setup
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/simple/flatfile/input.txt"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/simple/input.txt"));
         StepExecution execution = MetaDataInstanceFactory.createStepExecution(new JobParameters(jobParametersMap));
 
         int count = StepScopeTestUtils.doInStepScope(execution, new Callable<Integer>() {

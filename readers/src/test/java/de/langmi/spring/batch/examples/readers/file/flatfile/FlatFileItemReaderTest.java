@@ -31,7 +31,7 @@ public class FlatFileItemReaderTest {
 
     /** Reader under test. */
     private FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
-    private static final String INPUT_FILE = "src/test/resources/input/simple/flatfile/input.txt";
+    private static final String INPUT_FILE = "src/test/resources/input/file/simple/input.txt";
     private static final int EXPECTED_COUNT = 20;
 
     /**

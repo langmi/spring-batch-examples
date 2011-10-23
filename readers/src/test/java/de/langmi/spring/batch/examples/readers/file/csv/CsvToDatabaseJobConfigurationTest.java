@@ -68,7 +68,7 @@ public class CsvToDatabaseJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/csv/input.csv"));
+        jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/csv/input.csv"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/csv-to-database/output.txt"));
 
         // launch the job

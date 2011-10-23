@@ -33,8 +33,8 @@ import org.springframework.core.io.FileSystemResource;
 public class CompositeItemStreamReaderTest {
 
     private final CompositeItemStreamReader<String> reader = new CompositeItemStreamReader<String>();
-    private static final String INPUT_FILE_1 = "src/test/resources/input/composite/input1.txt";
-    private static final String INPUT_FILE_2 = "src/test/resources/input/composite/input2.txt";
+    private static final String INPUT_FILE_1 = "src/test/resources/input/file/composite/input1.txt";
+    private static final String INPUT_FILE_2 = "src/test/resources/input/file/composite/input2.txt";
     private static final int EXPECTED_COUNT = 20;
 
     @Test
