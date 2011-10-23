@@ -38,10 +38,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/readers/file/file-header-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-header-ignore-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class HeaderFlatFileJobConfigurationTest {
+public class HeaderIgnoreFlatFileJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -58,7 +58,7 @@ public class HeaderFlatFileJobConfigurationTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file", new JobParameter("file:src/test/resources/input/file/header/input.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/header/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/header-ignore/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

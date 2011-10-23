@@ -19,14 +19,14 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Example for a job which reads a file with header line(s).
+        Example for a job which reads a file with header line(s) and just ignores the lines.
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="headerFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
-        <step id="headerFlatFileReaderStep">
+    <job id="headerIgnoreFlatFileReaderJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="headerIgnoreFlatFileReaderStep">
             <tasklet>
                 <chunk 
                     reader="itemReader"
@@ -42,9 +42,10 @@
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
         </property>
+        <property name="linesToSkip" value="1" />        
         <property name="strict" value="true" />
     </bean>
-    
+
     <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
         <property name="resource" value="#{jobParameters['output.file']}" />
         <property name="lineAggregator">
