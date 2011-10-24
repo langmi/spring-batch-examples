@@ -29,6 +29,29 @@
     <url>https://github.com/langmi/spring-batch-templates</url>
     <description>Spring Batch Example: (item) reader examples</description>
 
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>manual</distribution>
+            <comments>
+                Choosed 'manual' distribution, because there are no plans 
+                to upload the project to a maven repository.
+            </comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>michael</id>
+            <name>Michael Lange</name>
+            <email>michael.r.lange@langmi.de</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
     <properties>
         <!-- compiler settings -->
