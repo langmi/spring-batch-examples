@@ -18,12 +18,6 @@
     <prerequisites>
         <maven>3.+</maven>
     </prerequisites>
-
-    <parent>
-        <artifactId>parent</artifactId>
-        <groupId>de.langmi.spring.batch.examples</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>      
       
     <modelVersion>4.0.0</modelVersion>
 
