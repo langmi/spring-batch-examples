@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.file.flatfile;
+package de.langmi.spring.batch.examples.readers.file.flatfileitemreader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +38,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/readers/file/file-simple-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-flatfileitemreader-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SimpleFlatFileJobConfigurationTest {
+public class FlatFileItemReaderJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());

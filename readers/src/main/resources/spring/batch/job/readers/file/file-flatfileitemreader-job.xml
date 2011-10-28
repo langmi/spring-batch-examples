@@ -19,7 +19,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Real simple Spring Batch example for a basic FlatFileItemReader
+        Simple Spring Batch example for a basic FlatFileItemReader
         
         - basically reads file and writes each line out unchanged
         - input/output files are configured with stepscope and jobparameters

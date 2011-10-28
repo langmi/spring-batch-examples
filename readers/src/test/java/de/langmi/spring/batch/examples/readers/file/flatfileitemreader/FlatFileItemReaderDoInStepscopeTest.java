@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.readers.file.flatfile;
+package de.langmi.spring.batch.examples.readers.file.flatfileitemreader;
 
 import static org.junit.Assert.*;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @see <a href="http://static.springsource.org/spring-batch/reference/html/testing.html#d0e7538">Spring Batch Testing</a>
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/readers/file/file-simple-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-flatfileitemreader-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FlatFileItemReaderDoInStepscopeTest {

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.multiresourcepartitioner;
+package de.langmi.spring.batch.examples.readers.file.multiresourcepartitioner;
 
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,12 +37,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
-@ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/multiresourcepartitioner/*.xml",
+@ContextConfiguration({
+    "classpath*:spring/batch/job/readers/file/file-multiresourcepartitioner-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JobConfigurationPartitionTest {
+public class MultiResourcePartitionerJobConfigurationTest {
 
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+    private static final int READ_COUNT_PER_FILE = 20;
+    private static final int READ_COUNT_OVERALL = 40;
+    private static final int STEP_COUNT = 3;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -50,13 +57,36 @@ public class JobConfigurationPartitionTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/*.txt"));
-        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/"));
+        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/file/multiresource/*.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/multiresource/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
+
+        assertEquals(STEP_COUNT, jobExecution.getStepExecutions().size());
+
+        // assert step meta data
+        boolean partitionStepFound = false;
+        boolean childrenStepFound = false;
+        for (StepExecution step : jobExecution.getStepExecutions()) {
+            // spring batch works with 3 "steps" here, the PartitionStep itself 
+            // and the created children
+            if ("businessStep".equals(step.getStepName())) {
+                assertEquals("Read Count mismatch, changed input?",
+                             READ_COUNT_OVERALL, step.getReadCount());
+                partitionStepFound = true;
+            }
+            // the children steps follow the pattern 
+            // "<stepName>:partition:<partition-id>"
+            if (step.getStepName().contains("concreteBusinessStep:partition")) {
+                assertEquals("Read Count mismatch, changed input?",
+                             READ_COUNT_PER_FILE, step.getReadCount());
+                childrenStepFound = true;
+            }
+        }
+        assertTrue("Changed step names?", partitionStepFound && childrenStepFound);
     }
 }
