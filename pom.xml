@@ -25,7 +25,6 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>automatic-thread-conf</module>
         <module>complex</module>
         <module>listeners</module>
         <module>multi-resource-partitioner</module>
