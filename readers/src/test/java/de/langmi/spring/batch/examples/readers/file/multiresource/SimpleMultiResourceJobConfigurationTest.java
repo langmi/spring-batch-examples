@@ -45,8 +45,8 @@ public class SimpleMultiResourceJobConfigurationTest {
 
     /** Logger. */
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    /** Lines count from input file. */
-    private static final int COUNT = 40;
+    /** Lines count from all input files. */
+    private static final int READ_COUNT_OVERALL = 40;
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -70,7 +70,9 @@ public class SimpleMultiResourceJobConfigurationTest {
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
             assertEquals("Read Count mismatch, changed input?",
-                    COUNT, step.getReadCount());
+                         READ_COUNT_OVERALL, step.getReadCount());
+            assertEquals("Write count mismatch.",
+                         READ_COUNT_OVERALL, step.getWriteCount());
         }
     }
 }

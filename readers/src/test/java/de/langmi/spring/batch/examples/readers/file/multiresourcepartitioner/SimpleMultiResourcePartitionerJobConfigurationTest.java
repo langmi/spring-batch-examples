@@ -20,8 +20,6 @@ import java.util.Map;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
@@ -38,12 +36,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/readers/file/file-multiresourcepartitioner-job.xml",
+    "classpath*:spring/batch/job/readers/file/file-multiresourcepartitioner-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class MultiResourcePartitionerJobConfigurationTest {
+public class SimpleMultiResourcePartitionerJobConfigurationTest {
 
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private static final int READ_COUNT_PER_FILE = 20;
     private static final int READ_COUNT_OVERALL = 40;
     private static final int STEP_COUNT = 3;
@@ -77,6 +74,8 @@ public class MultiResourcePartitionerJobConfigurationTest {
             if ("businessStep".equals(step.getStepName())) {
                 assertEquals("Read Count mismatch, changed input?",
                              READ_COUNT_OVERALL, step.getReadCount());
+                assertEquals("Write count mismatch.",
+                             READ_COUNT_OVERALL, step.getWriteCount());
                 partitionStepFound = true;
             }
             // the children steps follow the pattern 
