@@ -30,6 +30,8 @@
         <module>readers</module>
         <module>skip</module>
         <module>skip-policy</module>
+        <module>playground</module>
+        <module>writers</module>
     </modules>
 
     <name>spring batch examples parent</name>

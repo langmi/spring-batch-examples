@@ -18,16 +18,18 @@
     <prerequisites>
         <maven>3.+</maven>
     </prerequisites>
+
       
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.langmi.spring.batch.examples</groupId>
-    <artifactId>readers</artifactId>
+    <groupId>de.langmi.spring.batch.examples.playground</groupId>
+    <artifactId>playground</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>readers</name>
+
+    <name>playground</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: (item) reader examples</description>
+    <description>Spring Batch Example: playground</description>
 
     <licenses>
         <license>
@@ -53,6 +55,7 @@
         </developer>
     </developers>
 
+
     <properties>
         <!-- compiler settings -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,7 +69,6 @@
         <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
         <spring.framework.version>3.0.6.RELEASE</spring.framework.version>
         <slf4j.version>1.6.3</slf4j.version>
-        <truezip.version>7.3.4</truezip.version>
     </properties>
 
     <build>
@@ -104,32 +106,6 @@
         </plugins>
     </build>
     <dependencies>
-        <!-- Truezip -->
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-kernel</artifactId>
-            <version>${truezip.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-driver-file</artifactId>
-            <version>${truezip.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-driver-tar</artifactId>
-            <version>${truezip.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-driver-zip</artifactId>
-            <version>${truezip.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-file</artifactId>
-            <version>${truezip.version}</version>
-        </dependency>
         <!-- HSQLDB -->
         <dependency>
             <groupId>org.hsqldb</groupId>
@@ -141,11 +117,6 @@
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -204,7 +175,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.framework.version}</version>
-        </dependency>
+        </dependency>        
         <!-- Spring Batch dependencies -->
         <dependency>
             <groupId>org.springframework.batch</groupId>
@@ -236,4 +207,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>
