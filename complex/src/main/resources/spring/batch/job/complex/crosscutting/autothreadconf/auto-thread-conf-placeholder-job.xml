@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/batch 
+        http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+	http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        Simple Automatic Thread Configuration Example with placeholder.
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="automatiticThreadsConfPlaceholderJob" xmlns="http://www.springframework.org/schema/batch">        
+        <step id="businessStep" 
+              parent="businessStep:master" />
+    </job>
+
+    <step id="concreteBusinessStep" xmlns="http://www.springframework.org/schema/batch">
+        <tasklet>
+            <chunk reader="itemReader" 
+                   writer="itemWriter" 
+                   commit-interval="5" />
+        </tasklet>
+    </step>
+
+    <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
+        <description>
+            * concurrencyLimit matches count of read files to force multi-threading
+        </description>
+        <property name="jobRepository" ref="jobRepository"/>
+        <property name="stepExecutionSplitter">
+            <bean class="org.springframework.batch.core.partition.support.SimpleStepExecutionSplitter">
+                <constructor-arg ref="jobRepository"/>
+                <constructor-arg ref="concreteBusinessStep"/>
+                <constructor-arg>
+                    <bean class="de.langmi.spring.batch.examples.complex.support.CustomMultiResourcePartitioner" scope="step">
+                        <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </property> 
+        <property name="partitionHandler">
+            <bean class="org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler">
+                <property name="taskExecutor" ref="taskExecutor" />
+                <property name="step" ref="concreteBusinessStep"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <description>
+            * resource is set via step scoped late binding (see multiresourcereader)
+            * strict mode - we expect input files
+        </description>
+        <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <description>
+            resource is set via step scoped late binding
+        </description>
+        <property name="resource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+        </property>
+    </bean>    
+
+    <bean id="taskExecutor" class="de.langmi.spring.batch.examples.complex.crosscutting.autothreadconf.LoggingAsyncTaskExecutor">
+        <property name="concurrencyLimit" value="${concurrency.limit}" />
+    </bean>
+
+<!-- 
+    i did not manage to get the context namespace variant to work with SYSTEM_PROPERTIES_MODE_OVERRIDE
+    <context:property-placeholder location="classpath:spring/batch/job/autothreadconf/job.properties" />
+-->
+    
+    <bean id="placeholderProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:spring/batch/job/complex/crosscutting/autothreadconf/auto-thread-conf-placeholder-job.properties" />
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="ignoreUnresolvablePlaceholders" value="false" />
+    </bean>
+
+</beans>
