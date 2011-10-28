@@ -9,3 +9,5 @@
 /readers/target/
 /readers/catalog.xml
 /readers/.settings/
+/complex/target
+/complex/catalog.xml
