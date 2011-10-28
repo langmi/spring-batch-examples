@@ -62,7 +62,7 @@ public class CustomMultiResourcePartitioner implements Partitioner {
             Assert.state(resource.exists(), "Resource does not exist: " + resource);
             try {
                 context.putString(keyName, resource.getURL().toExternalForm());
-                context.put("outputFileName", createOutputFilename(i, context, resource));
+                context.put("outputFileName", createOutputFilename(i, resource));
             } catch (IOException e) {
                 throw new IllegalArgumentException("File could not be located for: " + resource, e);
             }
@@ -73,14 +73,14 @@ public class CustomMultiResourcePartitioner implements Partitioner {
     }
 
     /**
-     * Creates distinct output  file name per partition.
+     * Creates distinct output file name per partition.
      *
      * @param partitionId
      * @param context
      * @param resource
      * @return 
      */
-    private String createOutputFilename(int partitionId, ExecutionContext context, Resource resource) {
+    private String createOutputFilename(int partitionId, Resource resource) {
         String outputFileName = "output-" + String.valueOf(partitionId) + ".txt";
         LOG.info(
                 "for inputfile:'"

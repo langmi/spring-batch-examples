@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.complex.crosscutting.autothreadconf;
+package de.langmi.spring.batch.examples.complex.file.renamefile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,64 +24,38 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Automatic Thread Configuration JobConfigurationTest.
+ * JobConfigurationTest.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/complex/crosscutting/autothreadconf/auto-thread-conf-job.xml",
+    "classpath*:spring/batch/job/complex/file/renamefile/rename-file-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AutoThreadConfJobConfigurationTest {
+public class RenameFileSimpleJobConfigurationTest {
 
+    /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
-    private static final int READ_COUNT_PER_FILE = 20;
-    private static final int READ_COUNT_OVERALL = 120;
-    private static final int STEP_COUNT = 7;
 
+    /** Launch Test. */
     @Test
     public void launchJob() throws Exception {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/multi/*.txt"));
-        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/auto-thread-conf/"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/rename-file-simple/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-
-        assertEquals(STEP_COUNT, jobExecution.getStepExecutions().size());
-
-        // assert step meta data
-        boolean partitionStepFound = false;
-        boolean childrenStepFound = false;
-        for (StepExecution step : jobExecution.getStepExecutions()) {
-            // spring batch works with 7 "steps" here, the PartitionStep itself 
-            // and the created children
-            if ("businessStep".equals(step.getStepName())) {
-                assertEquals("Read Count mismatch, changed input?",
-                        READ_COUNT_OVERALL, step.getReadCount());
-                partitionStepFound = true;
-            }
-            // the children steps follow the pattern 
-            // "<stepName>:partition:<partition-id>"
-            if (step.getStepName().contains("concreteBusinessStep:partition")) {
-                assertEquals("Read Count mismatch, changed input?",
-                        READ_COUNT_PER_FILE, step.getReadCount());
-                childrenStepFound = true;
-            }
-        }
-        assertTrue("Changed step names?", partitionStepFound && childrenStepFound);
     }
 }

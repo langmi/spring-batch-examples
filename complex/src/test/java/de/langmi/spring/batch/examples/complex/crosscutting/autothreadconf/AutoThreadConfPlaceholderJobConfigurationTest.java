@@ -59,7 +59,7 @@ public class AutoThreadConfPlaceholderJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/multiple/*.txt"));
+        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/multi/*.txt"));
         jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/auto-thread-conf-placeholder/"));
 
         // launch the job

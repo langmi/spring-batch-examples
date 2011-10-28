@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        Rename Files Example with a MultiResourcePartitioner
+        
+            * partition step to read multiple files
+            * for each file, a specific business key is extracted from the header
+            * file renaming happens in afterStep listener
+                * its actually a copy-and-delete-old-file version
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="renameFilesPartitionJob" xmlns="http://www.springframework.org/schema/batch">        
+        <step id="businessStep" 
+              parent="businessStep:master" />
+    </job>
+
+    <step id="concreteBusinessStep" xmlns="http://www.springframework.org/schema/batch">
+        <tasklet>
+            <chunk reader="itemReader" 
+                   writer="itemWriter" 
+                   commit-interval="5" />
+        </tasklet>
+        <listeners>
+            <listener ref="headerLineCallbackHandler" />
+            <listener ref="renameFileListener" />
+        </listeners>
+    </step>
+
+    <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">
+        <description>
+            * concurrencyLimit > 1 to force multi-threading
+            * CustomMultiResourcePartitioner creates distinct output file names too
+        </description>
+        <property name="jobRepository" ref="jobRepository"/>
+        <property name="stepExecutionSplitter">
+            <bean class="org.springframework.batch.core.partition.support.SimpleStepExecutionSplitter">
+                <constructor-arg ref="jobRepository"/>
+                <constructor-arg ref="concreteBusinessStep"/>
+                <constructor-arg>
+                    <bean class="de.langmi.spring.batch.examples.complex.support.CustomMultiResourcePartitioner" scope="step">
+                        <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </property> 
+        <property name="partitionHandler">
+            <bean class="org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler">
+                <property name="taskExecutor">
+                    <bean class="org.springframework.core.task.SimpleAsyncTaskExecutor">
+                        <property name="concurrencyLimit" value="2" />
+                    </bean>
+                </property>
+                <property name="step" ref="concreteBusinessStep"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <description>
+            * resource is set via step scoped late binding (see multiresourcereader)
+            * linesToSkip - count for header lines, set to 1, there is only 1 header line
+            * strict mode - we expect input files
+        </description>
+        <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
+        <property name="linesToSkip" value="1" />
+        <property name="skippedLinesCallback" ref="headerLineCallbackHandler" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="headerLineCallbackHandler" 
+          class="de.langmi.spring.batch.examples.complex.file.renamefile.partition.HeaderLineCallbackHandler" 
+          scope="step">
+        <description>
+            * handles the header line
+            * extracts business key
+            * promotes the key to the step execution context for further use
+        </description>
+    </bean>
+
+    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <description>
+            resource is set via step scoped late binding
+        </description>
+        <property name="resource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+        </property>
+    </bean>
+
+    <bean id="renameFileListener" class="de.langmi.spring.batch.examples.complex.file.renamefile.partition.RenameFileListener" scope="step">
+        <description>
+            * pulls current output file name from context
+            * copies to desired output file 
+            * calls file.deleteOnExit for old output file
+        </description>        
+        <property name="outputFileResource" value="#{jobParameters['output.file.path']}#{stepExecutionContext['outputFileName']}" />
+    </bean>
+</beans>
