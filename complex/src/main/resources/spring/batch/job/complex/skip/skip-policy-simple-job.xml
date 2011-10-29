@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        Simple Skip Job Example - with skip policy instead of skip-limit 
+                                  and skippable-exceptions
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="skipJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="skipJobStep">
+            <tasklet>
+                <chunk 
+                    reader="itemReader" 
+                    writer="itemWriter" 
+                    commit-interval="5"
+                    skip-policy="skipPolicy">
+                </chunk>
+            </tasklet>
+            <listeners>
+                <listener ref="jobListener" />
+            </listeners>
+        </step>
+        <!-- registered at job level as well, to log job events -->        
+        <listeners>            
+            <listener ref="jobListener" />
+        </listeners>
+    </job>
+
+    <bean id="itemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+        <constructor-arg>
+            <ref bean="testData" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="testData" class="de.langmi.spring.batch.examples.complex.support.TestDataFactoryBean" />
+
+    <bean id="itemWriter" class="de.langmi.spring.batch.examples.complex.skip.simple.SkipJobItemWriter" />
+
+    <bean id="jobListener" class="de.langmi.spring.batch.examples.complex.skip.simple.SkipJobListener" />
+    
+    <bean id="skipPolicy" class="de.langmi.spring.batch.examples.complex.skip.policy.simple.SkipJobPolicy">
+        <property name="skipLimit" value="2" />
+    </bean>
+
+</beans>

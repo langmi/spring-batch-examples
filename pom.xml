@@ -28,8 +28,6 @@
         <module>complex</module>
         <module>listeners</module>
         <module>readers</module>
-        <module>skip</module>
-        <module>skip-policy</module>
         <module>playground</module>
         <module>writers</module>
     </modules>
