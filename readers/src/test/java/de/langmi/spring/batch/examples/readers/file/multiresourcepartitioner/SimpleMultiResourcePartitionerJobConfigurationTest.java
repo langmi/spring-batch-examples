@@ -55,7 +55,7 @@ public class SimpleMultiResourcePartitionerJobConfigurationTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/file/multiresource/*.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/multiresource/output.txt"));
+        jobParametersMap.put("output.dir", new JobParameter("file:target/test-outputs/readers/file/multiresourcepartitioner-simple/"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
@@ -73,16 +73,18 @@ public class SimpleMultiResourcePartitionerJobConfigurationTest {
             // and the created children
             if ("businessStep".equals(step.getStepName())) {
                 assertEquals("Read Count mismatch, changed input?",
-                             READ_COUNT_OVERALL, step.getReadCount());
+                        READ_COUNT_OVERALL, step.getReadCount());
                 assertEquals("Write count mismatch.",
-                             READ_COUNT_OVERALL, step.getWriteCount());
+                        READ_COUNT_OVERALL, step.getWriteCount());
                 partitionStepFound = true;
             }
             // the children steps follow the pattern 
             // "<stepName>:partition:<partition-id>"
             if (step.getStepName().contains("concreteBusinessStep:partition")) {
                 assertEquals("Read Count mismatch, changed input?",
-                             READ_COUNT_PER_FILE, step.getReadCount());
+                        READ_COUNT_PER_FILE, step.getReadCount());
+                assertEquals("Write count mismatch.",
+                        READ_COUNT_PER_FILE, step.getWriteCount());
                 childrenStepFound = true;
             }
         }

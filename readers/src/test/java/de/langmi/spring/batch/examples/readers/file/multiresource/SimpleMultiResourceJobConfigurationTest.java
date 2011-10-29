@@ -58,7 +58,7 @@ public class SimpleMultiResourceJobConfigurationTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.files", new JobParameter("file:src/test/resources/input/file/multiresource/*.txt"));
-        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/multiresource/output.txt"));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/readers/file/multiresource-simple/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));

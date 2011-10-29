@@ -58,7 +58,7 @@
                 <constructor-arg ref="jobRepository"/>
                 <constructor-arg ref="concreteBusinessStep"/>
                 <constructor-arg>
-                    <bean class="org.springframework.batch.core.partition.support.MultiResourcePartitioner" scope="step">
+                    <bean class="de.langmi.spring.batch.examples.readers.file.multiresourcepartitioner.CustomMultiResourcePartitioner" scope="step">
                         <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
                     </bean>
                 </constructor-arg>
@@ -81,7 +81,7 @@
             * resource is set via step scoped late binding (see multiresourcereader)
             * strict mode - we expect input files
         </description>
-        <property name="resource" value="#{stepExecutionContext['fileName']}" />
+        <property name="resource" value="#{stepExecutionContext['inputFilePath']}" />
         <property name="lineMapper">
             <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
         </property>
@@ -92,7 +92,7 @@
         <description>
             resource is set via step scoped late binding
         </description>
-        <property name="resource" value="#{jobParameters['output.file']}" />
+        <property name="resource" value="#{jobParameters['output.dir']}#{stepExecutionContext['outputFileName']}" />
         <property name="lineAggregator">
             <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
         </property>
