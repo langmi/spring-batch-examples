@@ -27,8 +27,8 @@
     <modules>
         <module>complex</module>
         <module>listeners</module>
-        <module>readers</module>
         <module>playground</module>
+        <module>readers</module>
         <module>writers</module>
     </modules>
 
