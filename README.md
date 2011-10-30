@@ -10,16 +10,7 @@ To further simplify it, all work is under Apache 2.0 license (see [license wiki 
 
 ## What ?
 
-List of examples, for some i provided detailed wiki pages
-
-* [automatic threads configuration][2]
-* [listeners][3]
-* [multi resource partitioner][4]
-* [readers][5]
-* [rename files][6], contains different strategies
-* [simple skip job][7]
-* **skip-policy** same as [simple skip job][7] but i used a skip policy instead of the usual skip-limit and skippable-exceptions
-
+The Examples are described in the [wiki][2]
 
 ## General Informations
 
@@ -30,7 +21,7 @@ All Spring Batch Examples:
   * Spring Batch 2.1.8.RELEASE
   * Spring Framework 3.0.6.RELEASE
 * are provided "as is", no guarantees :-)
-* work with in-memory database, but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][8] i could use it, but why break a standard configuration ?
+* work with [in-memory database][database], but not with in-memory jobrepository, since the [MapJobRepository is threadsafe][3] i could use it, but why break a standard configuration ?
 * for the general Maven, Spring and Database setup see the [project setup][project-setup] wiki page.
 
 ## License
@@ -38,11 +29,7 @@ All Spring Batch Examples:
 Apache 2.0 see [license wiki page][1] for more details
 
 [1]: https://github.com/langmi/spring-batch-examples/wiki/License---Apache-2.0
-[2]: https://github.com/langmi/spring-batch-examples/wiki/Automatic-Threads-Configuration
-[3]: https://github.com/langmi/spring-batch-examples/wiki/Listeners
-[4]: https://github.com/langmi/spring-batch-examples/wiki/Multi-Resource-Partitioner
-[5]: https://github.com/langmi/spring-batch-examples/wiki/Readers
-[6]: https://github.com/langmi/spring-batch-examples/wiki/Rename-Files
-[7]: https://github.com/langmi/spring-batch-examples/wiki/Simple-Skip-Job
-[8]: https://jira.springsource.org/browse/BATCH-1541
+[2]: https://github.com/langmi/spring-batch-examples/wiki
+[3]: https://jira.springsource.org/browse/BATCH-1541
 [project-setup]: https://github.com/langmi/spring-batch-examples/wiki/project-setup
+[database]:http://hsqldb.org/doc/2.0/guide/running-chapt.html#running_inprocess-sect
