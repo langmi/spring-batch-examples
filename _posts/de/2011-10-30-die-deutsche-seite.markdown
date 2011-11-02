@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Die deutsche Seite
-categories:
-- categorie1
-- categorie2
+category: de
+tags:
+- tag1
+- tag2
 published: true
-language: de
 ---
 
 # {{ page.title }}
