@@ -57,7 +57,7 @@ public class RenameFilePartitionExtraStepJobConfigurationTest {
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/multi/*.txt"));
-        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/rename-file-partition/"));
+        jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/rename-file-partition-extra-step/"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
