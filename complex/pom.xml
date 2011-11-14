@@ -13,11 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <prerequisites>
-        <maven>3.+</maven>
-    </prerequisites>
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.langmi.spring.batch.examples</groupId>
@@ -27,18 +27,29 @@
 
     <name>complex</name>
     <url>https://github.com/langmi/spring-batch-examples</url>
-    <description>Spring Batch Example: complex examples</description>
+    
+    <description>
+        Spring Batch Example: complex examples
+        This projects needs:
+        
+        * Java 1.6+
+        * Maven 3+
+        
+        see maven-enforcer-plugin configuration.
+    </description>
+
     <licenses>
         <license>
             <name>Apache 2</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>manual</distribution>
             <comments>
-                Choosed 'manual' distribution, because there are no plans
+                Declared 'manual' distribution, because there are no plans
                 to upload the project to a maven repository.
             </comments>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <id>michael</id>
@@ -53,12 +64,16 @@
     </developers>
 
     <properties>
-        <!-- compiler settings -->
+        <!-- general project settings -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.jdk>1.6</maven.jdk>
+        <project.java.version>1.6</project.java.version>
+        <!-- development settings for maven-compiler-plugin -->
         <maven.compiler.debug>true</maven.compiler.debug>
         <maven.compiler.optimize>false</maven.compiler.optimize>
-        <!-- test settings -->
+        <!-- maven-surefire-plugin forkmode set to always, because
+             the tests use Spring Framework, i want clean test setups,
+             Spring provides a "dirty" mechanism for this too, but
+             i do not trust this -->
         <maven.surefire.forkmode>always</maven.surefire.forkmode>
         <log4j.configuration>log4j/log4j.properties</log4j.configuration>
         <!-- often used dependency version data -->
@@ -70,18 +85,29 @@
     <build>
         <plugins>
             <plugin>
+                <!-- maven-compiler-plugin configured to:
+                        * use specific Java Version
+                        * use specific target Java Version
+                        * use UTF-8 for java sources
+                        * use debug compiler settings
+                        * do not use optimize compiler settings
+                        * show deprecated informations (will build anyhow)
+                -->
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>${maven.jdk}</source>
-                    <target>${maven.jdk}</target>
+                    <source>${project.java.version}</source>
+                    <target>${project.java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <debug>${maven.compiler.debug}</debug>
                     <optimize>${maven.compiler.optimize}</optimize>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
-            </plugin>
+            </plugin>    
             <plugin>
+                <!-- maven-resources-plugin configured to treat
+                     all resources as UTF-8 format
+                -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
@@ -89,6 +115,12 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!-- maven-surefire-plugin configured to set
+                        * system property for log4j file place
+                        * forkMode for clean context per test
+                        * some java arguments to prevent OutOfMemory problems
+                          while running some tests
+                -->
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
@@ -99,10 +131,41 @@
                     <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <!-- 
+                    With the maven-enforcer-plugin i want to make sure
+                    the project is built with maven 3+ and Java 1.6+.
+                    
+                    right now the plugin reads the version as lowest allowed, 
+                    so there is no need to use fancy formats like: [3.0,)
+                    see http://maven.apache.org/plugins/maven-enforcer-plugin/rules/versionRanges.html
+                -->
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>${project.java.version}</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>3.0.0</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <dependencies>
+        <!-- apache commons -->
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
@@ -135,11 +198,33 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
         </dependency>
         <!-- Spring (core) Framework dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.framework.version}</version>
+            <exclusions>
+                <exclusion>
+                    <!-- this project uses slf4j -->
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -148,11 +233,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>${spring.framework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
             <version>${spring.framework.version}</version>
         </dependency>
         <!-- Spring Batch dependencies -->
