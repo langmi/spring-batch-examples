@@ -34,8 +34,8 @@
         inline xmlns, otherwise it would look like 
         'batch:job, batch:step, etc.' 
     -->
-    <job id="jdbcPagingItemReaderJob" xmlns="http://www.springframework.org/schema/batch">
-        <step id="jdbcPagingItemReaderStep">
+    <job id="jdbcCursorItemReaderJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="jdbcCursorItemReaderStep">
             <tasklet>
                 <chunk 
                     reader="itemReader"
@@ -46,35 +46,27 @@
         </step>
     </job>
 
-    <bean id="itemReader" class="org.springframework.batch.item.database.JdbcPagingItemReader">
+    <bean id="itemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader">
         <property name="dataSource" ref="dataSource" />
-        <property name="queryProvider">
-            <bean class="org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean">
-                <property name="dataSource" ref="dataSource" />
-                <property name="databaseType" value="HSQL" />
-                <property name="selectClause" value="select ID, NAME" />
-                <property name="fromClause" value="from TEST" /> 
-                <property name="whereClause">
-                    <!-- Why CDATA? 
-                    
-                         because < etc. is not allowed for xml values
-                         when you use &lt; xml parser will work, but
-                         now the sql won't because of the & spring assumes
-                         a placeholder, see
-                         - AbstractSqlPagingQueryProvider.init(...)
-                         - JdbcParameterUtils.countParameterPlaceholders(...)
-                         
-                         -->
-                    <value>
-                        <![CDATA[
-                            where NAME <> 'foo'
-                        ]]>
-                    </value>
-                </property>
-                <property name="sortKey" value="ID" />
-            </bean>
+        <property name="sql">
+            <!-- Why CDATA? 
+
+                 because < etc. is not allowed for xml values
+                 when you use &lt; xml parser will work, but
+                 now the sql won't because of the & spring assumes
+                 a placeholder, see
+                 - AbstractSqlPagingQueryProvider.init(...)
+                 - JdbcParameterUtils.countParameterPlaceholders(...)
+
+                 -->
+            <value>
+                <![CDATA[
+                    SELECT ID,NAME
+                    FROM TEST
+                    WHERE NAME <> 'foo'
+                ]]>
+            </value>
         </property>
-        <property name="pageSize" value="2" />
         <property name="rowMapper" ref="rowMapper" />
     </bean>
     
