@@ -18,8 +18,6 @@ package de.langmi.spring.batch.examples.complex.jdbc.generic.export;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.junit.After;
-import java.util.HashMap;
-import java.util.Map;
 import javax.sql.DataSource;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -27,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -43,10 +40,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/complex/jdbc/jdbc-generic-export-job.xml",
+    "classpath*:spring/batch/job/complex/jdbc/jdbc-generic-export-to-file-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JdbcGenericExportJobConfigurationTest {
+public class JdbcGenericExportToFileJobConfigurationTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired
@@ -65,12 +62,8 @@ public class JdbcGenericExportJobConfigurationTest {
     /** Launch Test. */
     @Test
     public void launchJob() throws Exception {
-        // Job parameters, commit.rate is set with properties file and Spring placeholder 
-        Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
-        jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
-
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters());
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
@@ -80,11 +73,13 @@ public class JdbcGenericExportJobConfigurationTest {
             assertEquals(EXPECTED_COUNT, stepExecution.getReadCount());
             assertEquals(EXPECTED_COUNT, stepExecution.getWriteCount());
         }
-
-        // assert items are written successfully to database
-        assertEquals(EXPECTED_COUNT, jdbcTemplate.queryForInt(COUNT_SQL));
     }
 
+    /**
+     * Setup the test with some test data.
+     *
+     * @throws Exception 
+     */
     @Before
     public void before() throws Exception {
         // provide jdbc template for setup and later assertions
@@ -106,6 +101,11 @@ public class JdbcGenericExportJobConfigurationTest {
         });
     }
 
+    /**
+     * Teardown the test by deleting the test data.
+     *
+     * @throws Exception 
+     */
     @After
     public void after() throws Exception {
         // clear table

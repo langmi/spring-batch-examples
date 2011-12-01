@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.writers.jdbc.generic;
+package de.langmi.spring.batch.examples.complex.jdbc.generic.support;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
-import org.springframework.batch.item.file.transform.FieldSet;
 
 /**
- * Implementation for {@link ItemPreparedStatementSetter}, 
- * sets the values from {@link FieldSet}.
+ * MapPreparedStatementSetter.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class FieldSetItemPreparedStatementSetter implements ItemPreparedStatementSetter<FieldSet> {
+public class MapPreparedStatementSetter implements ItemPreparedStatementSetter<Map<String, Object>> {
 
-    /** {@inheritDoc} */
     @Override
-    public void setValues(FieldSet item, PreparedStatement ps) throws SQLException {
-        for (int i = 0; i < item.getValues().length; i++) {
+    public void setValues(Map<String, Object> item, PreparedStatement ps) throws SQLException {
+        for (int i = 0; i < item.size(); i++) {
             // PreparedStatements start with 1
-            ps.setObject(i + 1, item.getValues()[i]);
+            ps.setObject(i + 1, item.get(String.valueOf(i)));
         }
     }
 }
