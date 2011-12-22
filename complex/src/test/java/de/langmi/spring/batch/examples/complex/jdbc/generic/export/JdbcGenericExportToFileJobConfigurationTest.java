@@ -56,7 +56,6 @@ public class JdbcGenericExportToFileJobConfigurationTest {
     private static final String INSERT = "INSERT INTO TEST (NAME) VALUES (?)";
     private static final String DELETE_TABLE_SQL = "DROP TABLE TEST";
     private static final String SHUTDOWN_HSQLDB = "SHUTDOWN";
-    private static final String COUNT_SQL = "SELECT COUNT(*) FROM TEST";
     private static final int EXPECTED_COUNT = 40;
 
     /** Launch Test. */
