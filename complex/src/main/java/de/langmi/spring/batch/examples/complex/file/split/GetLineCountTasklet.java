@@ -16,6 +16,7 @@
 package de.langmi.spring.batch.examples.complex.file.split;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -48,7 +49,7 @@ public class GetLineCountTasklet implements Tasklet {
 
         checkResource();
         int lineCount = getLineCount(resource.getFile());
-        
+
         chunkContext.getStepContext().getStepExecution().getExecutionContext().put("line.count", lineCount);
 
         return RepeatStatus.FINISHED;
@@ -61,15 +62,19 @@ public class GetLineCountTasklet implements Tasklet {
      * @param file
      * @param chunkContext
      * @return the line count
-     * @throws IOException 
+     * @throws IOException
+     * @throws FileNotFoundException
      */
-    private int getLineCount(File file) throws IOException {
-        // get line count
+    private int getLineCount(File file) throws IOException, FileNotFoundException {
         LineNumberReader lnr = null;
         try {
             lnr = new LineNumberReader(new FileReader(file));
-            lnr.skip(Long.MAX_VALUE);
-            return lnr.getLineNumber();
+            String line = null;
+            int count = 0;
+            while ((line = lnr.readLine()) != null) {
+                count = lnr.getLineNumber();
+            }
+            return count;
         } finally {
             if (lnr != null) {
                 lnr.close();
@@ -84,13 +89,19 @@ public class GetLineCountTasklet implements Tasklet {
      * @throws RuntimeException 
      */
     private File checkResource() throws RuntimeException {
+        // is it null ?
+        if (resource == null) {
+            throw new NullPointerException("Resource was null.");
+        }
+
+        // is there a file ?
         File file;
-        // resource check
         try {
             file = resource.getFile();
         } catch (IOException e) {
             throw new RuntimeException("Could not convert resource to file: [" + resource + "]", e);
         }
+
         return file;
     }
 

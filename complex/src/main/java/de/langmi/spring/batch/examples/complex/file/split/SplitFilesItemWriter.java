@@ -47,10 +47,10 @@ public class SplitFilesItemWriter implements ItemWriter<String> {
             readCount++;
         }
         if (itemsFirst.size() > 0) {
-            firstWriter.write(items);
+            firstWriter.write(itemsFirst);
         }
         if (itemsSecond.size() > 0) {
-            secondWriter.write(items);
+            secondWriter.write(itemsSecond);
         }
     }
 

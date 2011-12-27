@@ -23,8 +23,8 @@
         
         Splits a file in two even halves.
         
-        - tasklet gets line-count for the input file
-        - custom writer controls which lines come into which output-file
+        - tasklet reads line-count for the input file
+        - custom writer controls which lines are written into which output-file
 
     </description>
     <!-- 
