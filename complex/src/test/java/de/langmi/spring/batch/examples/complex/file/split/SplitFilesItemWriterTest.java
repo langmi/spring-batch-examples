@@ -49,9 +49,9 @@ public class SplitFilesItemWriterTest {
     public void testWrite() throws Exception {
         // setup
         SplitFilesItemWriter writer = new SplitFilesItemWriter();
-        ListItemWriter<String> firstWriter = new ListItemWriter<String>();
+        ListItemWriter firstWriter = new ListItemWriter();
         writer.setFirstWriter(firstWriter);
-        ListItemWriter<String> secondWriter = new ListItemWriter<String>();
+        ListItemWriter secondWriter = new ListItemWriter();
         writer.setSecondWriter(secondWriter);
         writer.setInputLineCount(count);
 
@@ -85,7 +85,7 @@ public class SplitFilesItemWriterTest {
      *
      * @param <String> 
      */
-    private class ListItemWriter<String> implements ItemWriter<String> {
+    private class ListItemWriter implements ItemWriter<String> {
 
         private List<String> items = new ArrayList<String>();
 
