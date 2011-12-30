@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <description>
+        Test for issue with parallel flows seen at
+        http://forum.springsource.org/showthread.php?120629-Parallel-steps-issue-in-a-job                
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    
+    <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"  />
+    
+    <job id="parallelFlowsJob" xmlns="http://www.springframework.org/schema/batch">
+        <split id="parallelProcessing"  task-executor="taskExecutor">
+            <flow>
+                <step id="step1" parent="file1Step" />
+            </flow>
+            <flow>
+                <step id="step2" parent="file2Step" />
+            </flow>
+            <flow>
+                <step id="step3" parent="file3Step" />
+            </flow>
+        </split>        
+    </job>
+
+    <step id="file1Step" xmlns="http://www.springframework.org/schema/batch">
+        <tasklet>
+            <chunk reader="itemReader1" processor="itemProcessor" writer="itemWriter" commit-interval="5" />
+        </tasklet>
+    </step>
+    
+    <step id="file2Step" xmlns="http://www.springframework.org/schema/batch">
+        <tasklet>
+            <chunk reader="itemReader2" processor="itemProcessor" writer="itemWriter" commit-interval="5" />
+        </tasklet>
+    </step>
+
+    <step id="file3Step" xmlns="http://www.springframework.org/schema/batch">
+        <tasklet>
+            <chunk reader="itemReader3" processor="itemProcessor" writer="itemWriter" commit-interval="5" />
+        </tasklet>
+    </step>
+
+    <bean id="itemReader1" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file.1']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="itemReader2" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file.2']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="itemReader3" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file.3']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="itemProcessor" class="de.langmi.spring.batch.examples.playground.SimpleItemProcessor" />
+    
+    <bean id="itemWriter" class="de.langmi.spring.batch.examples.playground.SimpleItemWriter" />
+
+</beans>
