@@ -92,7 +92,7 @@
     
     <bean id="itemWriter" class="de.langmi.spring.batch.examples.playground.SimpleItemWriter" />
 
-    <bean id="resources" class="de.langmi.spring.batch.examples.playground.resource.FiltersFoldersResourceFactory" factory-method="getInstance">
+    <bean id="resources" class="de.langmi.spring.batch.examples.playground.file.resource.FiltersFoldersResourceFactory" factory-method="getInstance">
         <constructor-arg name="filePath" type="java.lang.String" value="${filePath}" />
         <constructor-arg name="acceptedFolders" type="java.util.List" value="${acceptedFolders}" />
     </bean>

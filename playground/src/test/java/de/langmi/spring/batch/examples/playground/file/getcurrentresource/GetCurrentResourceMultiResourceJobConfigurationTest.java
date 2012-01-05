@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.playground.multiresourcepartitioner;
+package de.langmi.spring.batch.examples.playground.file.getcurrentresource;
 
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
@@ -36,11 +38,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/file-multiresourcepartitioner-filter-folders-job.xml",
+    "classpath*:spring/batch/job/file-getcurrentresource-multiresource-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class FiltersFolderMultiResourcePartitionerJobConfigurationTest {
+public class GetCurrentResourceMultiResourceJobConfigurationTest {
 
+    /** Logger. */
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+    /** Lines count from all input files. */
+    private static final int READ_COUNT_OVERALL = 40;
+    private static final String KEY_CURRENT_RESOURCE = "current.resource";
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -51,6 +58,7 @@ public class FiltersFolderMultiResourcePartitionerJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
+        jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/getcurrentresource/output.txt"));
 
         // launch the job
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
@@ -58,11 +66,17 @@ public class FiltersFolderMultiResourcePartitionerJobConfigurationTest {
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
-        assertTrue(jobExecution.getStepExecutions().size() > 0);
-
+        // output step summaries
         for (StepExecution step : jobExecution.getStepExecutions()) {
-            assertTrue(step.getReadCount() > 0);
-            assertTrue(step.getWriteCount() > 0);
+            LOG.debug(step.getSummary());
+            assertEquals("Read Count mismatch, changed input?",
+                    READ_COUNT_OVERALL, step.getReadCount());
+            assertEquals("Write count mismatch.",
+                    READ_COUNT_OVERALL, step.getWriteCount());
+            // check for current resource
+            assertTrue(step.getExecutionContext().containsKey(KEY_CURRENT_RESOURCE));
+            assertNotNull(step.getExecutionContext().get(KEY_CURRENT_RESOURCE));
+            assertTrue(((String)step.getExecutionContext().get(KEY_CURRENT_RESOURCE)).contains(".txt"));
         }
     }
 }

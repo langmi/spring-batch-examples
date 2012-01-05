@@ -59,7 +59,7 @@
                 <constructor-arg ref="jobRepository"/>
                 <constructor-arg ref="concreteBusinessStep"/>
                 <constructor-arg>                    
-                    <bean class="de.langmi.spring.batch.examples.playground.multiresourcepartitioner.FiltersFoldersMultiResourcePartitioner" scope="step">
+                    <bean class="de.langmi.spring.batch.examples.playground.file.multiresourcepartitioner.FiltersFoldersMultiResourcePartitioner" scope="step">
                         <description>
                             Without scope="step" this class would be instantiiated more than once.
                             I do not know why though.

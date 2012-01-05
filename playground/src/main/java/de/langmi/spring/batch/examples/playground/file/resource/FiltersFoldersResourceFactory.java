@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.playground.resource;
+package de.langmi.spring.batch.examples.playground.file.resource;
 
 import java.io.File;
 import java.io.FilenameFilter;

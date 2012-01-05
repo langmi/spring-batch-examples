@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.playground.multiresourcepartitioner;
+package de.langmi.spring.batch.examples.playground.file.resource;
 
+import java.util.ArrayList;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.springframework.core.io.Resource;
 
 /**
- * Tests for {@link FiltersFoldersMultiResourcePartitioner}
- * 
+ *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class FiltersFoldersMultiResourcePartitionerTest {
+public class FiltersFoldersResourceFactoryTest {
 
     @Test
     public void testSimple() throws Exception {
-        FiltersFoldersMultiResourcePartitioner mrp = new FiltersFoldersMultiResourcePartitioner("src/test/resources/", "input");
+        Resource[] resources = FiltersFoldersResourceFactory.getInstance("src/test/resources", new ArrayList<String>() {
+
+            {
+                add("input");
+            }
+        });
+        assertNotNull(resources);
+        assertTrue(resources.length > 0);
     }
 }

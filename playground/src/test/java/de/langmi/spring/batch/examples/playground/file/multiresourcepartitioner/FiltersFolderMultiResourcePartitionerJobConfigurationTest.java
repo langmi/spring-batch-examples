@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.playground.multiresourcepartitioner.resource;
+package de.langmi.spring.batch.examples.playground.file.multiresourcepartitioner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +36,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration({
-    "classpath*:spring/batch/job/file-multiresourcepartitioner-filter-folders-factory-job.xml",
+    "classpath*:spring/batch/job/file-multiresourcepartitioner-filter-folders-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class FiltersFolderFactoryJobConfigurationTest {
+public class FiltersFolderMultiResourcePartitionerJobConfigurationTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired
