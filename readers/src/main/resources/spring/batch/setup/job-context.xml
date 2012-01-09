@@ -40,7 +40,7 @@
 	  p:dataSource-ref="dataSource" 
           p:transactionManager-ref="transactionManager" />
           
-    <!-- provides step scope -->
-    <bean class="org.springframework.batch.core.scope.StepScope" />
+    <!-- provides step scope, not needed, existence of xmlns for spring batch is enough -->
+    <!--<bean class="org.springframework.batch.core.scope.StepScope" />-->
     
 </beans>

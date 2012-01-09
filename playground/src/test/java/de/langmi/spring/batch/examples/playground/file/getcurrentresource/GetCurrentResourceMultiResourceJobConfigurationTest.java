@@ -17,6 +17,7 @@ package de.langmi.spring.batch.examples.playground.file.getcurrentresource;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +42,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/file-getcurrentresource-multiresource-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
 public class GetCurrentResourceMultiResourceJobConfigurationTest {
 
     /** Logger. */
@@ -58,6 +60,7 @@ public class GetCurrentResourceMultiResourceJobConfigurationTest {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
+        jobParametersMap.put("input.file.pattern", new JobParameter("file:src/test/resources/input/getcurrentresource/*.txt"));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/getcurrentresource/output.txt"));
 
         // launch the job
@@ -66,17 +69,30 @@ public class GetCurrentResourceMultiResourceJobConfigurationTest {
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
-        // output step summaries
+        // output step summaries and check
         for (StepExecution step : jobExecution.getStepExecutions()) {
             LOG.debug(step.getSummary());
             assertEquals("Read Count mismatch, changed input?",
                     READ_COUNT_OVERALL, step.getReadCount());
             assertEquals("Write count mismatch.",
                     READ_COUNT_OVERALL, step.getWriteCount());
-            // check for current resource
-            assertTrue(step.getExecutionContext().containsKey(KEY_CURRENT_RESOURCE));
-            assertNotNull(step.getExecutionContext().get(KEY_CURRENT_RESOURCE));
-            assertTrue(((String)step.getExecutionContext().get(KEY_CURRENT_RESOURCE)).contains(".txt"));
+            checkCurrentResources(step, 0);
+            checkCurrentResources(step, 1);
         }
+    }
+
+    /**
+     * Check the context for existence of a key/value for current.resource/filename.
+     *
+     * @param step
+     * @param index 
+     */
+    private void checkCurrentResources(StepExecution step, int index) {
+        // check for current resource
+        String keyName = KEY_CURRENT_RESOURCE + index;
+        assertTrue(step.getExecutionContext().containsKey(keyName));
+        assertNotNull(step.getExecutionContext().get(keyName));
+        // files follow pattern input0.txt, input1.txt, and so on
+        assertTrue(((String) step.getExecutionContext().get(keyName)).contains(index + ".txt"));
     }
 }

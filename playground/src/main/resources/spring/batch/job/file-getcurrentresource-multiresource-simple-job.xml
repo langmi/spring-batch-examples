@@ -15,7 +15,8 @@
  -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+       xsi:schemaLocation="
+                http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
@@ -28,9 +29,10 @@
         Uses a Chunklistener to log current used resource.
         
         - basically reads file and writes each line out unchanged
-        - input file pattern is hardwired, stepscope does not work, because the
-          MultiResourceItemReader can't be used as normal spring bean 
-          see https://jira.springsource.org/browse/BATCH-1243
+        - logs current resource to execution context
+            - accesses the step scoped proxy
+            - see https://jira.springsource.org/browse/BATCH-1831
+            - see https://gist.github.com/1582202
         - output file is configured with stepscope and jobparameters
         - expects an input file, see http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/file/FlatFileItemReader.html#setStrict(boolean)
         - uses http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/item/file/mapping/PassThroughLineMapper.html
@@ -58,8 +60,8 @@
         </step>
     </job>
 
-    <bean id="itemReader" class="org.springframework.batch.item.file.MultiResourceItemReader">
-        <property name="resources" value="file:src/test/resources/input/getcurrentresource/*.txt" />
+    <bean id="itemReader" class="org.springframework.batch.item.file.MultiResourceItemReader" scope="step">
+        <property name="resources" value="#{jobParameters['input.file.pattern']}" />
         <property name="delegate" ref="itemReaderDelegate" />
         <property name="strict" value="true" />
     </bean>
@@ -79,7 +81,8 @@
 
     <bean id="getCurrentResourceChunkListener" 
           class="de.langmi.spring.batch.examples.playground.file.getcurrentresource.GetCurrentResourceChunkListener">
-        <property name="mrir" ref ="itemReader" />
+        <property name="proxy" ref ="itemReader" />
+        <property name="test" ref ="itemReader" />
     </bean>
 
 </beans>

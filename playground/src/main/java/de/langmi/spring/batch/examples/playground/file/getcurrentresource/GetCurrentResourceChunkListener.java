@@ -15,6 +15,9 @@
  */
 package de.langmi.spring.batch.examples.playground.file.getcurrentresource;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.aop.framework.Advised;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -22,32 +25,29 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 
 /**
- * Simple ChunkListener for logging the current resource from a <br />
- * injected {@link MultiResourceItemReader}. Acts as StepExeuctionListener too
- * to save value to the StepExecutionContext, value is taken later in Test to
- * see if it really worked to get the current resource.
+ * Simple Listener for logging the current resource from a <br />
+ * injected {@link MultiResourceItemReader}. Saves the value to the StepExecutionContext, 
+ * value is taken later in Test to see if it really worked to get the current resource.
+ * <br />
+ * To get it working with a step scoped MultiResourceItemReader i access the 
+ * proxy directly, see http://forum.springsource.org/showthread.php?120775-Accessing-the-currently-processing-filename,
+ * https://gist.github.com/1582202 and https://jira.springsource.org/browse/BATCH-1831.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class GetCurrentResourceChunkListener implements ChunkListener, StepExecutionListener {
 
-    private MultiResourceItemReader mrir;
     private StepExecution stepExecution;
+    private Object proxy;
+    private List<String> fileNames = new ArrayList<String>();
+    private MultiResourceItemReader test;
 
-    public void setMrir(MultiResourceItemReader mrir) {
-        this.mrir = mrir;
+    public void setTest(MultiResourceItemReader test) {
+        this.test = test;
     }
 
-    @Override
-    public void beforeChunk() {
-        if (mrir != null && mrir.getCurrentResource() != null) {
-            stepExecution.getExecutionContext().put("current.resource", mrir.getCurrentResource().getFilename());
-        }
-    }
-
-    @Override
-    public void afterChunk() {
-        // no-op
+    public void setProxy(Object mrir) {
+        this.proxy = mrir;
     }
 
     @Override
@@ -57,7 +57,32 @@ public class GetCurrentResourceChunkListener implements ChunkListener, StepExecu
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-        // no-op
         return stepExecution.getExitStatus();
+    }
+
+    @Override
+    public void beforeChunk() {
+        if (proxy instanceof Advised) {
+            try {
+                Advised advised = (Advised) proxy;
+                Object obj = advised.getTargetSource().getTarget();
+                MultiResourceItemReader mrirTarget = (MultiResourceItemReader) obj;
+                if (mrirTarget != null
+                        && mrirTarget.getCurrentResource() != null
+                        && !fileNames.contains(mrirTarget.getCurrentResource().getFilename())) {
+                    String fileName = mrirTarget.getCurrentResource().getFilename();
+                    fileNames.add(fileName);
+                    String index = String.valueOf(fileNames.indexOf(fileName));
+                    stepExecution.getExecutionContext().put("current.resource" + index, fileName);
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    @Override
+    public void afterChunk() {
+        // no-op
     }
 }

@@ -14,3 +14,7 @@
 /playground/target/
 /writers/target/
 /playground/catalog.xml
+/listeners/catalog.xml
+/writers/catalog.xml
+/listeners/catalog.xml
+/writers/catalog.xml
