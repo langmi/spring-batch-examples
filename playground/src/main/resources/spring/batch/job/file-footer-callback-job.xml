@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2011 Michael R. Lange <michael.r.lange@langmi.de>.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" xmlns:ns2="null">
+
+    <description>
+        Groking http://stackoverflow.com/questions/8815958/writing-header-and-footer-to-the-output-file-for-a-database-to-file-job
+    </description>
+    <!-- 
+        inline xmlns, otherwise it would look like 
+        'batch:job, batch:step, etc.' 
+    -->
+    <job id="footerCallbaclJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="footerCallbackStep">
+            <tasklet>
+                <chunk 
+                    reader="itemReader"
+                    processor="itemProcessor"
+                    writer="customItemWriter" 
+                    commit-interval="5">
+                        <streams>
+                            <stream ref="itemWriter" />
+                        </streams>
+                </chunk>
+            </tasklet>
+        </step>
+    </job>
+    
+    <bean id="customItemWriter" class="de.langmi.spring.batch.examples.playground.file.footer.callback.CustomWriter">
+        <property name="delegate" ref="itemWriter" />
+    </bean>
+
+    <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="resource" value="#{jobParameters['input.file']}" />
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.PassThroughLineMapper" />
+        </property>
+        <property name="strict" value="true" />
+    </bean>
+
+    <bean id="itemProcessor" class="de.langmi.spring.batch.examples.playground.SimpleItemProcessor" />
+    
+    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <property name="resource" value="#{jobParameters['output.file']}" />
+        <!--<property name="resource" value="file:target/test-outputs/file/footer-callback/output.txt" />-->
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.PassThroughLineAggregator"/>
+        </property>
+        <property name="footerCallback" ref="customItemWriter" />        
+    </bean>
+
+</beans>
