@@ -15,7 +15,7 @@
  */
 package de.langmi.spring.batch.examples.complex.skip;
 
-import de.langmi.spring.batch.examples.complex.support.TestDataFactoryBean;
+import de.langmi.spring.batch.examples.complex.support.TestDataStringsFactoryBean;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ public class SkipPolicySimpleJobConfigurationTest {
         // output step summaries
         for (StepExecution step : jobExecution.getStepExecutions()) {
             assertTrue("Read Count mismatch.",
-                    step.getReadCount() == TestDataFactoryBean.COUNT);
+                    step.getReadCount() == TestDataStringsFactoryBean.COUNT);
         }
     }
 }

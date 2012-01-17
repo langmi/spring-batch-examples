@@ -52,7 +52,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="testData" class="de.langmi.spring.batch.examples.complex.support.TestDataFactoryBean" />
+    <bean id="testData" class="de.langmi.spring.batch.examples.complex.support.TestDataStringsFactoryBean" />
 
     <bean id="itemWriter" class="de.langmi.spring.batch.examples.complex.skip.simple.SkipJobItemWriter" />
 

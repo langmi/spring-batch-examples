@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.complex.skip;
+package de.langmi.spring.batch.examples.complex.aggregating;
 
 import de.langmi.spring.batch.examples.complex.support.TestDataStringsFactoryBean;
 import static org.junit.Assert.*;
@@ -33,14 +33,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/complex/skip/skip-simple-job.xml",
+    "classpath*:spring/batch/job/complex/aggregating/aggregating-items-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SkipSimpleJobConfigurationTest {
+public class AggregatingItemsJobConfigurationTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
+    @Autowired
+    private AggregatingTestDataSimpleItemsFactoryBean testDataFactoryBean;
 
     /** Launch Test. */
     @Test
@@ -52,8 +54,8 @@ public class SkipSimpleJobConfigurationTest {
 
         // output step summaries
         for (StepExecution step : jobExecution.getStepExecutions()) {
-            assertTrue("Read Count mismatch.",
-                    step.getReadCount() == TestDataStringsFactoryBean.COUNT);
+            assertEquals("Read Count mismatch.", testDataFactoryBean.getRealCount(),
+                         step.getReadCount());
         }
     }
 }
