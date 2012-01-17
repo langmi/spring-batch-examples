@@ -19,7 +19,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <description>
-        Job in which the ItemProcessor aggregates items.
+        Job in which the Itemwriter aggregates items.
         Works with a wrapper reader which peeks ahead to know if the delegate reader
         is exhausted.
         
