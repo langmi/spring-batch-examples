@@ -13,33 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.complex.support;
+package de.langmi.spring.batch.examples.complex.aggregating;
 
 /**
- * Simple Domain Class for Spring Batch Examples.
- * Has an own id and a shared id, which is meant as shared between many items,
- * which are somehow related.
- *
+ * AggregatedItem.
+ * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class SimpleItem {
+public class AggregatedItem {
 
     private int id;
-    private int sharedId;
-    private int value;
+    private int sum = 0;
 
-    public SimpleItem() {
+    public AggregatedItem(int id) {
+        this.id = id;
     }
 
-    public SimpleItem(int id, int value) {
+    
+    public AggregatedItem(int id, int sum) {
         this.id = id;
-        this.value = value;
-    }
-
-    public SimpleItem(int id, int sharedId, int value) {
-        this.id = id;
-        this.sharedId = sharedId;
-        this.value = value;
+        this.sum = sum;
     }
 
     public int getId() {
@@ -50,24 +43,20 @@ public class SimpleItem {
         this.id = id;
     }
 
-    public int getSharedId() {
-        return sharedId;
+    public int getSum() {
+        return sum;
     }
 
-    public void setSharedId(int sharedId) {
-        this.sharedId = sharedId;
+    public void setSum(int sum) {
+        this.sum = sum;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
+    public void add(int value) {
+        this.sum = this.sum + value;
     }
 
     @Override
     public String toString() {
-        return "SimpleItem{" + "id=" + id + ", sharedId=" + sharedId + ", value=" + value + '}';
+        return "AggregatedItem{" + "id=" + id + ", sum=" + sum + '}';
     }
 }

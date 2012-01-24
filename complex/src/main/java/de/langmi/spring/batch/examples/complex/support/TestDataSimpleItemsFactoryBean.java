@@ -33,7 +33,7 @@ public class TestDataSimpleItemsFactoryBean implements FactoryBean<List<SimpleIt
     public List<SimpleItem> getObject() throws Exception {
         List<SimpleItem> data = new ArrayList<SimpleItem>();
         for (int i = 0; i < COUNT; i++) {
-            data.add(new SimpleItem(i, String.valueOf(i)));
+            data.add(new SimpleItem(i, i));
         }
         return data;
     }

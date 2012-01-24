@@ -16,7 +16,7 @@
 package de.langmi.spring.batch.examples.complex.aggregating;
 
 import de.langmi.spring.batch.examples.complex.support.SimpleItem;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -31,11 +31,10 @@ import org.springframework.batch.item.ItemWriter;
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  * @see http://stackoverflow.com/questions/8837487/how-to-process-logically-related-rows-after-itemreader-in-springbatch
  */
-public class AggregatingItemsWriter implements ItemWriter<SimpleItem>, StepExecutionListener {
+public class AggregateSimpleItemsWriter implements ItemWriter<SimpleItem>, StepExecutionListener {
 
-    private ItemWriter<SimpleItem> delegate;
-    private Integer currentId = null;
-    private List<SimpleItem> tempData = new ArrayList<SimpleItem>();
+    private ItemWriter<AggregatedItem> delegate;
+    private AggregatedItem tempData = null;
     private StepExecution stepExecution;
     private static final String KEY_READER_EXHAUSTED = "readerExhausted";
 
@@ -43,32 +42,31 @@ public class AggregatingItemsWriter implements ItemWriter<SimpleItem>, StepExecu
     public void write(List<? extends SimpleItem> items) throws Exception {
 
         // setup with first sharedId at startup
-        if (currentId == null) {
-            currentId = items.get(0).getSharedId();
+        if (tempData == null) {
+            tempData = new AggregatedItem(items.get(0).getSharedId());
         }
 
         for (SimpleItem item : items) {
             // either actual known id, add to tempData
-            if (item.getSharedId() == currentId) {
-                tempData.add(item);
+            if (item.getSharedId() == tempData.getId()) {
+                tempData.add(item.getValue());
             } else {
                 // or new id, write tempData, empty it, keep new id
-                delegate.write(tempData);
-                tempData.clear();
-                currentId = item.getSharedId();
-                tempData.add(item);
+                delegate.write(Arrays.asList(tempData));
+                tempData = null;
+                tempData = new AggregatedItem(item.getSharedId(), item.getValue());
             }
         }
 
         // check if reader exhausted, flush tempData to delegate
         if (stepExecution.getExecutionContext().containsKey(KEY_READER_EXHAUSTED)
                 && (Boolean) stepExecution.getExecutionContext().get(KEY_READER_EXHAUSTED)
-                && tempData.size() > 0) {
-            delegate.write(tempData);
+                && tempData != null) {
+            delegate.write(Arrays.asList(tempData));
         }
     }
 
-    public void setDelegate(ItemWriter<SimpleItem> delegate) {
+    public void setDelegate(ItemWriter<AggregatedItem> delegate) {
         this.delegate = delegate;
     }
 

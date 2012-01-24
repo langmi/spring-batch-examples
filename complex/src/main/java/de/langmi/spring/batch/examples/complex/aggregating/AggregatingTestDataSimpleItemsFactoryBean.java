@@ -36,7 +36,7 @@ public class AggregatingTestDataSimpleItemsFactoryBean implements FactoryBean<Li
         List<SimpleItem> data = new ArrayList<SimpleItem>();
         for (int i = 0; i < aggregatedCount; i++) {
             // each duo of items has the same shared id
-            data.add(new SimpleItem(i, i / 2, String.valueOf(i)));
+            data.add(new SimpleItem(i, i / 2, 1));
         }
 
         realCount = data.size();
