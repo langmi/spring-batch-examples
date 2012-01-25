@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.complex.aggregating;
+package de.langmi.spring.batch.examples.complex.aggregating.reader;
 
+import de.langmi.spring.batch.examples.complex.aggregating.AggregatingTestDataSimpleItemsFactoryBean;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,10 +33,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
 @ContextConfiguration(locations = {
-    "classpath*:spring/batch/job/complex/aggregating/aggregating-items-job.xml",
+    "classpath*:spring/batch/job/complex/aggregating/aggregating-items-in-reader-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AggregatingItemsJobConfigurationTest {
+public class AggregatingItemsInReaderJobConfigurationTest {
 
     /** JobLauncherTestUtils Bean. */
     @Autowired
@@ -53,7 +54,7 @@ public class AggregatingItemsJobConfigurationTest {
 
         // output step summaries
         for (StepExecution step : jobExecution.getStepExecutions()) {
-            assertEquals("Read Count mismatch.", testDataFactoryBean.getRealCount(),
+            assertEquals("Read Count mismatch.", testDataFactoryBean.getAggregatedCount(),
                          step.getReadCount());
         }
     }

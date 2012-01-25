@@ -28,28 +28,29 @@ import org.springframework.beans.factory.FactoryBean;
 public class AggregatingTestDataSimpleItemsFactoryBean implements FactoryBean<List<SimpleItem>> {
 
     /** Public to make it usable for test assertions. */
-    private int aggregatedCount = 20;
-    private int realCount;
+    private int itemCount = 20;
+    private int countDivisor = 2;
+    private int aggregatedItemCount;
 
     @Override
     public List<SimpleItem> getObject() throws Exception {
         List<SimpleItem> data = new ArrayList<SimpleItem>();
-        for (int i = 0; i < aggregatedCount; i++) {
+        for (int i = 0; i < itemCount; i++) {
             // each duo of items has the same shared id
-            data.add(new SimpleItem(i, i / 2, 1));
+            data.add(new SimpleItem(i, i / countDivisor, 1));
         }
 
-        realCount = data.size();
+        aggregatedItemCount = itemCount / countDivisor;
 
         return data;
     }
 
     public int getAggregatedCount() {
-        return aggregatedCount;
+        return aggregatedItemCount;
     }
 
-    public int getRealCount() {
-        return realCount;
+    public int getItemCount() {
+        return itemCount;
     }
 
     @Override

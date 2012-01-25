@@ -33,8 +33,8 @@
         <step id="aggregatedItemsStep">
             <tasklet>
                 <chunk 
-                    reader="readerExhaustedWrapper"
-                    writer="aggregateSimpleItemsWriter" 
+                    reader="readerAggregationWrapper"
+                    writer="aggregatedItemWriter" 
                     commit-interval="5">
                 </chunk>
             </tasklet>
@@ -58,7 +58,7 @@
         </step>
     </job>
 
-    <bean id="readerExhaustedWrapper" class="de.langmi.spring.batch.examples.complex.aggregating.ReaderExhaustedWrapper">
+    <bean id="readerAggregationWrapper" class="de.langmi.spring.batch.examples.complex.aggregating.reader.AggregateSimpleItemsReader">
         <property name="delegate" ref="itemReader" />
     </bean>
 
@@ -69,10 +69,6 @@
     </bean>
 
     <bean id="testData" class="de.langmi.spring.batch.examples.complex.aggregating.AggregatingTestDataSimpleItemsFactoryBean" />
-
-    <bean id="aggregateSimpleItemsWriter" class="de.langmi.spring.batch.examples.complex.aggregating.AggregateSimpleItemsWriter">
-        <property name="delegate" ref="aggregatedItemWriter" />
-    </bean>      
 
     <bean id="aggregatedItemWriter" class="de.langmi.spring.batch.examples.complex.aggregating.AggregatedItemWriter" />
 

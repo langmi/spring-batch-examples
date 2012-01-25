@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.langmi.spring.batch.examples.complex.aggregating;
+package de.langmi.spring.batch.examples.complex.aggregating.writer;
 
+import de.langmi.spring.batch.examples.complex.aggregating.AggregatedItem;
 import de.langmi.spring.batch.examples.complex.support.SimpleItem;
 import java.util.Arrays;
 import java.util.List;
