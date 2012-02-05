@@ -15,7 +15,6 @@
  */
 package de.langmi.spring.batch.examples.readers.orm;
 
-import de.langmi.spring.batch.examples.readers.jdbc.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
