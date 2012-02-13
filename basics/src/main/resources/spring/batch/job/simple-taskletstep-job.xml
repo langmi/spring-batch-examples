@@ -21,6 +21,8 @@
     <description>
         Maybe one of the most simple Spring Batch Job Defintions,
         contains only one TaskletStep.
+        
+        See http://static.springsource.org/spring-batch/reference/html/configureStep.html#taskletStep
     </description>
     <!-- 
         inline xmlns, otherwise it would look like 

@@ -24,6 +24,7 @@ import org.springframework.batch.repeat.RepeatStatus;
  * A real simple TaskletStep implementation.
  * 
  * @author Michael R. Lange <michael.r.lange@langmi.de>
+ * @see <a href="http://static.springsource.org/spring-batch/reference/html/configureStep.html#taskletStep">TaskletStep</a>
  */
 public class SimpleTaskletStep implements Tasklet{
 
@@ -31,8 +32,12 @@ public class SimpleTaskletStep implements Tasklet{
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         
-        System.out.println("Hello World!");
+        // why not using println? because it makes testing harder, *nix and
+        // windows think different about new line as in \n vs \r\n
+        System.out.print("Hello World!");
         
+        // we want the step to stop here, the other status 
+        // RepeatStatus.CONTINUABLE would start an endless loop here
         return RepeatStatus.FINISHED;
     }
     
