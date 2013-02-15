@@ -40,11 +40,11 @@
             <chunk reader="itemReader" 
                    writer="itemWriter" 
                    commit-interval="5" />
+            <listeners>
+                <listener ref="headerLineCallbackHandler" />
+                <listener ref="renameFileListener" />
+            </listeners>                   
         </tasklet>
-        <listeners>
-            <listener ref="headerLineCallbackHandler" />
-            <listener ref="renameFileListener" />
-        </listeners>
     </step>
 
     <bean name="businessStep:master" class="org.springframework.batch.core.partition.support.PartitionStep">

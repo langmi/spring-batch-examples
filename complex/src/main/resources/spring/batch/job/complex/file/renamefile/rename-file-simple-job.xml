@@ -43,10 +43,10 @@
                     <streams>
                         <stream ref="itemReader" />
                     </streams>
-                    <listeners>
-                        <listener ref="promotionListener"/>
-                    </listeners>
                 </chunk>
+                <listeners>
+                    <listener ref="promotionListener"/>
+                </listeners>                
             </tasklet>
         </step>
         <step id="renameFileStep">

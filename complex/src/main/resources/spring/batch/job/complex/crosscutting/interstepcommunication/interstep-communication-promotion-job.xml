@@ -36,10 +36,11 @@
     -->
     <job id="jobContextInterStepCommunicationJob" xmlns="http://www.springframework.org/schema/batch">
         <step id="changingStepExecutionContextStep" next="readingJobExecutionContextStep">
-            <tasklet ref="changingStepExecutionContextTasklet" />
-            <listeners>
-                <listener ref="promotionListener"/>
-            </listeners>
+            <tasklet ref="changingStepExecutionContextTasklet">
+                <listeners>
+                    <listener ref="promotionListener"/>
+                </listeners>                
+            </tasklet>
         </step>
         <step id="readingJobExecutionContextStep">
             <tasklet ref="readingJobExecutionContextTasklet" />
@@ -53,7 +54,6 @@
           class="de.langmi.spring.batch.examples.complex.crosscutting.interstepcommunication.promotion.ReadingJobExecutionContextTasklet" />
 
     <bean id="promotionListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener"
-          p:strict="true"
           p:keys="value" />
 
 </beans>
