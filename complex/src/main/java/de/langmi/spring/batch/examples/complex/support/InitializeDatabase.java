@@ -15,8 +15,9 @@
  */
 package de.langmi.spring.batch.examples.complex.support;
 
-import java.util.Scanner;
+import java.util.List;
 import javax.sql.DataSource;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,18 +27,28 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
 public class InitializeDatabase implements InitializingBean {
-    
+
     private DataSource dataSource;
     private Resource scriptLocation;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Scanner sqlScanner = new Scanner(scriptLocation.getInputStream(),"UTF-8").useDelimiter(";");
-        while (sqlScanner.hasNext()) {
-            String sql = sqlScanner.next();
-            System.out.println(sql);
-            new JdbcTemplate(dataSource).execute(sql);
+        // i tried java.util.Scanner, but it does not work correctly with all line feed versions
+        String sql = stripComments(IOUtils.readLines(scriptLocation.getInputStream()));
+        new JdbcTemplate(dataSource).execute(sql);
+    }
+
+    /**
+     * Strip Strings in List from SQL comments.
+     */
+    private String stripComments(List<String> list) {
+        StringBuilder buffer = new StringBuilder();
+        for (String line : list) {
+            if (!line.startsWith("//") && !line.startsWith("--")) {
+                buffer.append(line).append("\n");
+            }
         }
+        return buffer.toString();
     }
 
     public void setDataSource(DataSource dataSource) {
@@ -47,5 +58,4 @@ public class InitializeDatabase implements InitializingBean {
     public void setScriptLocation(Resource scriptLocation) {
         this.scriptLocation = scriptLocation;
     }
-
 }
