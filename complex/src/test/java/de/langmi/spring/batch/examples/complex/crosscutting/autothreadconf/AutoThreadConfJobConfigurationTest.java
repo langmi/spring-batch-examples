@@ -25,8 +25,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.test.AbstractJobTests;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -39,16 +38,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/complex/crosscutting/autothreadconf/auto-thread-conf-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AutoThreadConfJobConfigurationTest {
+public class AutoThreadConfJobConfigurationTest extends AbstractJobTests{
 
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
     private static final int READ_COUNT_PER_FILE = 20;
     private static final int READ_COUNT_OVERALL = 120;
     private static final int STEP_COUNT = 7;
 
     @Test
-    public void launchJob() throws Exception {
+    public void testJob() throws Exception {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
@@ -56,7 +53,7 @@ public class AutoThreadConfJobConfigurationTest {
         jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/auto-thread-conf/"));
 
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        JobExecution jobExecution = this.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());

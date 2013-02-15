@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.support.IteratorItemReader;
+import org.springframework.batch.item.support.ListItemReader;
 
 /**
  * AggregateSimpleItemsReaderTest.
@@ -53,7 +53,7 @@ public class AggregateSimpleItemsReaderTest {
         // combine them
         testData.addAll(testData2);
         // setup wrapped delegate
-        ItemReader<SimpleItem> delegate = new IteratorItemReader<SimpleItem>(testData);
+        ItemReader<SimpleItem> delegate = new ListItemReader<SimpleItem>(testData);
         reader.setDelegate(delegate);
 
         // 1. aggregated item
@@ -79,7 +79,7 @@ public class AggregateSimpleItemsReaderTest {
         int sharedId = 1000;
         int value = 1;
         ItemReader<SimpleItem> delegate =
-                new IteratorItemReader<SimpleItem>(createTestData(count, sharedId, value));
+                new ListItemReader<SimpleItem>(createTestData(count, sharedId, value));
         reader.setDelegate(delegate);
 
         AggregatedItem item = reader.read();

@@ -27,7 +27,7 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.test.AbstractJobTests;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,11 +43,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/complex/jdbc/jdbc-generic-export-to-database-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JdbcGenericExportToDatabaseJobConfigurationTest {
+public class JdbcGenericExportToDatabaseJobConfigurationTest extends AbstractJobTests{
 
-    /** JobLauncherTestUtils Bean. */
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
     @Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
@@ -63,9 +60,9 @@ public class JdbcGenericExportToDatabaseJobConfigurationTest {
 
     /** Launch Test. */
     @Test
-    public void launchJob() throws Exception {
+    public void testJob() throws Exception {
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters());
+        JobExecution jobExecution = this.launchJob(new JobParameters());
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());

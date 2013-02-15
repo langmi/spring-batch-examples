@@ -20,13 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemStream;
-import org.springframework.batch.item.ItemStreamException;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.*;
 
 /**
  * SimpleItemReader - is not threadsafe, uses testdata.
@@ -43,7 +37,7 @@ public class SimpleItemReader implements ItemStream, ItemReader<String> {
     private StepExecution stepExecution;
 
     @Override
-    public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+    public String read() throws Exception, UnexpectedInputException, ParseException {
         if (iterator.hasNext()) {
             String item = iterator.next();
             if (!desiredOutputFilePathCreated) {

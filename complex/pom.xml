@@ -77,8 +77,8 @@
         <maven.surefire.forkmode>always</maven.surefire.forkmode>
         <log4j.configuration>log4j/log4j.properties</log4j.configuration>
         <!-- often used dependency version data -->
-        <spring.batch.version>2.1.8.RELEASE</spring.batch.version>
-        <spring.framework.version>3.1.0.RELEASE</spring.framework.version>
+        <spring.batch.version>2.0.0.RELEASE</spring.batch.version>
+        <spring.framework.version>2.5.6</spring.framework.version>
         <slf4j.version>1.6.4</slf4j.version>
     </properties>
 

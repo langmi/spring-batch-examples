@@ -15,7 +15,7 @@
  */
 package de.langmi.spring.batch.examples.complex.aggregating;
 
-import de.langmi.spring.batch.examples.complex.support.*;
+import de.langmi.spring.batch.examples.complex.support.SimpleItem;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.FactoryBean;
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.FactoryBean;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class AggregatingTestDataSimpleItemsFactoryBean implements FactoryBean<List<SimpleItem>> {
+public class AggregatingTestDataSimpleItemsFactoryBean implements FactoryBean {
 
     /** Public to make it usable for test assertions. */
     private int itemCount = 20;

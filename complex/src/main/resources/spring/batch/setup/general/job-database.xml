@@ -17,8 +17,7 @@
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <description>Job database setup.</description>
 
@@ -32,9 +31,16 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
-
+    <!-- 
+        spring 3.+ provides a convenient way for database initializing 
+        we have to do it manually
     <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="org/springframework/batch/core/schema-hsqldb.sql"/>
     </jdbc:initialize-database>
+    -->
 
+    <bean id="initializeDatabase" class="de.langmi.spring.batch.examples.complex.support.InitializeDatabase">
+        <property name="dataSource" ref="dataSource" />
+        <property name="scriptLocation" value="classpath:schema-hsqldb.sql" />
+    </bean>
 </beans>

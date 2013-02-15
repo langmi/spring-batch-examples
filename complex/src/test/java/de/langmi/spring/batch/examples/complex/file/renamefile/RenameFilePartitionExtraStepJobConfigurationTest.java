@@ -25,8 +25,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.test.AbstractJobTests;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -39,11 +38,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/complex/file/renamefile/rename-file-partition-extra-step-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class RenameFilePartitionExtraStepJobConfigurationTest {
+public class RenameFilePartitionExtraStepJobConfigurationTest extends AbstractJobTests{
 
-    /** JobLauncherTestUtils Bean. */
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
     /** Each file has 20 lines, but the first header line will not be processed. */
     private static final int READ_COUNT_PER_FILE = 19;
     /** Its 114 cause of the header lines per file. */
@@ -52,7 +48,7 @@ public class RenameFilePartitionExtraStepJobConfigurationTest {
 
     /** Launch Test. */
     @Test
-    public void launchJob() throws Exception {
+    public void testJob() throws Exception {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
@@ -60,7 +56,7 @@ public class RenameFilePartitionExtraStepJobConfigurationTest {
         jobParametersMap.put("output.file.path", new JobParameter("file:target/test-outputs/rename-file-partition-extra-step/"));
 
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        JobExecution jobExecution = this.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());

@@ -24,8 +24,7 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.test.AbstractJobTests;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,22 +37,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/complex/file/renamefile/rename-file-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class RenameFileSimpleJobConfigurationTest {
-
-    /** JobLauncherTestUtils Bean. */
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
+public class RenameFileSimpleJobConfigurationTest extends AbstractJobTests{
 
     /** Launch Test. */
     @Test
-    public void launchJob() throws Exception {
+    public void testJob() throws Exception {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
         jobParametersMap.put("output.file", new JobParameter("file:target/test-outputs/rename-file-simple/output.txt"));
 
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        JobExecution jobExecution = this.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());

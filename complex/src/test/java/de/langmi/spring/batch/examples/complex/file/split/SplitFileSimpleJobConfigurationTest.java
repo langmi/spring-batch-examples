@@ -27,8 +27,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.test.JobLauncherTestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.test.AbstractJobTests;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -41,11 +40,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/complex/file/split/split-file-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SplitFileSimpleJobConfigurationTest {
+public class SplitFileSimpleJobConfigurationTest extends AbstractJobTests{
 
-    /** JobLauncherTestUtils Bean. */
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
     private static final int EXPECTED_COUNT = 20;
     private static final String ENCODING_UTF_8 = "UTF-8";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -54,7 +50,7 @@ public class SplitFileSimpleJobConfigurationTest {
 
     /** Launch Test. */
     @Test
-    public void launchJob() throws Exception {
+    public void testJob() throws Exception {
         // Job parameters
         Map<String, JobParameter> jobParametersMap = new HashMap<String, JobParameter>();
         jobParametersMap.put("time", new JobParameter(System.currentTimeMillis()));
@@ -63,7 +59,7 @@ public class SplitFileSimpleJobConfigurationTest {
         jobParametersMap.put("output.file.second", new JobParameter("file:" + OUTPUT_SECOND));
 
         // launch the job
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(new JobParameters(jobParametersMap));
+        JobExecution jobExecution = this.launchJob(new JobParameters(jobParametersMap));
 
         // assert job run status
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());

@@ -24,7 +24,7 @@ import org.springframework.beans.factory.FactoryBean;
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de>
  */
-public class TestDataSimpleItemsFactoryBean implements FactoryBean<List<SimpleItem>> {
+public class TestDataSimpleItemsFactoryBean implements FactoryBean {
 
     /** Public to make it usable for test assertions. */
     public static final int COUNT = 20;
