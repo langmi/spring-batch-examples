@@ -47,11 +47,7 @@
             <bean class="org.springframework.batch.core.partition.support.SimpleStepExecutionSplitter">
                 <constructor-arg ref="jobRepository"/>
                 <constructor-arg ref="concreteBusinessStep"/>
-                <constructor-arg>
-                    <bean class="de.langmi.spring.batch.examples.complex.support.CustomMultiResourcePartitioner" scope="step">
-                        <property name="resources" value="#{jobParameters['input.file.pattern']}"/>
-                    </bean>
-                </constructor-arg>
+                <constructor-arg ref="customMultiResourcePartitioner" />
             </bean>
         </property> 
         <property name="partitionHandler">
@@ -61,6 +57,11 @@
             </bean>
         </property>
     </bean>
+
+    <bean id="customMultiResourcePartitioner" class="de.langmi.spring.batch.examples.complex.support.CustomMultiResourcePartitioner" scope="step">
+        <property name="resources" value="#{jobParameters[input.file.pattern]}"/>
+    </bean>
+
 
     <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
         <description>

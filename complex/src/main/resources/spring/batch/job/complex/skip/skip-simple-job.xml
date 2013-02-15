@@ -36,13 +36,13 @@
                     commit-interval="5"
                     skip-limit="4">
                     <skippable-exception-classes>
-                        <include class="de.langmi.spring.batch.examples.complex.skip.simple.SkipJobCustomException"/>
+                        de.langmi.spring.batch.examples.complex.skip.simple.SkipJobCustomException
                     </skippable-exception-classes>
                 </chunk>
+                <listeners>
+                    <listener ref="jobListener" />
+                </listeners>
             </tasklet>
-            <listeners>
-                <listener ref="jobListener" />
-            </listeners>
         </step>
         <!-- registered at job level as well, to log job events -->
         <listeners>
@@ -50,7 +50,7 @@
         </listeners>
     </job>
 
-    <bean id="itemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+    <bean id="itemReader" class="org.springframework.batch.item.support.ListItemReader">
         <constructor-arg>
             <ref bean="testData" />
         </constructor-arg>

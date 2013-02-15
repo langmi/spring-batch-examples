@@ -37,10 +37,10 @@
                     writer="aggregateSimpleItemsWriter" 
                     commit-interval="5">
                 </chunk>
+                <listeners>
+                    <listener ref="aggregatedItemWriter" />
+                </listeners>                
             </tasklet>
-            <listeners>
-                <listener ref="aggregatedItemWriter" />
-            </listeners>
         </step>
     </job>
 
@@ -48,7 +48,7 @@
         <property name="delegate" ref="itemReader" />
     </bean>
 
-    <bean id="itemReader" class="org.springframework.batch.item.support.IteratorItemReader">
+    <bean id="itemReader" class="org.springframework.batch.item.support.ListItemReader">
         <constructor-arg>
             <ref bean="testData" />
         </constructor-arg>
