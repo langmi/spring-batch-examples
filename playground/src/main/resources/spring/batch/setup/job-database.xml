@@ -33,7 +33,9 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+    <!-- ignore-failures="DROPS" is not needed, because the drop statements use "if exists" -->
     <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="org/springframework/batch/core/schema-drop-hsqldb.sql"/>
         <jdbc:script location="org/springframework/batch/core/schema-hsqldb.sql"/>
     </jdbc:initialize-database>
 

@@ -125,9 +125,11 @@
             <plugin>
                 <!-- maven-surefire-plugin configured to set
                         * system property for log4j file place
-                        * forkMode for clean context per test
                         * some java arguments to prevent OutOfMemory problems
                           while running some tests
+                        * reuseForks = true
+                            * works because the spring batch tables in the in-memory database are dropped before there are created
+                        * forkCount = 1C = 1 jvm fork per cpu core
                 -->
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.14.1</version>
@@ -135,7 +137,8 @@
                     <systemPropertyVariables>
                         <log4j.configuration>${log4j.configuration}</log4j.configuration>
                     </systemPropertyVariables>
-                    <forkMode>${maven.surefire.forkmode}</forkMode>
+                    <forkCount>1C</forkCount>
+                    <reuseForks>true</reuseForks>
                     <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
                 </configuration>
             </plugin>

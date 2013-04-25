@@ -21,11 +21,13 @@ import org.junit.runner.RunWith;
 import org.springframework.batch.item.support.IteratorItemReader;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Testing ItemReaders with Spring Context.
+ * Testing ItemReaders with Spring Context. The ListItemReader exhausts the used 
+ * list, this makes it necessary to mark the used spring context as dirty.
  *
  * @author Michael R. Lange <michael.r.lange@langmi.de> 
  */
@@ -33,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
     "classpath*:spring/batch/job/readers/list/list-simple-job.xml",
     "classpath*:spring/batch/setup/**/*.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
 public class ItemReaderContextTest {
 
     @Autowired
