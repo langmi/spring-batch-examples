@@ -53,13 +53,17 @@
     <developers>
         <developer>
             <id>michael</id>
-            <name>Michael Lange</name>
-            <email>michael.r.lange@langmi.de</email>
+            <name>Michael R. Pralow</name>
+            <email>me@michael-pralow.de</email>
+            <url>http://michael-pralow.de</url>
             <roles>
                 <role>architect</role>
                 <role>developer</role>
             </roles>
             <timezone>+1</timezone>
+            <properties>
+                <blogUrl>http://programmicha.de</blogUrl>
+            </properties>
         </developer>
     </developers>
 
