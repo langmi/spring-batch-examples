@@ -66,6 +66,10 @@
             </properties>
         </developer>
     </developers>
+    
+    <prerequisites>
+        <maven>3.0.0</maven>
+    </prerequisites>
 
     <properties>
         <!-- general project settings -->
