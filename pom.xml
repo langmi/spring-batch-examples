@@ -93,6 +93,9 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            <!-- versions plugin used for displaying possible updates
+                 for dependencies and plugins
+                 configured here due to some problems with older versions -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
