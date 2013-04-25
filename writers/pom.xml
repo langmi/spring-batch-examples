@@ -102,7 +102,7 @@
                         * show deprecated informations (will build anyhow)
                 -->
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.1</version>
                 <configuration>
                     <source>${project.java.version}</source>
                     <target>${project.java.version}</target>
@@ -117,7 +117,7 @@
                      all resources as UTF-8 format
                 -->
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
+                <version>2.6</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
@@ -149,7 +149,7 @@
                     see http://maven.apache.org/plugins/maven-enforcer-plugin/rules/versionRanges.html
                 -->
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.0.1</version>
+                <version>1.2</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
