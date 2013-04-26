@@ -35,7 +35,7 @@ import org.springframework.core.io.Resource;
 public class GZipBufferedReaderFactory implements BufferedReaderFactory {
 
     /** Default value for gzip suffixes. */
-    private List<String> gzipSuffixes = new ArrayList() {
+    private List<String> gzipSuffixes = new ArrayList<String>() {
 
         {
             add(".gz");

@@ -122,6 +122,6 @@ public class CompositeItemStreamReaderTest {
         ffir.setResource(new FileSystemResource(inputFile));
         ffir.setName(inputFile);
 
-        return (ItemStreamReader) ffir;
+        return (ItemStreamReader<String>) ffir;
     }
 }

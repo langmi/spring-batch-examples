@@ -30,7 +30,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 public class ChangingDataBeanTasklet implements Tasklet {
     
     /** Databean. */
-    private Map dataMap;
+    private Map<String, String> dataMap;
     
     /** {@inheritDoc} */
     @Override
@@ -42,7 +42,7 @@ public class ChangingDataBeanTasklet implements Tasklet {
         return RepeatStatus.FINISHED;
     }
 
-    public void setDataMap(Map dataMap) {
+    public void setDataMap(Map<String, String> dataMap) {
         this.dataMap = dataMap;
     }
 }
