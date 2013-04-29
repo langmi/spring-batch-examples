@@ -1,21 +1,8 @@
-/target/
-/rename-files-tasklet/target/
-/skip/target/
-/skip-policy/target/
-/listeners/target/
-/multi-resource-partitioner/target/
-/rename-files/target/
-/automatic-thread-conf/target/
-/readers/target/
-/readers/catalog.xml
-/readers/.settings/
-/complex/target
-/complex/catalog.xml
-/playground/target/
-/writers/target/
-/playground/catalog.xml
-/listeners/catalog.xml
-/writers/catalog.xml
-/listeners/catalog.xml
-/writers/catalog.xml
-/basics/target/
+# Texteditor history files
+*~
+# Mac
+.DS_Store
+# eclipse IDE
+.settings
+# maven build output
+target
