@@ -1,2 +1,0 @@
-LINEA  foo bar
-LINEB  1231  123
