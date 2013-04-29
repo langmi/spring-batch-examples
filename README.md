@@ -56,7 +56,7 @@ For each project i added specific build configurations for the following build p
   * forced UTF-8 encoding
 * [maven-surefire-plugin][maven-surefire-plugin]
   * set log4j properties file location
-  * set [forkMode=always][forkmode] to run each test class isolated
+  * set [reuseForks=true][reuseForks] to run each test class isolated
 
 #### Dependencies
 
@@ -133,7 +133,7 @@ To simplify it, all work is under [Apache 2.0 license][apache-license], fork it,
   * if you distribute a project with truezip you need to include the license and a statement basically saying you did not change anything
   * if you change the source, ... well if you run a commercial product you are screwed :-)
 
-[forkmode]: http://maven.apache.org/plugins/maven-surefire-plugin/test-mojo.html#forkMode
+[reuseForks]: http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#reuseForks
 [hsqldb-in-memory]: http://hsqldb.org/doc/2.0/guide/running-chapt.html#running_inprocess-sect
 [jdbc-init-db]: http://static.springsource.org/spring/docs/current/spring-framework-reference/html/jdbc.html#d0e24263
 [JobLauncherTestUtils]: http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/test/JobLauncherTestUtils.html
