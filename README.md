@@ -113,7 +113,7 @@ To simplify it, all work is under [Apache 2.0 license][apache-license], fork it,
 
 ### Licenses of used Java libraries
 
-**last check: 10.12.2011**
+**last check: 29.04.2013**
 
 * AOP Alliance - [Public Domain][aop-dependency]
 * Apache commons-collections, -dbcp, -io, -logging, -pool - all licensed under Apache 2.0
