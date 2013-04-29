@@ -52,10 +52,14 @@ For each project i added specific build configurations for the following build p
   * JDK set to 1.6
   * compiler.debug=true
   * compiler.optimize=false
+* [maven-enforcer-plugin][maven-enforcer-plugin]
+  * enforce minimum Java version 1.6
+  * enforce minimum Maven version 3.0
 * [maven-resources-plugin][maven-resources-plugin]
   * forced UTF-8 encoding
 * [maven-surefire-plugin][maven-surefire-plugin]
   * set log4j properties file location
+  * memory configuration to prevent OutOfMemory problems during tests
   * set [reuseForks=true][reuseForks] to run each test class isolated
 
 #### Dependencies
@@ -137,6 +141,7 @@ To simplify it, all work is under [Apache 2.0 license][apache-license], fork it,
 [hsqldb-in-memory]: http://hsqldb.org/doc/2.0/guide/running-chapt.html#running_inprocess-sect
 [jdbc-init-db]: http://static.springsource.org/spring/docs/current/spring-framework-reference/html/jdbc.html#d0e24263
 [JobLauncherTestUtils]: http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/test/JobLauncherTestUtils.html
+[maven-enforcer-plugin]: http://maven.apache.org/enforcer/maven-enforcer-plugin/
 [maven-compiler-plugin]:http://maven.apache.org/plugins/maven-compiler-plugin/
 [maven-resources-plugin]:http://maven.apache.org/plugins/maven-resources-plugin/
 [standard-dir-layout]: http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
