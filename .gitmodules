@@ -1,0 +1,18 @@
+[submodule "basics"]
+	path = basics
+	url = https://github.com/langmi/spring-batch-examples-basics.git
+[submodule "readers"]
+	path = readers
+	url = https://github.com/langmi/spring-batch-examples-readers.git
+[submodule "complex"]
+	path = complex
+	url = https://github.com/langmi/spring-batch-examples-complex.git
+[submodule "writers"]
+	path = writers
+	url = https://github.com/langmi/spring-batch-examples-writers.git
+[submodule "listeners"]
+	path = listeners
+	url = https://github.com/langmi/spring-batch-examples-listeners.git
+[submodule "playground"]
+	path = playground
+	url = https://github.com/langmi/spring-batch-examples-playground.git
