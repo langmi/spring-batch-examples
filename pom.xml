@@ -71,6 +71,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- forkmode for the surefire plugin, can be overridden with -DreuseForks=... 
+             needed at parent and submodule level to provide the systemproperty override
+             mechanism, if property is not set in parent too, -DreuseForks has no effect
+             if build is started from this parent module
+        -->
+        <reuseForks>false</reuseForks>
     </properties>
 
     <build>

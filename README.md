@@ -21,7 +21,7 @@ This repository uses [git submodules][git-submodules] to link to the individual 
 
 All Spring Batch Examples:
 
-* are individual github repository and maven projects, the pom.xml in this root directory is only for a convenient _build all_ feature
+* are individual github repositories and maven projects, the pom.xml in this root directory is only for a convenient _build all_ feature
 * are tested with:
   * Spring Batch 2.1.8.RELEASE
   * Spring Framework 3.1.0.RELEASE
@@ -38,29 +38,44 @@ Each individual project stands on its own and can be used as such, e.g. there ar
 The examples modules are:
 
 * spring batch examples parent, the mentioned "build all" parent module
-  * complex, contains examples which use more than one of the core aspects of spring batch
-  * listeners
-  * playground, mostly for incubating new examples
-  * readers
-  * writers
+    * complex, contains examples which use more than one of the core aspects of spring batch
+    * listeners
+    * playground, mostly for incubating new examples
+    * readers
+    * writers
+
+#### Usable Systemproperties
+
+* -DreuseForks
+    * run tests with individual and fresh JVM per test class or reuse JVM between tests
+    * default is `false`
+    * use `true`, if you want to run the tests with shared JVMs
 
 #### Specific Build Configurations
 
 For each project i added specific build configurations for the following build plugins:
 
 * [maven-compiler-plugin][maven-compiler-plugin]
-  * JDK set to 1.6
-  * compiler.debug=true
-  * compiler.optimize=false
+    * JDK set to 1.6
+    * compiler.debug=true
+    * compiler.optimize=false
 * [maven-enforcer-plugin][maven-enforcer-plugin]
-  * enforce minimum Java version 1.6
-  * enforce minimum Maven version 3.0
+    * enforce minimum Java version 1.6
+    * enforce minimum Maven version 3.0
 * [maven-resources-plugin][maven-resources-plugin]
-  * forced UTF-8 encoding
+    * forced UTF-8 encoding
 * [maven-surefire-plugin][maven-surefire-plugin]
-  * set log4j properties file location
-  * memory configuration to prevent OutOfMemory problems during tests
-  * set [reuseForks=true][reuseForks] to run each test class isolated
+    * set log4j properties file location
+    * Java memory configuration to prevent OutOfMemory problems during tests, see [Java -X options][java-x-options]
+    * [forkCount][forkCount]=1C to run one test class per cpu core
+    * [reuseForks][reuseForks]=false to run each test class isolated
+        * can be overridden by using systemproperty `-DreuseForks=true`
+
+##### Why isolated tests?
+
+I use the [reuseForks=false][reuseForks] for the maven test configuration to get a new JVM for each test class. This configuration lowers the test run time by a signifikant amount. Why is that necessary?
+
+While using the HSQLDB in-memory database i see sometimes thread problems.
 
 #### Dependencies
 
@@ -74,8 +89,8 @@ The project follows the [maven standard directory layout][standard-dir-layout], 
 
 Overview:
 
-	# log4j configuration
-	src/main/resources/log4j/log4.properties
+    # log4j configuration
+    src/main/resources/log4j/log4.properties
     # the job configurations    
     src/main/resources/spring/batch/job/
     # spring batch setup
@@ -89,21 +104,21 @@ Overview:
 For each project:
 
 * the log4j.properties is under `src/main/resources/log4j/log4j.properties`
-  * logging level is WARN for all and DEBUG for the source package of the project
-  * location might be changed soon to src/test...
+    * logging level is WARN for all and DEBUG for the source package of the project
+    * location might be changed soon to src/test...
 * the Spring Batch infrastructure setup is under `src/main/resources/spring/batch/setup/...`
-  * `job-context.xml` contains JobRepository, StepScope etc. beans
-  * `job-database.xml` contains the datasource and transactionmanager beans
-    * [HSQLDB in-memory][hsqldb-in-memory] variant is used
-    * Spring Batch Schema is loaded at Application Context startup with [jdbc:initialize-database][jdbc-init-db]
+    * `job-context.xml` contains JobRepository, StepScope etc. beans
+    * `job-database.xml` contains the datasource and transactionmanager beans
+        * [HSQLDB in-memory][hsqldb-in-memory] variant is used
+        * Spring Batch Schema is loaded at Application Context startup with [jdbc:initialize-database][jdbc-init-db]
 * the Spring Batch test infrastructure setup is under `src/test/resources/spring/batch/setup/test/...`
-  * `job-test-context.xml` contains just the [JobLauncherTestUtils][JobLauncherTestUtils] bean
+    * `job-test-context.xml` contains just the [JobLauncherTestUtils][JobLauncherTestUtils] bean
 
 
 ### Code Structure
 
 * each example has its own package (test package has the same name), e.g. `simplelist`
-  * not all examples have java source, some have only a job.xml and some tests
+    * not all examples have java source, some have only a job.xml and some tests
 * each example has its own job.xml, e.g. `simple-list-job.xml`
 * each example has a large test coverage, well what can i say, i am addicted to tests :-)
 
@@ -132,12 +147,12 @@ To simplify it, all work is under [Apache 2.0 license][apache-license], fork it,
 #### Problematic Dependencies
 
 * JUnit - [Common Public License - v 1.0][junit-dependency] (look for license.txt in the github repository)
-  * just do not distribute your project with junit, should be easy
+    * just do not distribute your project with junit, should be easy
 * Truezip - [Eclipse Public License, Version 1.0][truezip-dependency]
-  * if you distribute a project with truezip you need to include the license and a statement basically saying you did not change anything
-  * if you change the source, ... well if you run a commercial product you are screwed :-)
+    * if you distribute a project with truezip you need to include the license and a statement basically saying you did not change anything
+    * if you change the source, ... well if you run a commercial product you are screwed :-)
 
-[reuseForks]: http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#reuseForks
+
 [hsqldb-in-memory]: http://hsqldb.org/doc/2.0/guide/running-chapt.html#running_inprocess-sect
 [jdbc-init-db]: http://static.springsource.org/spring/docs/current/spring-framework-reference/html/jdbc.html#d0e24263
 [JobLauncherTestUtils]: http://static.springsource.org/spring-batch/apidocs/org/springframework/batch/test/JobLauncherTestUtils.html
@@ -168,8 +183,11 @@ To simplify it, all work is under [Apache 2.0 license][apache-license], fork it,
 [apache-license]: http://www.apache.org/licenses/LICENSE-2.0.html
 [database]:http://hsqldb.org/doc/2.0/guide/running-chapt.html#running_inprocess-sect
 [git-submodules]: http://git-scm.com/book/de/Git-Tools-Submodules
+[java-x-options]: http://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/jrdocs/refman/optionX.html
 [listeners]: http://static.springsource.org/spring-batch/reference/html/configureStep.html#interceptingStepExecution
 [maprepo-threadsafe]: https://jira.springsource.org/browse/BATCH-1541
 [readers]: http://static.springsource.org/spring-batch/reference/html/domain.html#domainItemReader
+[reuseForks]: http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#reuseForks
+[forkCount]: http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#forkCount
 [sourcetree]: http://sourcetreeapp.com/
 [writers]: http://static.springsource.org/spring-batch/reference/html/domain.html#domainItemWriter
