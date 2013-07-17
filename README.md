@@ -12,7 +12,9 @@ The Examples are described in each of the submodule README.
 
 ## How?
 
-This repository uses [git submodules][git-submodules] to link to the individual example repositories on github. To get the latest commits for the submodules:
+This repository uses [git submodules][git-submodules] to link to the individual example repositories on github. Right after the check-out you need to run: `git submodule --init` to get the submodule sources.
+
+To get the latest commits for the submodules:
 
 * [update submodules from with git command][git-update-submodules]: `git submodule -q foreach git pull -q origin master`
 * [sourcetree][sourcetree]: just fetch/pull from the current repository, sourcetree will update the submodules too
